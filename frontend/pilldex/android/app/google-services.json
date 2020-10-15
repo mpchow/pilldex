@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "36855760333",
+    "firebase_url": "https://pilldex.firebaseio.com",
+    "project_id": "pilldex",
+    "storage_bucket": "pilldex.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:36855760333:android:838a8ae06464c62b417084",
+        "android_client_info": {
+          "package_name": "com.pilldex"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "36855760333-mvit8m949smh3our3siua8gb21mmck6k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXjHS6mNxxexC-Uvj8p-kYkQ2DOD_aDPI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "36855760333-mvit8m949smh3our3siua8gb21mmck6k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
