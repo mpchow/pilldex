@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import { AuthContext } from '../navigation/AuthProvider';
 
-function HomeScreen() {
+function HomeScreen({ navigation }) {
   const { logout } = useContext(AuthContext);
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
@@ -15,6 +15,10 @@ function HomeScreen() {
         <TouchableOpacity style={styles.button}
                           onPress={() => logout()}>
           <Text style={styles.btnText}>LOG OUT</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button}
+                          onPress={() => navigation.navigate('NewPill')}>
+          <Text style={styles.btnText}>NEW PILL</Text>
         </TouchableOpacity>
     </View>
   );

@@ -6,7 +6,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Fontisto from 'react-native-vector-icons/Fontisto';
 
 /* screens */
-import HomeScreen from '../screens/HomeScreen.js';
+import HomeStack from './HomeStack.js';
 import ProfileScreen from '../screens/ProfileScreen.js';
 import PillboxScreen from '../screens/PillboxScreen.js';
 
@@ -28,7 +28,7 @@ function MainStack() {
                       ),
                     }}
                    />
-       <Tab.Screen name='Home' component={HomeScreen}
+       <Tab.Screen name='Home' component={HomeStack}
                    options = {{
                      tabBarIcon: ({ color }) => (
                      <MaterialCommunityIcons name="home" color={color} size={26} />
