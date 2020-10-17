@@ -5,10 +5,10 @@ const connStr = "mongodb://localhost:27017/pilldex";
 mongoose.connect(connStr, connOptions);
 mongoose.Promise = global.Promise;
 
-const Pill = require('pillmodel.js');
-const User = require('usermodel.js');
+const Pill = require('./pillmodel.js');
+const User = require('./usermodel.js');
 
-module.exports {
+module.exports = {
 	Pill, 
 	User
 };
