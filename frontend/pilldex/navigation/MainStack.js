@@ -17,12 +17,23 @@ function MainStack() {
   return (
       <Tab.Navigator
          initialRouteName = 'Home'
-         activeColor="#000"
-         inactiveColor = "#fff"
-         barStyle={{ backgroundColor: '#84C0C6', height: 77, paddingTop: 10}}
+         tabBarOptions={{
+           activeTintColor:"#fff",
+           inactiveTintColor: "#E5E5E5",
+           labelStyle: {
+             fontSize: 15,
+             paddingBottom: 10
+           },
+           style: {
+             backgroundColor: '#84C0C6',
+             height: 72,
+             paddingTop: 10
+           }
+         }}
          >
        <Tab.Screen name='Profile' component={ProfileScreen}
                    options = {{
+                     tabBarLabel: 'Profile',
                      tabBarIcon: ({ color }) => (
                      <MaterialCommunityIcons name="account-circle" color={color} size={26} />
                       ),
@@ -30,6 +41,7 @@ function MainStack() {
                    />
        <Tab.Screen name='Home' component={HomeStack}
                    options = {{
+                     tabBarLabel: 'Home',
                      tabBarIcon: ({ color }) => (
                      <MaterialCommunityIcons name="home" color={color} size={26} />
                       ),
@@ -37,6 +49,7 @@ function MainStack() {
                    />
        <Tab.Screen name='Pillbox' component={PillboxScreen}
                    options = {{
+                     tabBarLabel: 'Pillbox',
                      tabBarIcon: ({ color }) => (
                      <Fontisto name="pills" color={color} size={26} />
                       ),
