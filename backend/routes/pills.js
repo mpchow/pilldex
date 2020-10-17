@@ -10,10 +10,6 @@ router.get('/:name', getPillById);
 
 module.exports = router;
 
-///* GET home page. */
-//router.get('/', function(req, res, next) {
-//  res.render('index', { title: 'Express' });
-//});
 
 function newPill(req, res, next) {
 	console.log("In NEWPILL Route");

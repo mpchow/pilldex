@@ -1,4 +1,5 @@
 var express = require('express');
+var profile = require('../modules/profile');
 var router = express.Router();
 
 // Routes
@@ -7,15 +8,15 @@ router.put('/', updateUser);
 router.delete('/', deleteUser);
 
 function newUser(req, res, next) {
-  res.send('respond with a resource');
+  res.send(profile.create(req.body));
 }
 
 function updateUser(req, res, next) {
-  res.send('respond with a resource');
+  res.send(profile.update(req.body));
 }
 
 function deleteUser(req, res, next) {
-  res.send('respond with a resource');
+  res.send(profile.remove(req.body));
 }
 
 module.exports = router;
