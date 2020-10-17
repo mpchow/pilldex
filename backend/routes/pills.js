@@ -1,27 +1,48 @@
-var express = require('express');
-var pill = require('../modules/pill');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+const pillService = require('./../modules/pill.js');
 
 router.post('/', newPill);
-router.get('/', getPill);
+router.get('/', getPills);
 router.put('/', updatePill);
 router.delete('/', deletePill);
+router.get('/:name', getPillById);
+
+module.exports = router;
 
 
 function newPill(req, res, next) {
-  res.send(pill.create(req.body));
+	console.log("In NEWPILL Route");
+	pillService.create(req.body) 
+		.then(() => res.json({}))
+		.catch(err => next(err));
 }
 
-function getPill(req, res, next) {
-  res.send(pill.retrieve(req.body));
+function getPills(req, res, next) {
+	console.log("In GETPILL Route");
+	pillService.retreive() 
+		.then(pills => res.json(pills))
+		.catch(err => next(err));
+}
+
+function getPillById(req, res, next) {
+	console.log("In GETPILL Route");
+	pillService.retreive(req.params.name) 
+		.then(pill => pill ? res.json(pill) : res.sendStatus(404))
+		.catch(err => next(err));
 }
 
 function updatePill(req, res, next) {
-  res.send(pill.update(req.body));
+	console.log("In UPDATEPILL Route");
+	pillService.retreive(req.body) 
+		.then(() => res.json({}))
+		.catch(err => next(err));
 }
 
 function deletePill(req, res, next) {
-  res.send(pill.remove(req.body));
+	console.log("In DELETEPILL Route");
+	pillService.retreive(req.body) 
+		.then(() => res.json({}))
+		.catch(err => next(err));
 }
 
-module.exports = router;
