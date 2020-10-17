@@ -1,4 +1,5 @@
 var express = require('express');
+var pill = require('../modules/pill');
 var router = express.Router();
 
 router.post('/', newPill);
@@ -6,25 +7,21 @@ router.get('/', getPill);
 router.put('/', updatePill);
 router.delete('/', deletePill);
 
-///* GET home page. */
-//router.get('/', function(req, res, next) {
-//  res.render('index', { title: 'Express' });
-//});
 
 function newPill(req, res, next) {
-  res.send('respond with a resource');
+  res.send(pill.create(req.body));
 }
 
 function getPill(req, res, next) {
-  res.send('Get Pill endpoint');
+  res.send(pill.retrieve(req.body));
 }
 
 function updatePill(req, res, next) {
-  res.send('respond with a resource');
+  res.send(pill.update(req.body));
 }
 
 function deletePill(req, res, next) {
-  res.send('respond with a resource');
+  res.send(pill.remove(req.body));
 }
 
 module.exports = router;
