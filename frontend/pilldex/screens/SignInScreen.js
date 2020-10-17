@@ -4,11 +4,13 @@ import {
   View,
   Text,
   TouchableOpacity,
-  TextInput
+  TextInput,
+  Dimensions
 } from 'react-native';
 import { AuthContext } from '../navigation/AuthProvider';
 import Logo from '../components/Logo.js'
 
+const width = Dimensions.get('window').width;
 function SignInScreen() {
   const { register, login } = useContext(AuthContext);
   const [name, setName] = useState("");
@@ -26,6 +28,7 @@ function SignInScreen() {
         autoCorrect={false}
         onChangeText = {(text) => setName(text)}
       />
+    <View style={{height: 0.5, width: width - 60, marginTop: -5, backgroundColor:'#000'}} />
       <TextInput
         placeholder = "Email"
         style= {styles.input}
@@ -33,6 +36,7 @@ function SignInScreen() {
         autoCorrect={false}
         onChangeText = {(text) => setEmail(text)}
       />
+    <View style={{height: 0.5, width: width - 60, marginTop: -5, backgroundColor:'#000'}} />
       <TextInput
         placeholder = "Password"
         style= {styles.input}
@@ -41,14 +45,15 @@ function SignInScreen() {
         autoCorrect={false}
         onChangeText = {(text) => setPassword(text)}
       />
+    <View style={{height: 0.5, width: width - 60, marginTop: -5, backgroundColor:'#000'}} />
       <View style={{height: 20}} />
       <TouchableOpacity style={styles.button}
                         onPress={() => login(email, password)}>
         <Text style={styles.btnText}>SIGN IN</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button}
+      <TouchableOpacity style={styles.newUserButton}
                         onPress={() => register(email, password)}>
-        <Text style={styles.btnText}>NEW USER</Text>
+        <Text style={styles.newUserBtnText}>NEW USER</Text>
       </TouchableOpacity>
     </View>
   );
@@ -58,7 +63,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    backgroundColor: '#fff'
   },
   title: {
     fontFamily: 'Quicksand-Bold',
@@ -66,14 +72,11 @@ const styles = StyleSheet.create({
     color: '#538083'
   },
   input: {
-    width: 315,
+    width: width - 60,
     height: 50,
-    borderWidth: 0.5,
-    borderColor: '#000',
-    padding: 15,
     marginTop: 25,
     fontSize: 18,
-    fontFamily: 'Inter-Light'
+    fontFamily: 'Quicksand-Light'
   },
   button: {
     height: 60,
@@ -84,9 +87,25 @@ const styles = StyleSheet.create({
     borderRadius: 35,
     marginTop: 10
   },
+  newUserButton: {
+    height: 60,
+    width: 180,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2.5,
+    borderColor: '#9FB7B9',
+    borderRadius: 35,
+    marginTop: 10
+  },
   btnText: {
     fontFamily: 'Inter-SemiBold',
     color: '#fff',
+    fontSize: 20,
+    textAlign: 'center'
+  },
+  newUserBtnText: {
+    fontFamily: 'Inter-SemiBold',
+    color: '#9FB7B9',
     fontSize: 20,
     textAlign: 'center'
   }
