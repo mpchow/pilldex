@@ -9,9 +9,10 @@ import {
 } from 'react-native';
 import { AuthContext } from '../navigation/AuthProvider';
 import Logo from '../components/Logo.js'
+import LoginStack from '../navigation/LoginStack.js';
 
 const width = Dimensions.get('window').width;
-function SignInScreen() {
+function SignInScreen({ navigation }) {
   const { register, login } = useContext(AuthContext);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -52,7 +53,7 @@ function SignInScreen() {
         <Text style={styles.btnText}>SIGN IN</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.newUserButton}
-                        onPress={() => register(email, password)}>
+                        onPress={() => navigation.navigate('Register')}>
         <Text style={styles.newUserBtnText}>NEW USER</Text>
       </TouchableOpacity>
     </View>

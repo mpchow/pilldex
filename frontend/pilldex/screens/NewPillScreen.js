@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { RNCamera } from 'react-native-camera';
 import {
   StyleSheet,
@@ -11,7 +11,21 @@ import {
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 function NewPillScreen({ navigation }) {
+  const [text, setText] = useState("");
   var camera;
+
+  async function takePicture() {
+    if (camera) {
+      const options = { quality: 0.5, base64: true };
+      const data = await camera.takePictureAsync(options);
+      console.log(data.uri);
+    }
+  }
+
+  function logPicture() {
+    takePicture();
+    navigation.navigate('CheckPill');
+  }
 
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff'}}>
@@ -33,7 +47,7 @@ function NewPillScreen({ navigation }) {
           <Text style={styles.btnText}>MANUAL</Text>
        </TouchableOpacity>
        <TouchableOpacity style={styles.button}
-                        onPress={() => navigation.goBack()}>
+                        onPress={() => logPicture()}>
          <Text style={styles.btnText}>CONFIRM</Text>
        </TouchableOpacity>
      </View>
