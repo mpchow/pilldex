@@ -1,21 +1,26 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   View,
   Text,
   TouchableOpacity,
   TextInput,
+  ScrollView,
 } from 'react-native';
 
 function CheckPillScreen({ navigation }) {
 
   const [name, setName] = useState("");
   const [refillUnits, setRefillUnits] = useState("");
-  const [freqUnits, setFreqUnits] = useState("");
   const [freq, setFreq] = useState("");
 
+  const [freqButton, setFreqButton] = useState(null);
+  const [foodButton, setFoodButton] = useState(null);
+  const [drowsyButton, setDrowsyButton] = useState(null);
+
   return (
-    <View style={styles.container}>
+    <ScrollView>
+      <View  style={styles.container}>
       <Text style={styles.title}>New Prescription</Text>
 
       <View style={{height: 30}} />
@@ -53,36 +58,65 @@ function CheckPillScreen({ navigation }) {
             autoCapitalize='none'
             autoCorrect={false}
             keyboardType='numeric'
-            onChangeText = {(text) => setFreqUnits(text)}
+            onChangeText = {(text) => setFreq(text)}
           />
           <Text style={styles.text}>  units,</Text>
         </View>
+        <View style={{flexDirection: 'row', alignItems: 'center', marginTop: -15}}>
+          <TouchableOpacity style={freqButton == "Daily" ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setFreqButton("Daily")}/>
+          <Text style={styles.radioText}>  Daily</Text>
+        </View>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <TouchableOpacity style={freqButton == "Weekly" ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setFreqButton("Weekly")} />
+          <Text style={styles.radioText}>  Weekly</Text>
+        </View>
+        <View style={{height: 20}} />
 
         <Text style={styles.form_titles}>4 - Take with Food?</Text>
+        <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 10}}>
+          <TouchableOpacity style={foodButton == "Yes" ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setFoodButton("Yes")}/>
+          <Text style={styles.radioText}>  Yes</Text>
+        </View>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <TouchableOpacity style={foodButton == "No" ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setFoodButton("No")} />
+          <Text style={styles.radioText}>  No</Text>
+        </View>
+        <View style={{height: 20}} />
+
+        <Text style={styles.form_titles}>5 - Does it make you drowsy?</Text>
+        <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 10}}>
+          <TouchableOpacity style={drowsyButton == "Yes" ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setDrowsyButton("Yes")}/>
+          <Text style={styles.radioText}>  Yes</Text>
+        </View>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <TouchableOpacity style={drowsyButton == "No" ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setDrowsyButton("No")} />
+          <Text style={styles.radioText}>  No</Text>
+        </View>
+        <View style={{height: 20}} />
 
       </View>
       
-      <View style={{flexDirection: 'row', padding: 20, justifyContent:'space-between'}}>
+      <View style={{flexDirection: 'row', padding: 10, justifyContent:'space-between'}}>
         <TouchableOpacity style={styles.button}
                           onPress={() => navigation.goBack()}>
           <Text style={styles.btnText}>BACK</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button}
-                          onPress={() => navigation.goBack()}>
+                          onPress={() => console.log(freqButton, foodButton)}>
           <Text style={styles.btnText}>VERIFY</Text>
         </TouchableOpacity>
       </View>
-      
-    </View>
+
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, 
-    alignItems: 'center', 
+    flex: 1,
+    alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 15
   },
   title: {
     fontFamily: 'Quicksand-Bold',
@@ -118,12 +152,12 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 20,
     fontSize: 18,
-    fontFamily: 'Inter-Light'
+    fontFamily: 'Inter-Light',
   },
   text: {
     fontFamily: 'Quicksand', 
     fontSize: 20, color: '#000000', 
-    paddingTop: 26
+    paddingTop: 26,
   },
   button: {
     height: 60,
@@ -141,6 +175,25 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 20,
     textAlign: 'center'
+  },
+  radioButtonPressed:{
+    backgroundColor: '#538083',
+    borderRadius: 100,
+    height: 20,
+    width: 20,
+    marginTop: 0
+  },
+  radioButtonUnPressed:{
+    borderRadius: 100,
+    height: 20,
+    width: 20,
+    marginTop: 0,
+    borderWidth: 1.5,
+    borderColor: '#538083',
+  },
+  radioText: {
+    fontFamily: 'Quicksand', 
+    fontSize: 20, color: '#000000', 
   }
 });
 
