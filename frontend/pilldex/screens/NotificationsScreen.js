@@ -14,7 +14,7 @@ function NotificationsScreen({ navigation }) {
     <View style={styles.container}>
       <View style={{height: 20}} />
       <Text style={styles.title}>My Pilldex</Text>
-      <View style={{height: 20}} />
+      <View style={{height: 10}} />
       <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
         <Text style={styles.options} onPress={() => navigation.navigate('Home')}>Main</Text>
         <Text style={styles.options}>Notifications</Text>

@@ -7,14 +7,12 @@ import {
   Dimensions,
   FlatList
 } from 'react-native';
-import { AuthContext } from '../navigation/AuthProvider';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const width = Dimensions.get('window').width;
 
 function HomeScreen({ navigation }) {
-  const { logout } = useContext(AuthContext);
   const dayArray = ["Sunday", "Monday", "Tuesday",
                     "Wednesday", "Thursday", "Friday", "Saturday"];
   const monthArray = ["January", "February", "March", "April", "May",
@@ -99,7 +97,7 @@ function HomeScreen({ navigation }) {
     <View style={styles.container}>
       <View style={{height: 20}} />
       <Text style={styles.title}>My Pilldex</Text>
-      <View style={{height: 20}} />
+      <View style={{height: 10}} />
       <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
         <Text style={styles.options}>Main</Text>
         <Text style={styles.options}
@@ -145,16 +143,10 @@ function HomeScreen({ navigation }) {
           </View>
         )}
       />
-      <View style={{flexDirection: 'row'}}>
-        <TouchableOpacity style={styles.button}
-                          onPress={() => logout()}>
-          <Text style={styles.btnText}>LOG OUT</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button}
-                          onPress={() => navigation.navigate('NewPill')}>
-          <Text style={styles.btnText}>NEW PILL</Text>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity style={styles.button}
+                        onPress={() => navigation.navigate('NewPill')}>
+        <Text style={styles.btnText}>NEW PILL</Text>
+      </TouchableOpacity>
     </View>
   );
 }
