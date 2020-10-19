@@ -1,28 +1,53 @@
 import React from 'react';
+import { RNCamera } from 'react-native-camera';
 import {
   StyleSheet,
   View,
   Text,
-  TouchableOpacity
+  TouchableOpacity,
+  Dimensions
 } from 'react-native';
 
+const height = Dimensions.get('window').height;
+const width = Dimensions.get('window').width;
 function NewPillScreen({ navigation }) {
+  var camera;
+
   return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Text>Add Pill Screen</Text>
-      <TouchableOpacity style={styles.button}
+    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff'}}>
+      <Text style={styles.title}>New Prescription</Text>
+      <RNCamera
+        ref={ref => {
+          camera = ref;
+        }}
+        style={{
+          height: height * 0.8,
+          width: width,
+          marginBottom: -85
+        }}
+     >
+     </RNCamera>
+     <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+       <TouchableOpacity style={styles.button}
                         onPress={() => navigation.navigate('CheckPill')}>
-        <Text style={styles.btnText}>ADD PILL</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button}
+          <Text style={styles.btnText}>MANUAL</Text>
+       </TouchableOpacity>
+       <TouchableOpacity style={styles.button}
                         onPress={() => navigation.goBack()}>
-        <Text style={styles.btnText}>GO BACK</Text>
-      </TouchableOpacity>
+         <Text style={styles.btnText}>CONFIRM</Text>
+       </TouchableOpacity>
+     </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  title: {
+    fontFamily: 'Quicksand-Regular',
+    fontSize: 32,
+    color: '#000',
+    marginBottom: 5
+  },
   button: {
     height: 60,
     width: 180,
@@ -30,7 +55,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#9FB7B9',
     borderRadius: 35,
-    marginTop: 10
+    marginHorizontal: 10,
+    marginBottom: 20
   },
   btnText: {
     fontFamily: 'Inter-SemiBold',
