@@ -7,14 +7,12 @@ import {
   Dimensions,
   FlatList
 } from 'react-native';
-import { AuthContext } from '../navigation/AuthProvider';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const width = Dimensions.get('window').width;
 
 function HomeScreen({ navigation }) {
-  const { logout } = useContext(AuthContext);
   const dayArray = ["Sunday", "Monday", "Tuesday",
                     "Wednesday", "Thursday", "Friday", "Saturday"];
   const monthArray = ["January", "February", "March", "April", "May",
@@ -57,10 +55,10 @@ function HomeScreen({ navigation }) {
 
     // set dummy notifications
     return (
-      [{name: "Advil", time: date1, food: true, done: false, active: true,
-        dateString: date1String},
-       {name: "Tylenol", time: date2, food: false, done: false, active: false,
-        dateString: date2String}]
+      [{id: 0, name: "Advil", time: date1, food: true, drowsy: false,
+        done: false, dateString: date1String},
+       {id: 1, name: "Tylenol", time: date2, food: false, drowsy: true,
+        done: false, dateString: date2String}]
     );
   });
 
@@ -78,11 +76,28 @@ function HomeScreen({ navigation }) {
     });
   }
 
+  // set item.done to true and move notif to end of array
+  // ids of existing notifs also need to change?? idksksjsjj
+  function closeNotification(index) {
+    var item = notifs[index];
+    if (!item.done) {
+      item.done = true;
+      setNotifs(prevItems => {
+        return prevItems.filter(item => item.id != index);
+      });
+
+      item.id = notifs.length;
+      setNotifs(prevItems => {
+        return [...prevItems, item];
+      });
+    }
+  }
+
   return (
     <View style={styles.container}>
       <View style={{height: 20}} />
       <Text style={styles.title}>My Pilldex</Text>
-      <View style={{height: 20}} />
+      <View style={{height: 10}} />
       <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
         <Text style={styles.options}>Main</Text>
         <Text style={styles.options}
@@ -109,33 +124,29 @@ function HomeScreen({ navigation }) {
       <FlatList
         data={notifs}
         extradata={notifs}
-        keyExtractor={(item) => item.time}
+        keyExtractor={(item) => item.name}
         renderItem={({ item }) => (
           <View style={styles.notifBox}>
             <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
-              <View style={styles.checkBox} />
-              <View style={{flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+              <TouchableOpacity style={item.done ? styles.checkDone : styles.checkBox}
+                                onPress={() => closeNotification(item.id)}/>
+              <View style={{flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'space-evenly', marginLeft: 8}}>
                 <Text style={styles.medName}>{item.name}</Text>
                 <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
                   <Ionicons name="alarm-outline" color="#000" size={25} />
-                  <Text>{item.dateString}</Text>
+                  <Text style={styles.pillTime}>{item.dateString}</Text>
                 </View>
-                <Text>{item.food ? "Take with Food" : ""}</Text>
+                <Text>{item.food ? "Take with Food" :
+                       item.drowsy ? "Causes Drowsiness" : ""}</Text>
               </View>
             </View>
           </View>
         )}
       />
-      <View style={{flexDirection: 'row'}}>
-        <TouchableOpacity style={styles.button}
-                          onPress={() => logout()}>
-          <Text style={styles.btnText}>LOG OUT</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button}
-                          onPress={() => navigation.navigate('NewPill')}>
-          <Text style={styles.btnText}>NEW PILL</Text>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity style={styles.button}
+                        onPress={() => navigation.navigate('NewPill')}>
+        <Text style={styles.btnText}>NEW PILL</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -214,10 +225,23 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     marginLeft: 15
   },
+  checkDone: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: '#84C0C6',
+    borderColor: '#84C0C6',
+    borderWidth: 1.5,
+    marginLeft: 15
+  },
   medName: {
     fontFamily: 'Quicksand-Bold',
     fontSize: 28,
     color: '#538083'
+  },
+  pillTime: {
+    fontFamily: 'Inter-SemiBold',
+    fontSize: 15
   },
   button: {
     height: 60,

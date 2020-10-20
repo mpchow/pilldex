@@ -7,7 +7,7 @@ import Fontisto from 'react-native-vector-icons/Fontisto';
 
 /* screens */
 import HomeStack from './HomeStack.js';
-import ProfileScreen from '../screens/ProfileScreen.js';
+import ProfileStack from './ProfileStack.js';
 import PillboxScreen from '../screens/PillboxScreen.js';
 
 const Stack = createStackNavigator();
@@ -31,7 +31,7 @@ function MainStack() {
            }
          }}
          >
-       <Tab.Screen name='Profile' component={ProfileScreen}
+       <Tab.Screen name='Profile' component={ProfileStack}
                    options = {{
                      tabBarLabel: 'Profile',
                      tabBarIcon: ({ color }) => (
