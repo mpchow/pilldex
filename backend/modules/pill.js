@@ -3,15 +3,13 @@ const Pill = db.Pill;
 
 const create = async (pillParams) => {
    try {
-      if (await Pill.findOne({ name: pillParams.name, userId: pillParams.userId })) {
-         throw 'The Pill ' + name + ' is already in the pilldex';
-      }
+      await Pill.findOne({ name: pillParams.name, userId: pillParams.userId })
       const pill = new Pill(pillParams);
       pill.save();
       return({msg: 'Success'});
    }
-   catch (e) {
-      throw e;
+   catch (error) {
+      throw 'The Pill ' + name + ' is already in the pilldex';
    }
 }
 
@@ -19,7 +17,7 @@ const update = async (pillParams) => {
    try {
       await Pill.replaceOne({name: pillParams.name, userId: pillParams.userId}, pillParams);
    }
-   catch {
+   catch (error) {
       throw `The Pill ${pillParams.name} could not be updated`;
    }
 }
@@ -28,7 +26,7 @@ const remove = async (pillParams) => {
    try {
       await Pill.deleteOne({name: pillParams.name, userId: pillParams.userId});
    }
-   catch {
+   catch (error) {
       throw `The Pill ${pillParams.name} could not be deleted`;
    }  
    return({msg: 'Success'});
@@ -39,7 +37,7 @@ const retrieve = async (pillParams, one) => {
       try {
          return {pill: await Pill.findOne({name: pillParams.name, userId: pillParams.userId}), msg: 'Success'};
       }
-      catch {
+      catch (error) {
          throw `The Pill ${pillParams.name} could not be retrieved`;
       }
    }
@@ -47,7 +45,7 @@ const retrieve = async (pillParams, one) => {
       try {
          return {pill: await Pill.find({userId: pillParams.userId}), msg: 'Success'};
       }
-      catch {
+      catch (error) {
          throw `The Pills for ${pillParams.userId} could not be retrieved`;
       }
    }
