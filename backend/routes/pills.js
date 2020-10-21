@@ -14,35 +14,35 @@ module.exports = router;
 function newPill(req, res, next) {
 	console.log("In NEWPILL Route");
 	pillService.create(req.body) 
-		.then(() => res.json({}))
+		.then((success) => res.json(success))
 		.catch(err => next(err));
 }
 
 function getPills(req, res, next) {
 	console.log("In GETPILL Route");
-	pillService.retreive() 
+	pillService.retrieve(req.body, false) 
 		.then(pills => res.json(pills))
 		.catch(err => next(err));
 }
 
 function getPillById(req, res, next) {
 	console.log("In GETPILL Route");
-	pillService.retreive(req.params.name) 
-		.then(pill => pill ? res.json(pill) : res.sendStatus(404))
+	pillService.retrieve(req.body, true) 
+		.then(pill => res.json(pill))
 		.catch(err => next(err));
 }
 
 function updatePill(req, res, next) {
 	console.log("In UPDATEPILL Route");
-	pillService.retreive(req.body) 
-		.then(() => res.json({}))
+	pillService.update(req.body) 
+		.then((success) => res.json(success))
 		.catch(err => next(err));
 }
 
 function deletePill(req, res, next) {
 	console.log("In DELETEPILL Route");
-	pillService.retreive(req.body) 
-		.then(() => res.json({}))
+	pillService.remove(req.body) 
+		.then((success) => res.json(success))
 		.catch(err => next(err));
 }
 

@@ -7,16 +7,44 @@ import {
   TextInput,
   ScrollView,
 } from 'react-native';
+import auth, { firebase } from '@react-native-firebase/auth';
 
 function CheckPillScreen({ navigation }) {
 
   const [name, setName] = useState("");
   const [refillUnits, setRefillUnits] = useState("");
   const [freq, setFreq] = useState("");
+  const [dosage, setDosageButton] = useState("");
 
-  const [freqButton, setFreqButton] = useState(null);
+  const [freqUnits, setFreqButton] = useState(null);
   const [foodButton, setFoodButton] = useState(null);
   const [drowsyButton, setDrowsyButton] = useState(null);
+
+  function sendNewUserInfo(){
+    console.log(name, firebase.auth().currentUser.uid, refillUnits, freq, freqUnits, foodButton, drowsyButton);
+
+    fetch('http://ec2-35-183-198-103.ca-central-1.compute.amazonaws.com:3000/pills', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+      name: name,
+      userId: firebase.auth().currentUser.uid,
+      totalQuantity: refillUnits,
+      frequency: freq,
+      frequencyUnit: freqUnits,
+      withFood: foodButton,
+      withSleep: drowsyButton,
+      dosage: 0,
+      })
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+
+  }
 
   return (
     <ScrollView>
@@ -63,33 +91,33 @@ function CheckPillScreen({ navigation }) {
           <Text style={styles.text}>  units,</Text>
         </View>
         <View style={{flexDirection: 'row', alignItems: 'center', marginTop: -15}}>
-          <TouchableOpacity style={freqButton == "Daily" ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setFreqButton("Daily")}/>
+          <TouchableOpacity style={freqUnits == "Daily" ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setFreqButton("Daily")}/>
           <Text style={styles.radioText}>  Daily</Text>
         </View>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <TouchableOpacity style={freqButton == "Weekly" ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setFreqButton("Weekly")} />
+          <TouchableOpacity style={freqUnits == "Weekly" ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setFreqButton("Weekly")} />
           <Text style={styles.radioText}>  Weekly</Text>
         </View>
         <View style={{height: 20}} />
 
         <Text style={styles.form_titles}>4 - Take with Food?</Text>
         <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 10}}>
-          <TouchableOpacity style={foodButton == "Yes" ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setFoodButton("Yes")}/>
+          <TouchableOpacity style={foodButton == true ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setFoodButton(true)}/>
           <Text style={styles.radioText}>  Yes</Text>
         </View>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <TouchableOpacity style={foodButton == "No" ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setFoodButton("No")} />
+          <TouchableOpacity style={foodButton == false ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setFoodButton(false)} />
           <Text style={styles.radioText}>  No</Text>
         </View>
         <View style={{height: 20}} />
 
         <Text style={styles.form_titles}>5 - Does it make you drowsy?</Text>
         <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 10}}>
-          <TouchableOpacity style={drowsyButton == "Yes" ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setDrowsyButton("Yes")}/>
+          <TouchableOpacity style={drowsyButton == true ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setDrowsyButton(true)}/>
           <Text style={styles.radioText}>  Yes</Text>
         </View>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <TouchableOpacity style={drowsyButton == "No" ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setDrowsyButton("No")} />
+          <TouchableOpacity style={drowsyButton == false ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setDrowsyButton(false)} />
           <Text style={styles.radioText}>  No</Text>
         </View>
         <View style={{height: 20}} />
@@ -102,7 +130,7 @@ function CheckPillScreen({ navigation }) {
           <Text style={styles.btnText}>BACK</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button}
-                          onPress={() => console.log(freqButton, foodButton)}>
+                          onPress={() => sendNewUserInfo()}>
           <Text style={styles.btnText}>VERIFY</Text>
         </TouchableOpacity>
       </View>
