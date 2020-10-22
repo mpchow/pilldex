@@ -43,7 +43,18 @@ export const AuthProvider = ({ children }) => {
               Alert.alert("Please enter a password");
             else
               await auth().createUserWithEmailAndPassword(email, password)
-            //.then(); - add user to database here
+            .then(user => {
+              fetch('http://ec2-35-183-198-103.ca-central-1.compute.amazonaws.com:3000/user', {
+                method: 'POST',
+                headers: {
+                  Accept: 'application/json',
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  userId: user.user.uid
+                })
+              });
+            })
           } catch (e) {
             if (e.code === 'auth/email-already-in-use')
               Alert.alert("An account already exists with this email");

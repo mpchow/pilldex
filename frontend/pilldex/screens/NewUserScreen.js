@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { AuthContext } from '../navigation/AuthProvider';
 import Logo from '../components/Logo';
+import auth, { firebase } from '@react-native-firebase/auth';
 
 function NewUserScreen({ navigation }) {
 
@@ -17,6 +18,7 @@ function NewUserScreen({ navigation }) {
   const [language, setLanguage] = useState("");
 
   const { register } = useContext(AuthContext);
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Create Account</Text>
@@ -59,8 +61,9 @@ function NewUserScreen({ navigation }) {
           <Text style={styles.btnText}>BACK</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button}
-                          onPress={() => console.log(name, email, password, language)}>
-          <Text style={styles.btnText}>VERIFY</Text>
+                          onPress={() => {console.log(name, email, password, language); 
+                                          register(email, password); }}>
+          <Text style={styles.btnText}>CREATE ACCOUNT</Text>
         </TouchableOpacity>
       </View>
 
