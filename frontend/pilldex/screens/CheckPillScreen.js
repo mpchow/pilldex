@@ -51,7 +51,7 @@ function CheckPillScreen({ navigation }) {
 
   async function processDocument() {
 
-    const localFile = `images/test.jpg`;
+    const localFile = `images/pillinfo.png`;
     const processed = await vision().cloudDocumentTextRecognizerProcessImage(localFile);
 
     console.log('Found text in document: ', processed.text);
