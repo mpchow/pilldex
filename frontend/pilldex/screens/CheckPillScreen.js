@@ -8,6 +8,9 @@ import {
   ScrollView,
 } from 'react-native';
 import auth, { firebase } from '@react-native-firebase/auth';
+import { utils } from '@react-native-firebase/app';
+import vision from '@react-native-firebase/ml-vision';
+
 
 function CheckPillScreen({ navigation }) {
 
@@ -30,20 +33,34 @@ function CheckPillScreen({ navigation }) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-      name: name,
-      userId: firebase.auth().currentUser.uid,
-      totalQuantity: refillUnits,
-      frequency: freq,
-      frequencyUnit: freqUnits,
-      withFood: foodButton,
-      withSleep: drowsyButton,
-      dosage: 0,
+        name: name,
+        userId: firebase.auth().currentUser.uid,
+        totalQuantity: refillUnits,
+        frequency: freq,
+        frequencyUnit: freqUnits,
+        withFood: foodButton,
+        withSleep: drowsyButton,
+        dosage: 0,
       })
     })
     .catch((error) => {
       console.error(error);
     });
 
+  }
+
+  async function processDocument() {
+
+    const localFile = `test.jpg`;
+    const processed = await vision().cloudDocumentTextRecognizerProcessImage(localFile);
+  
+    console.log('Found text in document: ', processed.text);
+  
+    processed.blocks.forEach(block => {
+      console.log('Found block with text: ', block.text);
+      console.log('Confidence in block: ', block.confidence);
+      console.log('Languages found in block: ', block.recognizedLanguages);
+    });
   }
 
   return (
@@ -126,7 +143,7 @@ function CheckPillScreen({ navigation }) {
       
       <View style={{flexDirection: 'row', padding: 10, justifyContent:'space-between'}}>
         <TouchableOpacity style={styles.button}
-                          onPress={() => navigation.goBack()}>
+                          onPress={() => {processDocument(); navigation.goBack();}}>
           <Text style={styles.btnText}>BACK</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button}
