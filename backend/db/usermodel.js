@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
+	token: String,
 	userId: {type: String, unique: true, required: true}, 
 	wakeupHr: {type: Number, required: false},
 	wakeupMin: {type: Number, required: false},

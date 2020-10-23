@@ -4,8 +4,8 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-// var pillsRouter = require('./routes/pills');
-// /var usersRouter = require('./routes/users');
+var pillsRouter = require('./routes/pills');
+var usersRouter = require('./routes/users');
 
 const cron = require('node-cron');
 const pushTask = require('./pushNotification/pushTask');
@@ -23,10 +23,10 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 //app.use('/', indexRouter);
-// app.use('/users', usersRouter);
-// app.use('/pills', pillsRouter);
+app.use('/users', usersRouter);
+app.use('/pills', pillsRouter);
 
-cron.schedule('* * * * *', pushTask());
+//cron.schedule('* * * * *', pushTask());
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
