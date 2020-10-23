@@ -12,8 +12,8 @@ import firebase, { utils } from '@react-native-firebase/app';
 import vision from '@react-native-firebase/ml-vision';
 
 
-function CheckPillScreen({ navigation }) {
-
+function CheckPillScreen({ navigation, route }) {
+  const { uri } = route.params;
   const [name, setName] = useState("");
   const [refillUnits, setRefillUnits] = useState("");
   const [freq, setFreq] = useState("");
@@ -52,7 +52,7 @@ function CheckPillScreen({ navigation }) {
   async function processDocument() {
 
     const localFile = "./images/pillinfo.png";
-    const processed = await vision().cloudDocumentTextRecognizerProcessImage(localFile);
+    const processed = await vision().cloudDocumentTextRecognizerProcessImage(uri);
 
     console.log('Found text in document: ', processed.text);
 

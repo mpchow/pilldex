@@ -8,11 +8,9 @@ mongoose.Promise = global.Promise;
 
 const Pill = require('./pillmodel.js');
 const User = require('./usermodel.js');
-const Schedule = require('./schedulemodel.js');
 
 module.exports = {
 	Pill, 
-	User,
-	Schedule
+	User
 };
 
