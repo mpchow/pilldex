@@ -23,7 +23,16 @@ const userSchema = new Schema({
 	dinnerHr: {type: Number, required: false},
 	dinnerMin: {type: Number, required: false},
 	dinnerAM: {type: Boolean, required: false},
-	dinnerPM: {type: Boolean, required: false}
+	dinnerPM: {type: Boolean, required: false},
+	schedule: {
+		0: [{ time: Date, pillName: String}],
+		1: [{ time: Date, pillName: String}],
+		2: [{ time: Date, pillName: String}],
+		3: [{ time: Date, pillName: String}],
+		4: [{ time: Date, pillName: String}],
+		5: [{ time: Date, pillName: String}],
+		6: [{ time: Date, pillName: String}]
+	}
 }); 
 
 userSchema.set('toJSON', {
