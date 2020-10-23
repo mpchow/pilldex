@@ -44,7 +44,8 @@ export const AuthProvider = ({ children }) => {
               Alert.alert("Please enter a password");
             else
               await auth().createUserWithEmailAndPassword(email, password)
-                    .then(user => {
+                    .then( async (user) => {
+                      const token = await firebase.messaging().getToken();
                       fetch('http://ec2-35-183-198-103.ca-central-1.compute.amazonaws.com:3000/users', {
                         method: 'POST',
                         headers: {
@@ -52,7 +53,7 @@ export const AuthProvider = ({ children }) => {
                           'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({
-                          token: messaging().getToken(),
+                          token: token,
                           userId: user.user.uid
                         })
                       });
