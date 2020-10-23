@@ -44,31 +44,36 @@ var firebaseConfig = {
   "configuration_version": "1"
 };
 
-const messaging = firebase.messaging();
-
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-const sendNotification = async (message) => {
+const sendNotification = async (userToken, message) => {
 	const messageString = JSON.stringify(data)
-
-    const headers = {
-        'Authorization': 'key=<AAAACJTGRc0:APA91bHk_eOAhLdm_u5zz9dJdRqsd4eBwlkRpAp3bBKWMrc4dbrFlh-8ubz79qRkqCpj95uNk60ADgU9aGFR1roe7wqt3EJclqS8of0-NGWMRBSwSo48kFg04Y3MxAinQhibuACTB2JP>',
-        'Content-Type': 'application/json',
-        'Content-Length': messageString.length
-    }
-
-    const options = {
-        uri: 'https://fcm.googleapis.com/fcm/send',
-        method: 'POST',
-        headers: headers,
-        json: data
-    }
-
-    request(options, function (err, res, body) {
-        if (err) throw err
-        else console.log(body)
-    })
+	await admin.messaging().sendToDevice(
+		userToken,
+		{ data : messageString },
+		{ priority: 'high'},
+	);
 }
+	
+/* Other Possible Implementation */
+//    const headers = {
+//        'Authorization': 'key=<AAAACJTGRc0:APA91bHk_eOAhLdm_u5zz9dJdRqsd4eBwlkRpAp3bBKWMrc4dbrFlh-8ubz79qRkqCpj95uNk60ADgU9aGFR1roe7wqt3EJclqS8of0-NGWMRBSwSo48kFg04Y3MxAinQhibuACTB2JP>',
+//        'Content-Type': 'application/json',
+//        'Content-Length': messageString.length
+//    }
+//
+//    const options = {
+//        uri: 'https://fcm.googleapis.com/fcm/send',
+//        method: 'POST',
+//        headers: headers,
+//        json: data
+//    }
+//
+//    request(options, function (err, res, body) {
+//        if (err) throw err
+//        else console.log(body)
+//    })
+//}
 
 
