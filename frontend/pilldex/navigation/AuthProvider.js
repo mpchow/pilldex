@@ -1,6 +1,7 @@
 import React, { createContext, useState } from 'react';
 import auth from '@react-native-firebase/auth';
 import firebase from '@react-native-firebase/app';
+import messaging from '@react-native-firebase/messaging';
 import { Alert } from 'react-native';
 
 export const AuthContext = createContext({});
@@ -43,18 +44,19 @@ export const AuthProvider = ({ children }) => {
               Alert.alert("Please enter a password");
             else
               await auth().createUserWithEmailAndPassword(email, password)
-            .then(user => {
-              fetch('http://ec2-35-183-198-103.ca-central-1.compute.amazonaws.com:3000/user', {
-                method: 'POST',
-                headers: {
-                  Accept: 'application/json',
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                  userId: user.user.uid
-                })
-              });
-            })
+                    .then(user => {
+                      fetch('http://ec2-35-183-198-103.ca-central-1.compute.amazonaws.com:3000/users', {
+                        method: 'POST',
+                        headers: {
+                          Accept: 'application/json',
+                          'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                          token: messaging().getToken(),
+                          userId: user.user.uid
+                        })
+                      });
+                    });
           } catch (e) {
             if (e.code === 'auth/email-already-in-use')
               Alert.alert("An account already exists with this email");

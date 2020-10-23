@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import messaging from '@react-native-firebase/messaging';
 
 const width = Dimensions.get('window').width;
 
@@ -53,6 +54,8 @@ function HomeScreen({ navigation }) {
     else
       date2String = date2.getHours() + ":" + date2Mins + " AM";
 
+    const token = messaging().getToken();
+    console.log(token.data);
     // set dummy notifications
     return (
       [{id: 0, name: "Advil", time: date1, food: true, drowsy: false,
