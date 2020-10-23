@@ -2,6 +2,7 @@ import React, { createContext, useState } from 'react';
 import auth from '@react-native-firebase/auth';
 import firebase from '@react-native-firebase/app';
 import { Alert } from 'react-native';
+import messaging from '@react-native-firebase/messaging';
 
 export const AuthContext = createContext({});
 
@@ -44,14 +45,20 @@ export const AuthProvider = ({ children }) => {
             else
               await auth().createUserWithEmailAndPassword(email, password)
             .then(user => {
-              fetch('http://ec2-35-183-198-103.ca-central-1.compute.amazonaws.com:3000/user', {
+              console.log(`User id is ${user.user.uid} and token is ${JSON.stringify(messaging().getToken())}`);
+              fetch('http://ec2-35-183-198-103.ca-central-1.compute.amazonaws.com:3000/users', {
                 method: 'POST',
                 headers: {
                   Accept: 'application/json',
                   'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                  userId: user.user.uid
+                  userId: user.user.uid,
+                  token: messaging().getToken(),
+                  wakeupHr: 5,
+                  wakeupMin: 0,
+                  wakeupAM: true,
+                  waakeupPM: false
                 })
               });
             })
