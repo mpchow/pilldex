@@ -28,10 +28,14 @@ function deleteUser(req, res, next) {
 }
 
 function getNotification(req, res, next) {
-	var message = JSON.parse('{ "message":"Testing a push notification"}');
-	notifService.sendNotification(req.body, message)
-		.then((success) => res.json(success))
-		.catch(err => next(err));
+	try {
+		var message = JSON.parse('{ "message":"Testing a push notification"}');
+		notifService.sendNotification(req.body, message)
+			.then((success) => res.json(success))
+			.catch(err => next(err));
+	catch (error) {
+      throw `Could not send notification`;
+	}
 }
 
 module.exports = router;

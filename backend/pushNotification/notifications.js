@@ -49,12 +49,17 @@ firebase.initializeApp(firebaseConfig);
 
 const sendNotification = async (user, message) => {
 	const messageString = JSON.stringify(data)
-	await admin.messaging().sendToDevice(
-		user.token,
-		{ data : messageString },
-		{ priority: 'high'},
-	);
-    return({msg: 'Success'});
+	try {
+		await admin.messaging().sendToDevice(
+			user.token,
+			{ data : messageString },
+			{ priority: 'high'},
+		);
+	    return({msg: 'Success'});
+	}
+	catch (error) {
+		throw `Could not send notification`;
+	}
 }
 	
 /* Other Possible Implementation */
