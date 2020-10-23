@@ -20,7 +20,7 @@ function newPill(req, res, next) {
 
 function getPills(req, res, next) {
 	console.log("In GETPILL Route");
-	pillService.retrieve(req.body, false) 
+	pillService.retrieveAll() 
 		.then(pills => res.json(pills))
 		.catch(err => next(err));
 }
