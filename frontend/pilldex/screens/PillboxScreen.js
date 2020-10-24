@@ -16,7 +16,8 @@ const width = Dimensions.get('window').width;
 
 function PillboxScreen( {navigation} ) {
 
-  
+  const needRefill = 5; //below this amount, the text is red
+
   const [pills, setPills] = useState(() => [
     {id: 0, name: "INDOMETHACIN", capsulesLeft: 15},
     {id: 1, name: "VICODIN", capsulesLeft: 2},
@@ -40,7 +41,7 @@ function PillboxScreen( {navigation} ) {
                 <View style={{flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'space-evenly', marginLeft: 8}}>
                   <Text style={styles.medName}>{item.name}</Text>
                   <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-                    <Text style={{color: item.capsulesLeft <= 5 ? 'red' : 'black'}}>{item.capsulesLeft} Capsules Left</Text>
+                    <Text style={{color: item.capsulesLeft <= needRefill ? 'red' : 'black'}}>{item.capsulesLeft} Capsules Left</Text>
                   </View>
                   <TouchableOpacity style={{flexDirection: 'row'}}
                                     onPress={() => navigation.navigate("PillInfo", {pillName: item.name, pillAmount: item.capsulesLeft})}>
