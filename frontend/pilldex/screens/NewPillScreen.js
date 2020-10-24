@@ -19,6 +19,7 @@ function NewPillScreen({ navigation }) {
       const options = { quality: 0.5, base64: true };
       const data = await camera.takePictureAsync(options);
       console.log(data.uri);
+      console.log(typeof(data.uri));
       return data.uri;
     }
   }
@@ -44,7 +45,7 @@ function NewPillScreen({ navigation }) {
      </RNCamera>
      <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
        <TouchableOpacity style={styles.button}
-                        onPress={() => navigation.navigate('CheckPill')}>
+                        onPress={() => navigation.navigate('CheckPill', {uri: uri})}>
           <Text style={styles.btnText}>MANUAL</Text>
        </TouchableOpacity>
        <TouchableOpacity style={styles.button}

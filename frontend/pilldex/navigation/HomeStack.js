@@ -11,7 +11,7 @@ import firebase from '@react-native-firebase/app';
 const Stack = createStackNavigator();
 
 function HomeStack () {
-  useEffect(() => {
+  /*useEffect(() => {
     // foreground notification
     const unsubscribe = firebase.messaging().onMessage(async remoteMessage => {
       console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
@@ -38,7 +38,7 @@ function HomeStack () {
       });
 
     return unsubscribe;
-  }, []);
+  }, []);*/
 
   return (
       <Stack.Navigator intialRouteName = 'Home'

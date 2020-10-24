@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Fontisto from 'react-native-vector-icons/Fontisto';
+import messaging from '@react-native-firebase/messaging';
+import firebase from '@react-native-firebase/app';
 
-/* screens */
+/* components */
 import HomeStack from './HomeStack.js';
 import ProfileStack from './ProfileStack.js';
 import PillboxScreen from '../screens/PillboxScreen.js';
@@ -14,6 +16,35 @@ const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 function MainStack() {
+  useEffect(() => {
+    // foreground notification
+    const unsubscribe = firebase.messaging().onMessage(async remoteMessage => {
+      console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    });
+
+    // notification while app is in background mode
+    firebase.messaging().onNotificationOpenedApp(remoteMessage => {
+      console.log(
+        'Notification caused app to open from background state:',
+        remoteMessage.notification,
+      );
+    });
+
+    // notification while app is in quit mode
+    firebase.messaging()
+      .getInitialNotification()
+      .then(remoteMessage => {
+        if (remoteMessage) {
+          console.log(
+            'Notification caused app to open from quit state:',
+            remoteMessage.notification,
+          );
+        }
+      });
+
+    return unsubscribe;
+  }, []);
+
   return (
       <Tab.Navigator
          initialRouteName = 'Home'
