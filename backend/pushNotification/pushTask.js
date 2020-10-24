@@ -1,4 +1,5 @@
-const sendNotification = require('./notifications');
+//const sendNotification = require('./notifications');
+const notifService = require('./notifications');
 const db = require('../db/db');
 const Profile = db.User;
 
@@ -10,7 +11,7 @@ const pushTask = async () => {
    (await profiles).forEach(profile => {
       profile.schedule[currDay].forEach((pill) => {
          if(pill.time.getHours() === currTime) {
-            sendNotification(profile.token, `It is time to take ${reminder.name}`);
+            notifService.sendNotification(profile.token, `It is time to take ${reminder.name}`);
          }
       });
       

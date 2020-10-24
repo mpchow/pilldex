@@ -10,10 +10,17 @@ admin.initializeApp({
 		  databaseURL: "https://pilldex.firebaseio.com"
 });
 
-const sendNotification = async (userParams, payload) => {
+const sendNotification = async (token, message) => {
 	console.log("About to Send Notification!");
+	const payload = {
+		notification: {
+			title: "Test Notification!", 
+			body: message,
+			priority: 'high',
+		 }
+	};
 	try {
-		return admin.messaging().sendToDevice(userParams.token, payload).then(response =>{
+		return admin.messaging().sendToDevice(token, payload).then(response =>{
 			console.log("The Notification Has been Sent !");
 		});
 	}
