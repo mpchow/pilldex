@@ -8,11 +8,19 @@ const pushTask = async () => {
    const currMin = new Date().getMinutes();
    const currDay = new Date().getDay();
    let profiles = await Profile.find({});
-   
+
    (await profiles).forEach(profile => {
       profile.schedule[currDay].forEach((pill) => {
          if(pill.time.getHours() === currHour && pill.time.getMinutes() === currMin) {
-            notifService.sendNotification(profile.token, `It is time to take ${reminder.name}`);
+			const payload = {
+				notification: {
+					title: "Testing pushtask Function!",
+					body: `It is time to take ${pill.pillName}`,
+					priority: 'high',
+				}
+			 };
+            //notifService.sendNotification(profile, `It is time to take ${reminder.name}`);
+            notifService.sendNotification(profile, payload);
          }
       });
       
