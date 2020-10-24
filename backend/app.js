@@ -7,6 +7,9 @@ var logger = require('morgan');
 var pillsRouter = require('./routes/pills');
 var usersRouter = require('./routes/users');
 
+const cron = require('node-cron');
+const pushTask = require('./pushNotification/pushTask');
+
 var app = express();
 
 // view engine setup
@@ -22,6 +25,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 //app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/pills', pillsRouter);
+
+//cron.schedule('* * * * *', pushTask());
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -15,7 +15,7 @@ const create = async (profileParams) => {
 
 const update = async (profileParams) => {
    try {
-      await Profile.replaceOne({userId: profileParams.userId});
+      await Profile.replaceOne({userId: profileParams.userId}, profileParams);
       return {msg: 'Success'};
    }
    catch (error) {
@@ -24,6 +24,13 @@ const update = async (profileParams) => {
 }
 
 const remove = async (profileParams) => {
+   try {
+      await Profile.deleteOne({userId: profileParams.userId});
+      return {msg: 'Success'};
+   }
+   catch (error) {
+      throw `The profile for ${profileParams.name} could not be removed`;
+   }
 
 }
 

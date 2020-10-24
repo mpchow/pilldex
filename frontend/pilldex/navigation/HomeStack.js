@@ -6,18 +6,19 @@ import NewPillScreen from '../screens/NewPillScreen.js';
 import CheckPillScreen from '../screens/CheckPillScreen.js';
 import NotificationsScreen from '../screens/NotificationsScreen.js';
 import messaging from '@react-native-firebase/messaging';
+import firebase from '@react-native-firebase/app';
 
 const Stack = createStackNavigator();
 
 function HomeStack () {
   useEffect(() => {
     // foreground notification
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
+    const unsubscribe = firebase.messaging().onMessage(async remoteMessage => {
       console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
     });
 
     // notification while app is in background mode
-    messaging().onNotificationOpenedApp(remoteMessage => {
+    firebase.messaging().onNotificationOpenedApp(remoteMessage => {
       console.log(
         'Notification caused app to open from background state:',
         remoteMessage.notification,
@@ -25,7 +26,7 @@ function HomeStack () {
     });
 
     // notification while app is in quit mode
-    messaging()
+    firebase.messaging()
       .getInitialNotification()
       .then(remoteMessage => {
         if (remoteMessage) {

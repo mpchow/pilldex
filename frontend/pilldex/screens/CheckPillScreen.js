@@ -7,13 +7,13 @@ import {
   TextInput,
   ScrollView,
 } from 'react-native';
-import auth, { firebase } from '@react-native-firebase/auth';
-import { utils } from '@react-native-firebase/app';
+import auth from '@react-native-firebase/auth';
+import firebase, { utils } from '@react-native-firebase/app';
 import vision from '@react-native-firebase/ml-vision';
 
 
-function CheckPillScreen({ navigation }) {
-
+function CheckPillScreen({ navigation, route }) {
+  const { uri } = route.params;
   const [name, setName] = useState("");
   const [refillUnits, setRefillUnits] = useState("");
   const [freq, setFreq] = useState("");
@@ -51,11 +51,11 @@ function CheckPillScreen({ navigation }) {
 
   async function processDocument() {
 
-    const localFile = `images/pillinfo.png`;
-    const processed = await vision().cloudDocumentTextRecognizerProcessImage(localFile);
-  
+    const localFile = "./images/pillinfo.png";
+    const processed = await vision().cloudDocumentTextRecognizerProcessImage(uri);
+
     console.log('Found text in document: ', processed.text);
-  
+
     processed.blocks.forEach(block => {
       console.log('Found block with text: ', block.text);
       console.log('Confidence in block: ', block.confidence);
@@ -93,7 +93,7 @@ function CheckPillScreen({ navigation }) {
           />
           <Text style={styles.text}>  units</Text>
         </View>
-          
+
         <Text style={styles.form_titles}>3 - Frequency</Text>
         <View style={{flexDirection: 'row'}}>
           <Text style={styles.text}>Take  </Text>
@@ -140,7 +140,7 @@ function CheckPillScreen({ navigation }) {
         <View style={{height: 20}} />
 
       </View>
-      
+
       <View style={{flexDirection: 'row', padding: 10, justifyContent:'space-between'}}>
         <TouchableOpacity style={styles.button}
                           onPress={() => {processDocument(); navigation.goBack();}}>
@@ -200,8 +200,8 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter-Light',
   },
   text: {
-    fontFamily: 'Quicksand', 
-    fontSize: 20, color: '#000000', 
+    fontFamily: 'Quicksand',
+    fontSize: 20, color: '#000000',
     paddingTop: 26,
   },
   button: {
@@ -237,8 +237,8 @@ const styles = StyleSheet.create({
     borderColor: '#538083',
   },
   radioText: {
-    fontFamily: 'Quicksand', 
-    fontSize: 20, color: '#000000', 
+    fontFamily: 'Quicksand',
+    fontSize: 20, color: '#000000',
   }
 });
 
