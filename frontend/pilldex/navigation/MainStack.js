@@ -10,7 +10,7 @@ import firebase from '@react-native-firebase/app';
 /* components */
 import HomeStack from './HomeStack.js';
 import ProfileStack from './ProfileStack.js';
-import PillboxScreen from '../screens/PillboxScreen.js';
+import PillBoxStack from './PillBoxStack.js';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -78,7 +78,7 @@ function MainStack() {
                       ),
                     }}
                    />
-       <Tab.Screen name='Pillbox' component={PillboxScreen}
+       <Tab.Screen name='Pillbox' component={PillBoxStack}
                    options = {{
                      tabBarLabel: 'Pillbox',
                      tabBarIcon: ({ color }) => (
