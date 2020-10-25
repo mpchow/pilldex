@@ -41,11 +41,12 @@ function NewPillScreen({ navigation }) {
           width: width,
           marginBottom: -85
         }}
+        captureAudio={false}
      >
      </RNCamera>
      <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
        <TouchableOpacity style={styles.button}
-                        onPress={() => navigation.navigate('CheckPill', {uri: uri})}>
+                        onPress={() => navigation.navigate('CheckPill', {uri: ""})}>
           <Text style={styles.btnText}>MANUAL</Text>
        </TouchableOpacity>
        <TouchableOpacity style={styles.button}

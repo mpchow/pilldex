@@ -6,7 +6,7 @@ import PillInfoScreen from '../screens/PillInfoScreen.js';
 
 const Stack = createStackNavigator();
 
-function PillBoxStack ( ) {
+function PillBoxStack(propName) {
     return (
         <Stack.Navigator intialRouteName = 'PillBox'
                          screenOptions={{
