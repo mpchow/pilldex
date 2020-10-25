@@ -1,8 +1,10 @@
+const manageSchedule = require('../pushNotification/manageSchedule');
 const db = require('./../db/db.js');
 const Pill = db.Pill;
 
 const create = async (pillParams) => {
    try {
+		updateSchedule(pillParams.userId, pillParams);
       await Pill.findOne({ name: pillParams.name, userId: pillParams.userId })
       const pill = new Pill(pillParams);
       pill.save();
@@ -15,6 +17,8 @@ const create = async (pillParams) => {
 
 const update = async (pillParams) => {
 	try {
+		manageSchedule.removeSchedule();
+		manageSchedule.updateSchedule();
 		await Pill.replaceOne({name: pillParams.name, userId: pillParams.userId}, pillParams);
 		return({msg: 'Success'});
 	}
@@ -25,6 +29,7 @@ const update = async (pillParams) => {
 
 const remove = async (pillParams) => {
 	try {
+		removeSchedule();
 		await Pill.deleteOne({name: pillParams.name, userId: pillParams.userId});
 		return({msg: 'Success'});
 	}
@@ -33,7 +38,7 @@ const remove = async (pillParams) => {
 	}  
 }
 
-const retrieve = async (pillParams, one) => {
+const retrieve = async (pillParams) => {
 	try {
 		return {pill: await Pill.findOne({name: pillParams.name, userId: pillParams.userId}), msg: 'Success'};
     }

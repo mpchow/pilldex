@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Fontisto from 'react-native-vector-icons/Fontisto';
+import messaging from '@react-native-firebase/messaging';
+import firebase from '@react-native-firebase/app';
 
-/* screens */
+/* components */
 import HomeStack from './HomeStack.js';
 import ProfileStack from './ProfileStack.js';
 import PillBoxStack from './PillBoxStack.js';
@@ -14,6 +16,53 @@ const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 function MainStack() {
+  const [notif, setNotif] = ('');
+
+  useEffect(() => {
+    // foreground notification
+    const unsubscribe = firebase.messaging().onMessage(async remoteMessage => {
+      //setNotif(JSON.stringify(remoteMessage));
+      console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
+      Alert.alert('Notification',
+        remoteMessage.notification.body,
+        [
+          {
+            text: 'OK',
+            onPress: () => console.log('Notification closed')
+          },
+          {
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel'
+          },
+        ],
+        { cancelable: false }
+      );
+    });
+
+    // notification while app is in background mode
+    firebase.messaging().onNotificationOpenedApp(remoteMessage => {
+      console.log(
+        'Notification caused app to open from background state:',
+        remoteMessage.notification,
+      );
+    });
+
+    // notification while app is in quit mode
+    firebase.messaging()
+      .getInitialNotification()
+      .then(remoteMessage => {
+        if (remoteMessage) {
+          console.log(
+            'Notification caused app to open from quit state:',
+            remoteMessage.notification,
+          );
+        }
+      });
+
+    return unsubscribe;
+  }, []);
+
   return (
       <Tab.Navigator
          initialRouteName = 'Home'
@@ -31,7 +80,8 @@ function MainStack() {
            }
          }}
          >
-       <Tab.Screen name='Profile' component={ProfileStack}
+       <Tab.Screen name='Profile'
+                   children={() => <ProfileStack propName={notif}/>}
                    options = {{
                      tabBarLabel: 'Profile',
                      tabBarIcon: ({ color }) => (
@@ -39,7 +89,8 @@ function MainStack() {
                       ),
                     }}
                    />
-       <Tab.Screen name='Home' component={HomeStack}
+       <Tab.Screen name='Home'
+                   children={() => <HomeStack propName={notif}/>}
                    options = {{
                      tabBarLabel: 'Home',
                      tabBarIcon: ({ color }) => (
@@ -47,7 +98,8 @@ function MainStack() {
                       ),
                     }}
                    />
-       <Tab.Screen name='Pillbox' component={PillBoxStack}
+       <Tab.Screen name='Pillbox'
+                   children={() => <PillBoxStack propName={notif}/>}
                    options = {{
                      tabBarLabel: 'Pillbox',
                      tabBarIcon: ({ color }) => (

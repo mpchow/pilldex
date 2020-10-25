@@ -20,6 +20,7 @@ function NewPillScreen({ navigation }) {
       const data = await camera.takePictureAsync(options);
       console.log(typeof(data.uri));
       console.log(data.uri);
+      console.log(typeof(data.uri));
       return data.uri;
     }
   }
@@ -41,11 +42,12 @@ function NewPillScreen({ navigation }) {
           width: width,
           marginBottom: -85
         }}
+        captureAudio={false}
      >
      </RNCamera>
      <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
        <TouchableOpacity style={styles.button}
-                        onPress={() => navigation.navigate('CheckPill')}>
+                        onPress={() => navigation.navigate('CheckPill', {uri: ""})}>
           <Text style={styles.btnText}>MANUAL</Text>
        </TouchableOpacity>
        <TouchableOpacity style={styles.button}

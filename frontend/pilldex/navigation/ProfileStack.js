@@ -6,7 +6,7 @@ import SchedulerScreen from '../screens/SchedulerScreen.js';
 
 const Stack = createStackNavigator();
 
-function ProfileStack ( ) {
+function ProfileStack(propName) {
     return (
         <Stack.Navigator intialRouteName = 'Profile'
                          screenOptions={{
