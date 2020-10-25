@@ -7,15 +7,17 @@ import {
   TextInput
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 function SchedulerScreen({ navigation }) {
   // will go to default values or the user's prev settings
   const [routine, setRoutine] = useState([
     {"time": "07:00", "AM": false, "PM": false},
-    {"time": "22:00", "AM": false, "PM": false},
+    {"time": "10:00", "AM": false, "PM": false},
     {"time": "08:00", "AM": false, "PM": false},
     {"time": "12:00", "AM": false, "PM": false},
-    {"time": "18:00", "AM": false, "PM": false}
+    {"time": "06:00", "AM": false, "PM": false}
   ]);
 
   function updateRoutine(index, field, newValue) {
@@ -94,11 +96,10 @@ function SchedulerScreen({ navigation }) {
       </View>
 
       <View style={styles.routineComponent}>
-        <Ionicons name="sunny" color='#A2E1E2' size={30} style={{marginTop: 3}}/>
+        <Ionicons name="moon" color='#A2E1E2' size={30} style={{marginTop: 3}}/>
         <View style={{width: 7}}/>
         <Text style={styles.bigRoutineText}>Bedtime:</Text>
-        <View style={{width: 7}}/>
-        <View style={{alignItems: 'center', justifyContent: 'center'}}>
+        <View style={{marginLeft: 18, alignItems: 'center', justifyContent: 'center'}}>
           <TextInput
             placeholder = {routine[1]["time"]}
             style= {styles.input}
@@ -128,10 +129,10 @@ function SchedulerScreen({ navigation }) {
       </View>
 
       <View style={styles.routineComponent}>
-        <Ionicons name="sunny" color='#A2E1E2' size={30} style={{marginTop: 3}}/>
+        <SimpleLineIcons name="cup" color='#A2E1E2' size={30} style={{marginTop: 3}}/>
         <View style={{width: 7}}/>
-        <Text style={styles.bigRoutineText}>Breakfast:</Text>
-        <View style={{width: 7}}/>
+        <Text style={styles.smallRoutineText}>Breakfast:</Text>
+        <View style={{width: 15}}/>
         <View style={{alignItems: 'center', justifyContent: 'center'}}>
           <TextInput
             placeholder = {routine[2]["time"]}
@@ -158,10 +159,10 @@ function SchedulerScreen({ navigation }) {
       </View>
 
       <View style={styles.routineComponent}>
-        <Ionicons name="sunny" color='#A2E1E2' size={30} style={{marginTop: 3}}/>
+        <Ionicons name="fast-food" color='#A2E1E2' size={30} style={{marginTop: 3}}/>
         <View style={{width: 7}}/>
         <Text style={styles.bigRoutineText}>Lunch:</Text>
-        <View style={{width: 7}}/>
+        <View style={{width: 45}}/>
         <View style={{alignItems: 'center', justifyContent: 'center'}}>
           <TextInput
             placeholder = {routine[3]["time"]}
@@ -188,10 +189,11 @@ function SchedulerScreen({ navigation }) {
       </View>
 
       <View style={styles.routineComponent}>
-        <Ionicons name="sunny" color='#A2E1E2' size={30} style={{marginTop: 3}}/>
+        <MaterialCommunityIcons name="silverware-fork-knife" color='#A2E1E2'
+                                size={30} style={{marginTop: 3}}/>
         <View style={{width: 7}}/>
         <Text style={styles.bigRoutineText}>Dinner:</Text>
-        <View style={{width: 7}}/>
+        <View style={{width: 39}}/>
         <View style={{alignItems: 'center', justifyContent: 'center'}}>
           <TextInput
             placeholder = {routine[4]["time"]}
@@ -270,6 +272,11 @@ const styles = StyleSheet.create({
   bigRoutineText: {
     fontFamily: 'Quicksand-Medium',
     fontSize: 25,
+    color: '#538083'
+  },
+  smallRoutineText: {
+    fontFamily: 'Quicksand-Medium',
+    fontSize: 22,
     color: '#538083'
   },
   input: {

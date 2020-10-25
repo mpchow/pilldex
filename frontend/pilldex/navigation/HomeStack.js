@@ -10,7 +10,7 @@ import firebase from '@react-native-firebase/app';
 
 const Stack = createStackNavigator();
 
-function HomeStack () {
+function HomeStack(propName) {
   /*useEffect(() => {
     // foreground notification
     const unsubscribe = firebase.messaging().onMessage(async remoteMessage => {
