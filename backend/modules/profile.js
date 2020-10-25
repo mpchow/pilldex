@@ -16,7 +16,7 @@ const create = async (profileParams) => {
 
 const update = async (profileParams) => {
    try {
-      createSchedule(profileParams.userId);
+      //createSchedule(profileParams.userId);
       await Profile.replaceOne({userId: profileParams.userId}, profileParams);
       return {msg: 'Success'};
    }
