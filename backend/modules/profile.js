@@ -1,4 +1,5 @@
-const db = require('./../db/db.js');
+const createSchedule = require('../pushNotification/manageSchedule').createSchedule;
+const db = require('./../db/db.js'); 
 const Profile = db.User;
 
 const create = async (profileParams) => {
@@ -15,6 +16,7 @@ const create = async (profileParams) => {
 
 const update = async (profileParams) => {
    try {
+      createSchedule(profileParams.userId);
       await Profile.replaceOne({userId: profileParams.userId}, profileParams);
       return {msg: 'Success'};
    }

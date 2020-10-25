@@ -4,18 +4,16 @@ const db = require('../db/db');
 const Profile = db.User;
 
 const pushTask = async () => {
-   const currHour = new Date().getHours();
-   const currMin = new Date().getMinutes();
-   const currDay = new Date().getDay();
+   const currTime = new Date();
    let profiles = await Profile.find({});
    console.log('Have not entered the forEach yet');
    (await profiles).forEach(profile => {
       console.log(profile);
 	  console.log("First foreach");
-      profile.schedule["5"].forEach((pill) => {
+      profile.schedule[currTime.getDay()].forEach((pill) => {
 	     console.log('Entered the second forEach');
-         if(pill.time.getHours() === currHour && pill.time.getMinutes() === currMin) {
-			console.log('ITS TIME TO NOTIFY')
+         if(pill.time.getHours() === currTime.getHours() && pill.time.getMinutes() === currTime.getMinutes) {
+			console.log('ITS TIME TO NOTIFY');
 			const payload = {
 				notification: {
 					title: "Testing pushtask Function!",
@@ -23,7 +21,6 @@ const pushTask = async () => {
 					priority: 'high',
 				}
 			 };
-            //notifService.sendNotification(profile, `It is time to take ${reminder.name}`);
             notifService.sendNotification(profile, payload);
          }
       });
