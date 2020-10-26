@@ -3,11 +3,21 @@ const Pills = db.Pill;
 const Users = db.User;
 
 const getDate = (day, pill, user) => {
-const lunchHour = user.lunchHour ? user.lunchHour : 12;
-const lunchMin = user.lunchMin ? user.lunchMin : 0;
-const sleepHour = user.sleepHour ? user.sleepHour : 22;
-const sleepMin = user.sleepMin ? user.sleepMin : 0;
+    const lunchAM = user.lunchAM ? user.lunchAM : false;
+	const lunchHour = user.lunchHr ? (lunchAM ? user.lunchHr : user.lunchHr + 12) : 12;
+	const lunchMin = user.lunchMin ? user.lunchMin : 0;
 
+	const dinnerAM = user.dinnerAM ? user.dinnerAM : false;
+	const dinnerHour = user.dinnerHr ? (dinerAM ? user.dinnerHr: user.dinnerHr + 12) : 19;
+	const dinnerMin = user.dinnerMin ? user.dinnerMin : 0;
+
+	const sleepAM = user.sleepAM ? user.sleepAM : false;
+	const sleepHour = user.sleepHr ? (sleepAM ? user.sleepHr : user.sleepHr + 12) : 22;
+	const sleepMin = user.sleepMin ? user.sleepMin : 0;
+
+   if (pill.withFood && pill.withSleep) {
+	  return new Date(2020, 10, (lunchHour + 7 > 24 ? day + 2 : day + 1), lunchHour, lunchMin);
+   }
    if (pill.withFood) {
       return new Date(2020, 10, (lunchHour + 7 > 24 ? day + 2 : day + 1), lunchHour, lunchMin);
    }
