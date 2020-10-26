@@ -54,7 +54,8 @@ export const AuthProvider = ({ children }) => {
                         },
                         body: JSON.stringify({
                           token: token,
-                          userId: user.user.uid
+                          userId: user.user.uid,
+                          schedule: [[], [], [], [], [], [], []]
                         })
                       });
                     });
