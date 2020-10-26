@@ -18,6 +18,7 @@ function NewPillScreen({ navigation }) {
     if (camera) {
       const options = { quality: 0.5, base64: true };
       const data = await camera.takePictureAsync(options);
+      console.log(typeof(data.uri));
       console.log(data.uri);
       console.log(typeof(data.uri));
       return data.uri;
