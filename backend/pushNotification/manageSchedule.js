@@ -16,7 +16,7 @@ const getDate = (day, pill, user) => {
 	const sleepMin = user.sleepMin ? user.sleepMin : 0;
 
    if (pill.withFood && pill.withSleep) {
-	  return new Date(2020, 10, (lunchHour + 7 > 24 ? day + 2 : day + 1), lunchHour, lunchMin);
+	  return new Date(2020, 10, (dinnerHour + (dinnerHour - sleepHour) / 2 + 7 > 24 ? day + 2 : day + 1), dinnerHour + (dinnerHour - sleepHour) / 2, dinnerMin);
    }
    if (pill.withFood) {
       return new Date(2020, 10, (lunchHour + 7 > 24 ? day + 2 : day + 1), lunchHour, lunchMin);
