@@ -46,6 +46,7 @@ function CheckPillScreen({ navigation, route }) {
     .catch((error) => {
       console.error(error);
     });
+    navigation.navigate("Home");
 
   }
 
