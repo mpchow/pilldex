@@ -3,58 +3,64 @@ const Pills = db.Pill;
 const Users = db.User;
 
 const getDate = (day, pill, user) => {
+const lunchHour = user.lunchHour ? user.lunchHour : 12;
+const lunchMin = user.lunchMin ? user.lunchMin : 0;
+const sleepHour = user.sleepHour ? user.sleepHour : 22;
+const sleepMin = user.sleepMin ? user.sleepMin : 0;
+
    if (pill.withFood) {
-      return new Date(2020, 10, day + 1, user.lunchHour, user.lunchMin);
+      return new Date(2020, 10, (lunchHour + 7 > 24 ? day + 2 : day + 1), lunchHour, lunchMin);
    }
    else if (pill.withSleep) {
-      return new Date(2020, 10, day + 1, user.sleepHour, user.sleepMin);
+      return new Date(2020, 10, (sleepHour + 7 > 24 ? day + 2 : day + 1), sleepHour, sleepMin);
    }
    else {
-      return new Date(2020, 10, day + 1, user.lunchHour + 2);
+      return new Date(2020, 10, (lunchHour + 9 > 24 ? day + 2 : day + 1), lunchHour + 2);
    }
 };
  
-const updateSchedule = (userID, pill) => {
-   let user = Users.find({userId: userID});
+const updateSchedule = async (userID, pill) => {
+   let user = await Users.findOne({userId: userID});
    let schedule = user.schedule;
-   
-   for (let i = 0; i < 7; i += pill.frequency) {
-      schedule[i].push({time: getDate(i, pill, user), pillName: pill.name});
+   const freq = pill.frequencyUnit === 'Daily' ? 1 : 7;	
+   for (let i = 0; i < 7; i += freq) {
+		if(schedule[i]) {
+			schedule[i].push({time: getDate(i, pill, user), pillName: pill.name});
+		}
    }
-   
-   Users.findOneAndUpdate({userId: userID}, {schedule: schedule,...user});
+  await Users.findOneAndUpdate({userId: userID}, {schedule: schedule});
+
 }
 
-const deleteSchedule = (userID, pill) => {
-   let user = Users.find({userId: userID});
+const deleteSchedule = async (userID, pill) => {
+   let user = await Users.findOne({userId: userID});
    let schedule = user.schedule;
 
-   schedule.forEach(day => {
-      day.filter(reminder => {
+   schedule = schedule.map(day => {
+      return day.filter(reminder => {
          reminder.pillName !== pill.name;
       })
-   })
+   });
 
-   Users.findOneAndUpdate({userId: userID}, {schedule: schedule,...user});
+  await Users.findOneAndUpdate({userId: userID}, {schedule: schedule});
 };
 
-const createSchedule = (userID) => {
+const createSchedule = async (userID) => {
    //iterate through all of the pills
-   let pills = Pills.find({userId: userID});
-   let user = Users.find({userId: userID});
+   let pills = await Pills.find({userId: userID});
+   let user = await Users.findOne({userId: userID});
    let schedule = [[], [], [], [], [], [], []];
 
    pills.forEach(pill => {
       //Get when we need to take the pill
-      //Check frequency and whether we take it at night or with food
-      for (let i = 0; i < 7; i += pill.frequency) {
+      //Check frequency and whether we take it at night or with foodi
+      const freq = pill.frequencyUnit === 'Daily' ? 1 : 7;
+      for (let i = 0; i < 7; i += freq) {
          schedule[i].push({time: getDate(i, pill, user), pillName: pill.name});
       }
    });
 
-
-   //Later have to update the user entry in the db
-   Users.findOneAndUpdate({userId: userID}, {schedule: schedule,...user});
+  await Users.findOneAndUpdate({userId: userID}, {schedule: schedule});
 } 
 
 module.exports = {createSchedule, updateSchedule, deleteSchedule};
