@@ -4,22 +4,23 @@ const Pill = db.Pill;
 
 const create = async (pillParams) => {
    try {
-		updateSchedule(pillParams.userId, pillParams);
       await Pill.findOne({ name: pillParams.name, userId: pillParams.userId })
       const pill = new Pill(pillParams);
       pill.save();
+      manageSchedule.updateSchedule(pillParams.userId, pillParams);
       return({msg: 'Success'});
    }
    catch (error) {
+	  console.log(error);
       throw 'The Pill ' + name + ' is already in the pilldex';
    }
 }
 
 const update = async (pillParams) => {
 	try {
-		manageSchedule.removeSchedule();
-		manageSchedule.updateSchedule();
-		await Pill.replaceOne({name: pillParams.name, userId: pillParams.userId}, pillParams);
+        await Pill.replaceOne({name: pillParams.name, userId: pillParams.userId}, pillParams);
+		manageSchedule.removeSchedule(pillParams.userId, pillParams.name);
+		manageSchedule.updateSchedule(pillParams.userId, pillParams);
 		return({msg: 'Success'});
 	}
 	catch (error) {
@@ -29,8 +30,8 @@ const update = async (pillParams) => {
 
 const remove = async (pillParams) => {
 	try {
-		removeSchedule();
 		await Pill.deleteOne({name: pillParams.name, userId: pillParams.userId});
+        manageSchedule.deleteSchedule(pillParams.userId, pillParams.name);
 		return({msg: 'Success'});
 	}
 	catch (error) {
@@ -49,7 +50,7 @@ const retrieve = async (pillParams) => {
 
 const retrieveAll = async () => {
 	try {
-	   return {pill: await Pill.find(), msg: 'Success'};
+	   return {pill: await Pill.find({}), msg: 'Success'};
 	}
 	catch (error) {
 	   throw `The Pills could not be retrieved`;

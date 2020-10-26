@@ -1,6 +1,7 @@
 const createSchedule = require('../pushNotification/manageSchedule').createSchedule;
 const db = require('./../db/db.js'); 
 const Profile = db.User;
+const Pill = db.Pill;
 
 const create = async (profileParams) => {
    try {
@@ -28,6 +29,7 @@ const update = async (profileParams) => {
 const remove = async (profileParams) => {
    try {
       await Profile.deleteOne({userId: profileParams.userId});
+	  await Pill.deleteMany({userId: profileParams.userId});
       return {msg: 'Success'};
    }
    catch (error) {
