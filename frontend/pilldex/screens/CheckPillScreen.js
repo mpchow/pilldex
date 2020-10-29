@@ -9,11 +9,11 @@ import {
 } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import firebase, { utils } from '@react-native-firebase/app';
-import vision from '@react-native-firebase/ml-vision';
+
 
 
 function CheckPillScreen({ navigation, route }) {
-  const { uri } = route.params;
+  //const { uri } = route.params;
   const [name, setName] = useState("");
   const [refillUnits, setRefillUnits] = useState("");
   const [freq, setFreq] = useState("");
@@ -47,20 +47,6 @@ function CheckPillScreen({ navigation, route }) {
       console.error(error);
     });
     navigation.navigate('Home');
-  }
-
-  async function processDocument() {
-
-    const localFile = "./images/pillinfo.png";
-    const processed = await vision().cloudDocumentTextRecognizerProcessImage(uri);
-
-    console.log('Found text in document: ', processed.text);
-
-    processed.blocks.forEach(block => {
-      console.log('Found block with text: ', block.text);
-      console.log('Confidence in block: ', block.confidence);
-      console.log('Languages found in block: ', block.recognizedLanguages);
-    });
   }
 
   return (
@@ -143,7 +129,7 @@ function CheckPillScreen({ navigation, route }) {
 
       <View style={{flexDirection: 'row', padding: 10, justifyContent:'space-between'}}>
         <TouchableOpacity style={styles.button}
-                          onPress={() => {processDocument(); navigation.goBack();}}>
+                          onPress={() => navigation.goBack()}>
           <Text style={styles.btnText}>BACK</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button}
