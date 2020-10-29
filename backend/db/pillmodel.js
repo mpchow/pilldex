@@ -11,6 +11,7 @@ const pillSchema = new Schema({
 	dosage: {type: Number, required: true}, 
 	withFood: {type: Boolean, required: true},
 	withSleep: {type: Boolean, required: true},
+	remaining: {type: Number, required: true}
 }); 
 
 pillSchema.set('toJSON', {

@@ -48,9 +48,9 @@ const retrieve = async (pillParams) => {
     }
 }
 
-const retrieveAll = async () => {
+const retrieveAll = async (pillParams) => {
 	try {
-	   return {pill: await Pill.find({}), msg: 'Success'};
+	   return {pill: await Pill.find({userId: pillParams.userId}), msg: 'Success'};
 	}
 	catch (error) {
 	   throw `The Pills could not be retrieved`;

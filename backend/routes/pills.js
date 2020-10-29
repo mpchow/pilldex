@@ -6,7 +6,7 @@ router.post('/', newPill);
 router.get('/', getPills);
 router.put('/', updatePill);
 router.delete('/', deletePill);
-router.get('/:name', getPillById);
+router.get('/single', getPillById);
 router.post('/label', parseLabel);
 
 module.exports = router;
@@ -28,14 +28,14 @@ function newPill(req, res, next) {
 
 function getPills(req, res, next) {
 	console.log("In GETALLPILL Route");
-	pillService.retrieveAll() 
+	pillService.retrieveAll(req.body) 
 		.then(pills => {res.json(pills);})
 		.catch(err => next(err));
 }
 
 function getPillById(req, res, next) {
 	console.log("In GETPILL Route");
-	pillService.retrieve(req.body, true) 
+	pillService.retrieve(req.body) 
 		.then(pill => res.json(pill))
 		.catch(err => next(err));
 }
