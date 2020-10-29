@@ -7,8 +7,16 @@ router.get('/', getPills);
 router.put('/', updatePill);
 router.delete('/', deletePill);
 router.get('/:name', getPillById);
+router.post('/label', parseLabel);
 
 module.exports = router;
+
+function parseLabel(req, res, next) {
+	console.log("In PARSELABEL Route");
+	pillService.parseLabel(req.body)
+		.then((success) => res.json(success))
+		.catch(err => next(err));
+}
 
 
 function newPill(req, res, next) {
