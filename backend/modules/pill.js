@@ -57,7 +57,17 @@ const retrieveAll = async () => {
 	}
 }
 
-module.exports = {create, update, remove, retrieve, retrieveAll};
+const parseLabel = async (label) => {
+	try {
+		console.log(label);
+		return({msg: 'Success'});
+	}
+	catch (error) {
+	   throw `The label could not be parsed`;
+	}
+}
+
+module.exports = {create, update, remove, retrieve, retrieveAll, parseLabel};
 
 // {name, userId, totalQuantity, frequency, 
 //    frequencyUnit, dosage, withFood, withSleep
