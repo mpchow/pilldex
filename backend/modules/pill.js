@@ -41,6 +41,8 @@ const remove = async (pillParams) => {
 
 const retrieve = async (pillParams) => {
 	try {
+		console.log("PillName = ", pillparams.name);
+		console.log("UserId = ", pillparams.userId);
 		return {pill: await Pill.findOne({name: pillParams.name, userId: pillParams.userId}), msg: 'Success'};
     }
     catch (error) {
