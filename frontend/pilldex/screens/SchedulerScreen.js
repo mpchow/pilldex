@@ -1,23 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   StyleSheet,
   View,
   Text,
   TouchableOpacity,
-  TextInput
+  TextInput,
+  Alert
 } from 'react-native';
+import { AuthContext } from '../navigation/AuthProvider';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-function SchedulerScreen({ navigation }) {
+function SchedulerScreen({ navigation, route }) {
+  const { user, register } = useContext(AuthContext);
+  const { email, password } = route.params;
+
   // will go to default values or the user's prev settings
+  const [wakeup, setWakeup] = useState("");
+  const [bedtime, setBedtime] = useState("");
+  const [bfast, setBfast] = useState("");
+  const [lunch, setLunch] = useState("");
+  const [dinner, setDinner] = useState("");
   const [routine, setRoutine] = useState([
-    {"time": "07:00", "AM": false, "PM": false},
-    {"time": "10:00", "AM": false, "PM": false},
-    {"time": "08:00", "AM": false, "PM": false},
-    {"time": "12:00", "AM": false, "PM": false},
-    {"time": "06:00", "AM": false, "PM": false}
+    {title: "Wake-up", "time": wakeup, "AM": false, "PM": false},
+    {title: "Bedtime", "time": bedtime, "AM": false, "PM": false},
+    {title: "Breakfast", "time": bfast, "AM": false, "PM": false},
+    {title: "Lunch", "time": lunch, "AM": false, "PM": false},
+    {title: "Dinner", "time": dinner, "AM": false, "PM": false}
   ]);
 
   function updateRoutine(index, field, newValue) {
@@ -25,27 +35,29 @@ function SchedulerScreen({ navigation }) {
     var isPM = routineCopy[index]["PM"];
     var isAM = routineCopy[index]["AM"];
     if (field == "time") { // go ahead and update time
-      routineCopy[index][field] = newValue;
-    }
-    // if AM is already TRUE and PM is FALSE, deselect AM
-    // if AM is FALSE and PM is TRUE, select AM and deselect PM
-    // if AM and PM are BOTH FALSE, select AM and without touching PM
-
-    // if PM is already TRUE and AM is FALSE, deselect PM
-    // if PM is FALSE and AM is TRUE, select PM and deselect AM
-    // if PM and AM are BOTH FALSE, select PM and without touching AM
-    else if (field == "AM") { // only NONE or ONE of AM/PM can be selected
+      switch(index) {
+        case 0:
+          setWakeup(newValue);
+          break;
+        case 1:
+          setBedtime(newValue);
+          break;
+        case 2:
+          setBfast(newValue);
+          break;
+        case 3:
+          setLunch(newValue);
+          break;
+        case 4:
+          setDinner(newValue);
+          break;
+      }
+    } else { // only NONE or ONE of AM/PM can be selected
       if (!isPM && !isAM) {
-        routineCopy[index][field] = true; // set AM to true
+        routineCopy[index][field] = true;
       } else if (isPM && !isAM) {
         routineCopy[index][field] = true;
         routineCopy[index]["PM"] = false;
-      } else {
-        routineCopy[index][field] = false;
-      }
-    } else {
-      if (!isPM && !isAM) {
-        routineCopy[index][field] = true; // set PM to true
       } else if (!isPM && isAM) {
         routineCopy[index][field] = true;
         routineCopy[index]["AM"] = false;
@@ -54,6 +66,64 @@ function SchedulerScreen({ navigation }) {
       }
     }
     setRoutine(routineCopy);
+  }
+
+  function checkInputs() {
+    /* Update the state times first */
+    var copy = [...routine];
+    for (let i = 0; i < copy.length; i++) {
+      switch(i) {
+        case 0:
+          copy[i]["time"] = wakeup;
+          break;
+        case 1:
+          copy[i]["time"] = bedtime;
+          break;
+        case 2:
+          copy[i]["time"] = bfast;
+          break;
+        case 3:
+          copy[i]["time"] = lunch;
+          break;
+        case 4:
+          copy[i]["time"] = dinner;
+          break;
+      }
+    }
+    setRoutine(copy);
+
+    for (let i = 0; i < copy.length; i++) {
+      const elem = copy[i];
+
+      if (!elem.AM && !elem.PM) {
+        Alert.alert("Please select AM or PM for " + elem.title);
+        return;
+      } else if (elem.time == "") {
+        Alert.alert("Please enter a time for " + elem.title);
+        return;
+      }
+
+      /* check that time input is okay */
+      const timeCheck = elem.time.split(":");
+      if (timeCheck.length != 2) {
+        Alert.alert("Please enter a valid time for " + elem.title);
+        return;
+      }
+
+      const hours = parseInt(timeCheck[0]);
+      const mins = parseInt(timeCheck[1]);
+      if (isNaN(hours) || isNaN(mins) || hours <= 0 ||
+          hours > 12 || mins < 0 || mins >= 60) {
+        Alert.alert("Please enter a valid time for " + elem.title);
+        return;
+      }
+
+    }
+    if (user)
+      navigation.goBack();
+    else {
+      register(email, password);
+    }
   }
 
   return (
@@ -220,7 +290,7 @@ function SchedulerScreen({ navigation }) {
       </View>
 
       <TouchableOpacity style={styles.submitButton}
-                        onPress={() => navigation.goBack()}>
+                        onPress={() => checkInputs()}>
         <Text style={styles.submitText}>SUBMIT</Text>
       </TouchableOpacity>
 

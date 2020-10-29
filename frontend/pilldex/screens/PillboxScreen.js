@@ -19,13 +19,13 @@ function PillboxScreen( {navigation} ) {
   const needRefill = 5; //below this amount, the text is red
 
   const [pills, setPills] = useState(() => [
-    {id: 0, name: "INDOMETHACIN", capsulesLeft: 15},
+    {id: 0, name: "LACTAID", capsulesLeft: 15},
     {id: 1, name: "VICODIN", capsulesLeft: 2},
     {id: 1, name: "NITROGLYCERIN", capsulesLeft: 5},
-    {id: 1, name: "AMOXICILLIN", capsulesLeft: 26},
-    {id: 1, name: "IBUPROFEN", capsulesLeft: 85}
+    {id: 1, name: "FLINTSTONES", capsulesLeft: 26},
+    {id: 1, name: "GUMMY VITAMINS", capsulesLeft: 85}
   ]);
-  
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Patient's Pillbox</Text>
@@ -48,21 +48,15 @@ function PillboxScreen( {navigation} ) {
                     <Text style={styles.details}>More Details</Text>
                     <View style = {{width: 10}}/>
                     <Icon name="arrow-right" size={15} color="#538083" style={{paddingTop: 4}}/>
-                  </TouchableOpacity>  
+                  </TouchableOpacity>
                 </View>
               </View>
             </View>
-            
+
           )}
         />
       </SafeAreaView>
-      <View style={{flexDirection: 'row', padding: 10, justifyContent:'space-between'}}>
-        <TouchableOpacity style={styles.button}
-                          onPress={() => navigation.goBack()}>
-          <Text style={styles.btnText}>BACK</Text>
-        </TouchableOpacity>
-      </View>
-      
+      <View style={{height:30}} />
     </View>
   );
 }
@@ -99,22 +93,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: "#538083"
   },
-  button: {
-    height: 60,
-    width: 180,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#9FB7B9',
-    borderRadius: 35,
-    marginTop: 10,
-    marginLeft: 5
-  },
-  btnText: {
-    fontFamily: 'Inter-SemiBold',
-    color: '#fff',
-    fontSize: 20,
-    textAlign: 'center'
-  }
 });
 
 export default PillboxScreen;

@@ -9,14 +9,15 @@ import {
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 function PillInfoScreen({ navigation, route }) {
-  const { pillName, pillAmount } = route.params;
+  var { pillName, pillAmount } = route.params;
+  const [pillsLeft, setPillsLeft] = useState(pillAmount);
 
   const [info, setInfo] = useState(() => {
     //do get request here with pill name
     return {refillAmount: 30, frequency: 3, frequencyUnits: "Daily", withFood: true, withSleep: true, lastRefill: "10-23-2020"};
   });
 
-  function instructions(){
+  function instructions() {
     return info.withFood && info.withSleep ? <View>
                                     <Text style={styles.text}>This medication will make you drowsy.</Text>
                                     <Text style={styles.text}>Take with food.</Text>
@@ -26,15 +27,19 @@ function PillInfoScreen({ navigation, route }) {
           : null;
   }
 
+  function refillPill() {
+    setPillsLeft(pillsLeft + info.refillAmount);
+  }
+
   return (
-    
+
     <View style={styles.container}>
 
       <Text style={styles.title}>{pillName}</Text>
 
       <View style={{flexDirection: 'row', paddingTop: 20}}>
           <MaterialCommunityIcons name="pill" color='#84C0C6' size={40} />
-          <Text style={styles.colorText}> {pillAmount} </Text>
+          <Text style={styles.colorText}> {pillsLeft} </Text>
           <Text style={styles.text}> Units Left</Text>
       </View>
 
@@ -58,14 +63,18 @@ function PillInfoScreen({ navigation, route }) {
           <Text style={styles.text}>{info.lastRefill}</Text>
         </View>
       </View>
-     
+
       <View style={{flexDirection: 'row', padding: 10, justifyContent:'space-between'}}>
         <TouchableOpacity style={styles.button}
                           onPress={() => navigation.goBack()}>
           <Text style={styles.btnText}>BACK</Text>
         </TouchableOpacity>
+        <TouchableOpacity style={styles.button}
+                          onPress={() => refillPill()}>
+          <Text style={styles.btnText}>REFILL</Text>
+        </TouchableOpacity>
       </View>
-    
+
     </View>
   );
 }
@@ -86,20 +95,20 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: 'Quicksand',
-    fontSize: 24, 
+    fontSize: 24,
     color: '#000000',
     paddingTop: 5,
   },
   colorText: {
     fontFamily: 'Quicksand',
-    fontSize: 24, 
+    fontSize: 24,
     color: '#538083',
     paddingTop: 5,
     fontWeight: 'bold'
   },
   subHeading: {
     fontFamily: 'Quicksand',
-    fontSize: 26, 
+    fontSize: 26,
     color: '#538083',
     paddingTop: 2
   },
