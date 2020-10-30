@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const pillService = require('./../modules/pill.js');
+const labelService = require('./../modules/label.js');
 
 router.post('/', newPill);
 router.get('/', getPills);
@@ -13,11 +14,10 @@ module.exports = router;
 
 function parseLabel(req, res, next) {
 	console.log("In PARSELABEL Route");
-	pillService.parseLabel(req.body)
+	labelService.parseLabel(req.body)
 		.then((success) => res.json(success))
 		.catch(err => next(err));
 }
-
 
 function newPill(req, res, next) {
 	console.log("In NEWPILL Route");
