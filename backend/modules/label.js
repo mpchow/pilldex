@@ -7,9 +7,7 @@ var frequencies = new Set(["daily", "weekly", "days", "weeks"]);
 
 const parseLabel = async (label) => {
 	try {
-		console.log(label);
-		var splitLabel = label.split(" ");
-		console.log(splitLabel);
+		var splitLabel = label.body.split(" ");
 		return({msg: 'Success'});
 	}
 	catch (error) {
