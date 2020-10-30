@@ -12,7 +12,7 @@ function PillBoxStack(propName) {
                          screenOptions={{
                              headerShown: false
                          }}>
-          <Stack.Screen name='PillBox' component={PillboxScreen}/>
+          <Stack.Screen name='PillBox' children={() => <PillboxScreen propName={propName}/>}/>
           <Stack.Screen name='PillInfo' component={PillInfoScreen}/>
         </Stack.Navigator>
       );

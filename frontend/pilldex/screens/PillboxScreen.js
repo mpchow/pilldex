@@ -9,23 +9,62 @@ import {
   SafeAreaView
 } from 'react-native';
 
+import firebase, { utils } from '@react-native-firebase/app';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const width = Dimensions.get('window').width;
 
-function PillboxScreen( {navigation} ) {
+function PillboxScreen( {navigation } ) {
+
 
   const needRefill = 5; //below this amount, the text is red
 
-  const [pills, setPills] = useState(() => [
-    {id: 0, name: "INDOMETHACIN", capsulesLeft: 15},
-    {id: 1, name: "VICODIN", capsulesLeft: 2},
-    {id: 1, name: "NITROGLYCERIN", capsulesLeft: 5},
-    {id: 1, name: "AMOXICILLIN", capsulesLeft: 26},
-    {id: 1, name: "IBUPROFEN", capsulesLeft: 85}
-  ]);
+  const [pills, setPills] = useState([]);
+  console.log("PIll is", pills);
+
+  function getPills(){
+   
+    fetch(`http://ec2-35-183-198-103.ca-central-1.compute.amazonaws.com:3000/pills?userId=${firebase.auth().currentUser.uid}`, {
+      method: 'GET',
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+
+      console.log("Response from server is", responseJson['pill']);
+      setPills(responseJson['pill']);
+     
+    })
+    .catch((error) => {
+         console.error(error);
+    });
+
+    
+    
+  }
+
   
+
+  useEffect(() => {
+    console.log("Inside useEffect function");
+    getPills();
+    
+
+  }, []);
+
+  function showInfo(pillName){
+    fetch(`http://ec2-35-183-198-103.ca-central-1.compute.amazonaws.com:3000/pills/single?userId=${firebase.auth().currentUser.uid}&name=${pillName}`, {
+      method: 'GET',
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      console.log("Response from server is", responseJson['pill']);
+      navigation.navigate("PillInfo", {pillInfo: responseJson['pill']});
+    })
+    .catch((error) => {
+         console.error(error);
+    });
+  }
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Patient's Pillbox</Text>
@@ -41,10 +80,10 @@ function PillboxScreen( {navigation} ) {
                 <View style={{flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'space-evenly', marginLeft: 8}}>
                   <Text style={styles.medName}>{item.name}</Text>
                   <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-                    <Text style={{color: item.capsulesLeft <= needRefill ? 'red' : 'black'}}>{item.capsulesLeft} Capsules Left</Text>
+                    <Text style={{color: item.totalQuantity <= needRefill ? 'red' : 'black'}}>{item.totalQuantity} Capsules Left</Text>
                   </View>
                   <TouchableOpacity style={{flexDirection: 'row'}}
-                                    onPress={() => navigation.navigate("PillInfo", {pillName: item.name, pillAmount: item.capsulesLeft})}>
+                                    onPress={() => showInfo(item.name)}>
                     <Text style={styles.details}>More Details</Text>
                     <View style = {{width: 10}}/>
                     <Icon name="arrow-right" size={15} color="#538083" style={{paddingTop: 4}}/>

@@ -15,6 +15,7 @@ import firebase from '@react-native-firebase/app';
 const width = Dimensions.get('window').width;
 
 function HomeScreen({ navigation }) {
+  
   const dayArray = ["Sunday", "Monday", "Tuesday",
                     "Wednesday", "Thursday", "Friday", "Saturday"];
   const monthArray = ["January", "February", "March", "April", "May",

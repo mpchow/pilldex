@@ -20,11 +20,7 @@ function NewPillScreen({ navigation }) {
     if (camera) {
       const options = { quality: 0.5, base64: true };
       const data = await camera.takePictureAsync(options);
-      // const deviceTextRecognition = await RNMlKit.deviceTextRecognition(data.uri); 
-      // console.log('Text Recognition On-Device', deviceTextRecognition);
-      // // for cloud (At the moment supports only Android)
-      // const cloudTextRecognition = await RNMlKit.cloudTextRecognition(data.uri);
-      // console.log('Text Recognition Cloud', cloudTextRecognition);
+      
       console.log(data.uri);
       const processed = await vision().cloudDocumentTextRecognizerProcessImage(data.uri); 
       console.log('Found text in document: ', processed.text);

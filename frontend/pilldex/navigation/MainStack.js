@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -16,8 +16,8 @@ const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 function MainStack() {
-  const [notif, setNotif] = ('');
-
+  const [notif, setNotif] = useState(true);
+  
   useEffect(() => {
     // foreground notification
     const unsubscribe = firebase.messaging().onMessage(async remoteMessage => {
@@ -99,7 +99,7 @@ function MainStack() {
                     }}
                    />
        <Tab.Screen name='Pillbox'
-                   children={() => <PillBoxStack propName={notif}/>}
+                   children={() => <PillBoxStack propName={true}/>}
                    options = {{
                      tabBarLabel: 'Pillbox',
                      tabBarIcon: ({ color }) => (
