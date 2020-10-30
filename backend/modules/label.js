@@ -19,7 +19,8 @@ const parseLabel = async (label) => {
 	try {
 		var pillData = {"name": null, "totalQuantity" : null, "frequency" : null, "frequencyUnit" : null, "dosage" : null, "withFood" : false, "withSleep" : false};
 		var label_lc = label.body.toLowerCase();
-		var splitLabel = label_lc.split(" ");
+		var splitLabel = label_lc.replace( /\n/g, " " ).split(" ");
+//		console.log(splitLabel);
 		for (var i = 0; i < splitLabel.length; i++) {
 			if (pillNames.has(splitLabel[i])) {
 				pillData.name = splitLabel[i];
@@ -72,7 +73,7 @@ const parseLabel = async (label) => {
 			}
 		}
 		console.log(pillData);
-		return(pillData, {msg: 'Success'});
+		return{ pillData:pillData, msg: 'Success'};
 	}
 	catch (error) {
 	   throw `The label could not be parsed`;
