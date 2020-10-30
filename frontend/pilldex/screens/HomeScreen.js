@@ -70,7 +70,7 @@ function HomeScreen({ navigation }) {
   console.log(date);
 
   function toggleDate(dir) {
-    var newDate = new Date();
+    var newDate = date.dateObj;
     newDate.setDate(date.dateObj.getDate() + dir);
     setDate({
       dateObj: newDate,
@@ -152,6 +152,7 @@ function HomeScreen({ navigation }) {
                         onPress={() => navigation.navigate('NewPill')}>
         <Text style={styles.btnText}>NEW PILL</Text>
       </TouchableOpacity>
+      <View style={{height:30}} />
     </View>
   );
 }

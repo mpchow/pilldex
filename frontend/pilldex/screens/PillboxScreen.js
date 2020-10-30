@@ -38,12 +38,8 @@ function PillboxScreen( {navigation } ) {
     .catch((error) => {
          console.error(error);
     });
-
-    
-    
+ 
   }
-
-  
 
   useEffect(() => {
     console.log("Inside useEffect function");
@@ -59,7 +55,7 @@ function PillboxScreen( {navigation } ) {
     .then((response) => response.json())
     .then((responseJson) => {
       console.log("Response from server is", responseJson['pill']);
-      navigation.navigate("PillInfo", {pillInfo: responseJson['pill']});
+      navigation.navigate("PillInfo", {pillInfo: { ...responseJson['pill'], pillsLeft:50}});
     })
     .catch((error) => {
          console.error(error);

@@ -48,7 +48,7 @@ function ProfileScreen({ navigation }) {
       </View>
       <View style={styles.profileOption}>
         <TouchableOpacity style={{flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'center'}}
-                          onPress={() => navigation.navigate('Scheduler')}>
+                          onPress={() => navigation.navigate('Scheduler', {email: "", password: ""})}>
           <Text style={styles.optionText}>Smart Schedule</Text>
           <SimpleLineIcons style={{marginLeft: 128, marginBottom: 3}}
                            name="arrow-right" color='#538083' size={23}

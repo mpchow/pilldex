@@ -12,6 +12,8 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 function PillInfoScreen({ navigation, route }) {
   const { pillInfo } = route.params;
 
+  const [pillsLeft, setPillsLeft] = useState(pillInfo.pillsLeft);
+
   function instructions(){
     return pillInfo.withFood && pillInfo.withSleep ? <View>
                                     <Text style={styles.text}>This medication will make you drowsy.</Text>
@@ -22,6 +24,11 @@ function PillInfoScreen({ navigation, route }) {
           : null;
   }
 
+  function refillPill() {
+    console.log("TESTING")
+    setPillsLeft(pillsLeft => pillsLeft + pillInfo.totalQuantity);
+  }
+
   return (
     <View style={styles.container}>
 
@@ -29,7 +36,7 @@ function PillInfoScreen({ navigation, route }) {
 
       <View style={{flexDirection: 'row', paddingTop: 20}}>
           <MaterialCommunityIcons name="pill" color='#84C0C6' size={40} />
-          <Text style={styles.colorText}> {pillInfo.pillsLeft || "ERROR"} </Text>
+          <Text style={styles.colorText}> {pillsLeft} </Text>
           <Text style={styles.text}> Units Left</Text>
       </View>
 
@@ -53,14 +60,18 @@ function PillInfoScreen({ navigation, route }) {
           <Text style={styles.text}>{pillInfo.lastRefill || "GET FROM SERVER"}</Text>
         </View>
       </View>
-     
+
       <View style={{flexDirection: 'row', padding: 10, justifyContent:'space-between'}}>
         <TouchableOpacity style={styles.button}
                           onPress={() => navigation.goBack()}>
           <Text style={styles.btnText}>BACK</Text>
         </TouchableOpacity>
+        <TouchableOpacity style={styles.button}
+                          onPress={() => refillPill()}>
+          <Text style={styles.btnText}>REFILL</Text>
+        </TouchableOpacity>
       </View>
-    
+
     </View>
   );
 }
@@ -81,20 +92,20 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: 'Quicksand',
-    fontSize: 24, 
+    fontSize: 24,
     color: '#000000',
     paddingTop: 5,
   },
   colorText: {
     fontFamily: 'Quicksand',
-    fontSize: 24, 
+    fontSize: 24,
     color: '#538083',
     paddingTop: 5,
     fontWeight: 'bold'
   },
   subHeading: {
     fontFamily: 'Quicksand',
-    fontSize: 26, 
+    fontSize: 26,
     color: '#538083',
     paddingTop: 2
   },

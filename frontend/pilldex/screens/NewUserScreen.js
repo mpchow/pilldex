@@ -53,7 +53,7 @@ function NewUserScreen({ navigation }) {
           autoCorrect={false}
           onChangeText = {(text) => setLanguage(text)}
       />
-      
+
 
       <View style={{flexDirection: 'row', padding: 10, justifyContent:'space-between'}}>
         <TouchableOpacity style={styles.button}
@@ -61,8 +61,7 @@ function NewUserScreen({ navigation }) {
           <Text style={styles.btnText}>BACK</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button}
-                          onPress={() => {console.log(name, email, password, language); 
-                                          register(email, password); }}>
+                          onPress={() => {navigation.navigate('Scheduler', {email: email, password: password})}}>
           <Text style={styles.btnText}>CREATE ACCOUNT</Text>
         </TouchableOpacity>
       </View>
@@ -94,8 +93,8 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter-Light'
   },
   text: {
-    fontFamily: 'Quicksand', 
-    fontSize: 20, color: '#000000', 
+    fontFamily: 'Quicksand',
+    fontSize: 20, color: '#000000',
     paddingTop: 26,
   },
   button: {
