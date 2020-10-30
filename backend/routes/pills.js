@@ -28,14 +28,14 @@ function newPill(req, res, next) {
 
 function getPills(req, res, next) {
 	console.log("In GETALLPILL Route");
-	pillService.retrieveAll(req.body) 
+	pillService.retrieveAll(req) 
 		.then(pills => {res.json(pills);})
 		.catch(err => next(err));
 }
 
 function getPillById(req, res, next) {
 	console.log("In GETPILL Route");
-	pillService.retrieve(req.body) 
+	pillService.retrieve(req) 
 		.then(pill => res.json(pill))
 		.catch(err => next(err));
 }

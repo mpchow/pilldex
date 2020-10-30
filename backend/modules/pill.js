@@ -41,9 +41,7 @@ const remove = async (pillParams) => {
 
 const retrieve = async (pillParams) => {
 	try {
-		console.log("PillName = ", pillparams.name);
-		console.log("UserId = ", pillparams.userId);
-		return {pill: await Pill.findOne({name: pillParams.name, userId: pillParams.userId}), msg: 'Success'};
+		return {pill: await Pill.findOne({name: pillParams.query.name, userId: pillParams.query.userId}), msg: 'Success'};
     }
     catch (error) {
         throw `The Pill ${pillParams.name} could not be retrieved`;
@@ -52,7 +50,7 @@ const retrieve = async (pillParams) => {
 
 const retrieveAll = async (pillParams) => {
 	try {
-	   return {pill: await Pill.find({userId: pillParams.userId}), msg: 'Success'};
+	   return {pill: await Pill.find({userId: pillParams.query.userId}), msg: 'Success'};
 	}
 	catch (error) {
 	   throw `The Pills could not be retrieved`;
