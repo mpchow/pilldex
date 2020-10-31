@@ -11,6 +11,7 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import messaging from '@react-native-firebase/messaging';
 import firebase from '@react-native-firebase/app';
+import auth from '@react-native-firebase/auth';
 import PNController, { displayNotification } from '../components/PNController.js';
 
 const width = Dimensions.get('window').width;
@@ -67,6 +68,19 @@ function HomeScreen({ navigation }) {
         done: false, dateString: date2String}]
     );
   });
+
+  /*useEffect(() => {
+    fetch(`http://ec2-35-183-198-103.ca-central-1.compute.amazonaws.com:3000/users?userId=${firebase.auth().currentUser.uid}`, {
+      method: 'GET',
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      console.log("Response from server is", responseJson);
+    })
+    .catch((error) => {
+         console.error(error);
+    });
+  });*/
 
   console.log(date);
 

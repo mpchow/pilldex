@@ -8,6 +8,9 @@ import {
   Alert
 } from 'react-native';
 import { AuthContext } from '../navigation/AuthProvider';
+import auth from '@react-native-firebase/auth';
+import firebase from '@react-native-firebase/app';
+import messaging from '@react-native-firebase/messaging';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -68,7 +71,7 @@ function SchedulerScreen({ navigation, route }) {
     setRoutine(routineCopy);
   }
 
-  function checkInputs() {
+  async function checkInputs() {
     /* Update the state times first */
     var copy = [...routine];
     for (let i = 0; i < copy.length; i++) {
@@ -120,9 +123,44 @@ function SchedulerScreen({ navigation, route }) {
     }
 
     if (!user)
-      register(email, password);
-
-    /* PUT REQUEST HERE TO UPDATE USER'S SCHEDULE */
+      register(email, password, routine);
+    else {
+      /* PUT REQUEST HERE TO UPDATE USER'S SCHEDULE */
+      const token = await firebase.messaging().getToken();
+      const wake = routine[0]["time"].split(":");
+      const sleep = routine[1]["time"].split(":");
+      const bfast = routine[2]["time"].split(":");
+      const lunch = routine[3]["time"].split(":");
+      const din = routine[4]["time"].split(":");
+      fetch('http://ec2-35-183-198-103.ca-central-1.compute.amazonaws.com:3000/users', {
+        method: 'PUT',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          token: token,
+          userId: firebase.auth().currentUser.uid,
+          wakeupHr: parseInt(wake[0]),
+          wakeupMin: parseInt(wake[1]),
+          wakeupAM: routine[0]["AM"],
+          sleepHr: parseInt(sleep[0]),
+          sleepMin: parseInt(sleep[1]),
+          sleepAM: routine[1]["AM"],
+          breakfastHr: parseInt(bfast[0]),
+          breakfastMin: parseInt(bfast[1]),
+          breakfastAM: routine[2]["AM"],
+          lunchHr: parseInt(lunch[0]),
+          lunchMin: parseInt(lunch[1]),
+          lunchAM: routine[3]["AM"],
+          dinnerHr: parseInt(din[0]),
+          dinnerMin: parseInt(din[1]),
+          dinnerAM: routine[4]["AM"],
+          schedule: [[], [], [], [], [], [], []]
+        })
+      });
+      navigation.navigate('Profile');
+    }
   }
 
   return (

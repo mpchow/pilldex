@@ -115,7 +115,7 @@ function MainStack() {
                     }}
                    />
      </Tab.Navigator>
-     </>
+   </>
   );
 }
 
