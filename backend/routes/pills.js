@@ -9,8 +9,16 @@ router.put('/', updatePill);
 router.delete('/', deletePill);
 router.get('/single', getPillById);
 router.post('/label', parseLabel);
+router.post('/refill', refill);
 
 module.exports = router;
+
+function refill(req, res, next) {
+    console.log("In REFILL Route");
+    pillService.updateRemaining(req.body)
+        .then(pill => res.json(pill))
+        .catch(err => next(err));
+}
 
 function parseLabel(req, res, next) {
 	console.log("In PARSELABEL Route");

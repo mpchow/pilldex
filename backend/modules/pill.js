@@ -57,17 +57,20 @@ const retrieveAll = async (pillParams) => {
 	}
 }
 
-const parseLabel = async (label) => {
-	try {
-		console.log(label);
-		return({msg: 'Success'});
-	}
-	catch (error) {
-	   throw `The label could not be parsed`;
-	}
+const updateRemaining = async (pillParams) => {
+    try {
+        newPill = await Pill.findOne({name: pillParams.name, userId: pillParams.userId});
+        newPill.remaining = newPill.remaining + newPill.totalQuantity;
+		console.log(newPill.remaining);
+        await Pill.replaceOne({name: pillParams.name, userId: pillParams.userId}, newPill);
+        return {newPill, msg:"Success"};
+    }
+    catch (error) {
+       throw `The remaining capsuls could not be updated`;
+    }
 }
 
-module.exports = {create, update, remove, retrieve, retrieveAll, parseLabel};
+module.exports = {create, update, remove, retrieve, retrieveAll, updateRemaining};
 
 // {name, userId, totalQuantity, frequency, 
 //    frequencyUnit, dosage, withFood, withSleep
