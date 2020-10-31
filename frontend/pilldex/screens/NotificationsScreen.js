@@ -9,6 +9,9 @@ import {
 
 const width = Dimensions.get('window').width;
 
+/* Notification: userID, time closed, notification ID
+*/
+
 function NotificationsScreen({ navigation }) {
   return (
     <View style={styles.container}>
