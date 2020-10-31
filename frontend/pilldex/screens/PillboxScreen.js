@@ -55,7 +55,7 @@ function PillboxScreen( {navigation } ) {
     .then((response) => response.json())
     .then((responseJson) => {
       console.log("Response from server is", responseJson['pill']);
-      navigation.navigate("PillInfo", {pillInfo: { ...responseJson['pill'], pillsLeft:50}});
+      navigation.navigate("PillInfo", {pillInfo: { ...responseJson['pill'], pillsLeft:50}}); //TODO: REMOVE pillsLeft: 50
     })
     .catch((error) => {
          console.error(error);
