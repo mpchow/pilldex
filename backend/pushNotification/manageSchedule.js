@@ -45,7 +45,8 @@ const updateSchedule = async (reqBody) => {
    let user = await Users.findOne({userId: reqBody.userID});
    let schedule = user.schedule;
 
-   let pill = await Pills.findOne({name: reqBody.pillName});
+   const pill = await Pills.findOne({name: reqBody.pillName});
+   await Pills.findOneAndUpdate({name: reqBody.pillName}, {remaining: pill.remaining - pill.dosage});
 
    let timeTaken = reqBody.timeTaken;
    let id = reqBody.id;
@@ -77,13 +78,13 @@ const updateSchedule = async (reqBody) => {
          let timeAdjust
          if(timeTakenConverted < reminderTimeConverted) {
             percentageLate = timeDiff / (pillReminder.time.leftBound * 60);
-            timeAdjust = dist.cdf(3*percentageLate);
+            timeAdjust = dist.cdf(3 * percentageLate);
 
             pillReminder.time.adjustedTimes.push(timeTakenConverted - timeAdjust);
          }  
          else {
             percentageLate = timeDiff / (pillReminder.time.rightBound * 60);
-            timeAdjust = dist.cdf(3*percentageLate);
+            timeAdjust = dist.cdf(3 * percentageLate);
 
             pillReminder.time.adjustedTimes.push(timeTakenConverted + timeAdjust);
          }
