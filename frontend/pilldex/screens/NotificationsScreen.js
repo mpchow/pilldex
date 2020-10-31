@@ -10,6 +10,8 @@ import {
 const width = Dimensions.get('window').width;
 
 /* Notification: userID, time closed, notification ID
+ * 'http://ec2-35-183-198-103.ca-central-1.compute.amazonaws.com:3000/pills/label
+ * takenEarly: true
 */
 
 function NotificationsScreen({ navigation }) {

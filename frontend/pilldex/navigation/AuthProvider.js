@@ -36,13 +36,18 @@ export const AuthProvider = ({ children }) => {
             console.log('Sign in Failed');
           }
         },
-        register: async (email, password) => {
+        register: async (email, password, routine) => {
           try {
             if (email == "" || email == null)
               Alert.alert("Please enter a valid email");
             else if (password == "" || password == null)
               Alert.alert("Please enter a password");
-            else
+            else {
+              const wake = routine[0]["time"].split(":");
+              const sleep = routine[1]["time"].split(":");
+              const bfast = routine[2]["time"].split(":");
+              const lunch = routine[3]["time"].split(":");
+              const din = routine[4]["time"].split(":");
               await auth().createUserWithEmailAndPassword(email, password)
                     .then( async (user) => {
                       const token = await firebase.messaging().getToken();
@@ -55,10 +60,26 @@ export const AuthProvider = ({ children }) => {
                         body: JSON.stringify({
                           token: token,
                           userId: user.user.uid,
+                          wakeupHr: parseInt(wake[0]),
+                          wakeupMin: parseInt(wake[1]),
+                          wakeupAM: routine[0]["AM"],
+                          sleepHr: parseInt(sleep[0]),
+                          sleepMin: parseInt(sleep[1]),
+                          sleepAM: routine[1]["AM"],
+                          breakfastHr: parseInt(bfast[0]),
+                          breakfastMin: parseInt(bfast[1]),
+                          breakfastAM: routine[2]["AM"],
+                          lunchHr: parseInt(lunch[0]),
+                          lunchMin: parseInt(lunch[1]),
+                          lunchAM: routine[3]["AM"],
+                          dinnerHr: parseInt(din[0]),
+                          dinnerMin: parseInt(din[1]),
+                          dinnerAM: routine[4]["AM"],
                           schedule: [[], [], [], [], [], [], []]
                         })
                       });
                     });
+            }
           } catch (e) {
             if (e.code === 'auth/email-already-in-use')
               Alert.alert("An account already exists with this email");
