@@ -3,7 +3,7 @@ const Pills = db.Pill;
 const Users = db.User;
 const NormalDistribution = require('normal-distribution');
 const pill = require('../modules/pill');
-const dist = new NormalDistribution();
+const dist = new NormalDistribution.default();
 const {v4: uuidv4 } = require('uuid');
 
 const freqMap = [
