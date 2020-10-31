@@ -10,7 +10,7 @@ const pushTask = async () => {
    let profiles = await Profile.find({});
    (await profiles).forEach(profile => {
       profile.schedule[currDay].forEach((pill) => {
-         if(pill.time.getHours() === currHour && pill.time.getMinutes() === currMin) {
+         if(pill.time.reminderTime.getHours() === currHour && pill.time.reminderTime,getMinutes() === currMin && !pill.takenEarly) {
 			const payload = {
 				notification: {
 					title: "Testing pushtask Function!",

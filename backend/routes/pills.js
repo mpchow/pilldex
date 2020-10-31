@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const pillService = require('./../modules/pill.js');
 const labelService = require('./../modules/label.js');
+const scheduler = require('./../pushNotification/manageSchedule');
 
 router.post('/', newPill);
 router.get('/', getPills);
@@ -9,8 +10,16 @@ router.put('/', updatePill);
 router.delete('/', deletePill);
 router.get('/single', getPillById);
 router.post('/label', parseLabel);
+router.post('/taken', pillTaken);
 
 module.exports = router;
+
+function pillTaken(req, res, next) {
+	console.log("In PILLTAKEN route");
+	scheduler.updateSchedule(req.body)
+		.then((success) => req.json(success))
+		.catch(err => next(err));
+}
 
 function parseLabel(req, res, next) {
 	console.log("In PARSELABEL Route");
