@@ -4,7 +4,8 @@ const Users = db.User;
 const NormalDistribution = require('normal-distribution');
 const pill = require('../modules/pill');
 const dist = new NormalDistribution();
-const {v4: uuidv4 } = require('uuid');
+// const {v4: uuidv4 } = require('uuid');
+const { uuid } = require('uuidv4');
 
 const freqMap = [
    [0],
@@ -137,7 +138,7 @@ const createSchedule = async (pillParams) => {
                   rightBound: 4
                }, 
                pillName: pill.name,
-               id: uuidv4(),
+               id: uuid(),
                dosage: pillParams.dosage,
                timesLate: 0,
                adjustedTimes: [],
@@ -178,7 +179,7 @@ const createSchedule = async (pillParams) => {
                      rightBound: rightBound
                   }, 
                   pillName: pill.name,
-                  id: uuidv4(),
+                  id: uuid(),
                   dosage: pillParams.dosage,
                   timesLate: 0,
                   adjustedTimes: [],
@@ -200,7 +201,7 @@ const createSchedule = async (pillParams) => {
                      rightBound: userTimes.dinnerHr - userTimes.lunchHr < 4 ? (userTimes.dinnerHr - userTimes.lunchHr) : 4
                   },
                   pillName: pill.name,
-                  id: uuidv4(),
+                  id: uuid(),
                   dosage: pillParams.dosage,
                   timesLate: 0,
                   adjustedTimes: [],
@@ -215,7 +216,7 @@ const createSchedule = async (pillParams) => {
          schedule[day].push({
             time: getDefaultDate(i, pillParams, user, userTimes),
             pillName: pill.name,
-            id: uuidv4(),
+            id: uuid(),
             dosage: pillParams.dosage,
             timesLate: 0,
             adjustedTimes: [],
