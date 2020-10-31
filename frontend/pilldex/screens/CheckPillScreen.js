@@ -10,8 +10,6 @@ import {
 import auth from '@react-native-firebase/auth';
 import firebase, { utils } from '@react-native-firebase/app';
 
-
-
 function CheckPillScreen({ navigation, route }) {
   //const { uri } = route.params;
   const [name, setName] = useState("");
