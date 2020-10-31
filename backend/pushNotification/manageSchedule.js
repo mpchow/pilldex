@@ -91,8 +91,8 @@ const updateSchedule = async (reqBody) => {
    
       await Users.findOneAndUpdate({userId: user.userId}, {schedule: schedule});
 
-      return {msg: "Schedule Updated"}
    } 
+   return {msg: "Schedule Updated"}
 }
 
 const deleteSchedule = async (userID, pill) => {
