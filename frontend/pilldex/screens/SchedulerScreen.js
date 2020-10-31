@@ -117,13 +117,12 @@ function SchedulerScreen({ navigation, route }) {
         Alert.alert("Please enter a valid time for " + elem.title);
         return;
       }
+    }
 
-    }
-    if (user)
-      navigation.goBack();
-    else {
+    if (!user)
       register(email, password);
-    }
+
+    /* PUT REQUEST HERE TO UPDATE USER'S SCHEDULE */
   }
 
   return (

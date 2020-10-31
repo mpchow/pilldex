@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
+  Alert
 } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import firebase, { utils } from '@react-native-firebase/app';
@@ -24,6 +25,21 @@ function CheckPillScreen({ navigation, route }) {
   function sendNewUserInfo(){
     console.log(name, firebase.auth().currentUser.uid, refillUnits, freq, freqUnits, foodButton, drowsyButton);
 
+    /* Make sure inputs are valid */
+    if (name == "") {
+      Alert.alert("Please enter a valid medication name");
+      return;
+    }
+    var refill = parseInt(refillUnits);
+    var dose = parseInt(dosage);
+    if (isNaN(refill) || refill <= 0) {
+      Alert.alert("Please enter a valid refill amount");
+      return;
+    } else if (isNaN(dose) || dose <= 0) {
+      Alert.alert("Please enter a valid dosage");
+      return;
+    }
+
     fetch('http://ec2-35-183-198-103.ca-central-1.compute.amazonaws.com:3000/pills', {
       method: 'POST',
       headers: {
@@ -34,6 +50,7 @@ function CheckPillScreen({ navigation, route }) {
         name: name,
         userId: firebase.auth().currentUser.uid,
         totalQuantity: refillUnits,
+        remaining: refillUnits,
         frequency: freq,
         frequencyUnit: freqUnits,
         withFood: foodButton,
@@ -49,7 +66,7 @@ function CheckPillScreen({ navigation, route }) {
   }
 
   useEffect(() => {
-    setName(name => info.name); 
+    setName(name => info.name);
     setRefillUnits(refillUnits => info.totalQuantity);
     setFreq(freq => info.frequency);
     setFreqButton(freqUnits => info.frequencyUnit);
