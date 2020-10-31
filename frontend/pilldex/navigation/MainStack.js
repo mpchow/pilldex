@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -11,19 +11,21 @@ import firebase from '@react-native-firebase/app';
 import HomeStack from './HomeStack.js';
 import ProfileStack from './ProfileStack.js';
 import PillBoxStack from './PillBoxStack.js';
+import PNController, { displayNotification } from '../components/PNController.js';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 function MainStack() {
-  const [notif, setNotif] = ('');
+  const [notif, setNotif] = useState(true);
 
   useEffect(() => {
     // foreground notification
     const unsubscribe = firebase.messaging().onMessage(async remoteMessage => {
       //setNotif(JSON.stringify(remoteMessage));
       console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
-      Alert.alert('Notification',
+      displayNotification(remoteMessage.notification.body);
+      /*Alert.alert('Notification',
         remoteMessage.notification.body,
         [
           {
@@ -37,7 +39,8 @@ function MainStack() {
           },
         ],
         { cancelable: false }
-      );
+      );*/
+
     });
 
     // notification while app is in background mode
@@ -46,6 +49,7 @@ function MainStack() {
         'Notification caused app to open from background state:',
         remoteMessage.notification,
       );
+      displayNotification(remoteMessage.notification.body);
     });
 
     // notification while app is in quit mode
@@ -57,6 +61,7 @@ function MainStack() {
             'Notification caused app to open from quit state:',
             remoteMessage.notification,
           );
+          displayNotification(remoteMessage.notification.body);
         }
       });
 
@@ -64,6 +69,8 @@ function MainStack() {
   }, []);
 
   return (
+      <>
+      <PNController />
       <Tab.Navigator
          initialRouteName = 'Home'
          tabBarOptions={{
@@ -99,7 +106,7 @@ function MainStack() {
                     }}
                    />
        <Tab.Screen name='Pillbox'
-                   children={() => <PillBoxStack propName={notif}/>}
+                   children={() => <PillBoxStack propName={true}/>}
                    options = {{
                      tabBarLabel: 'Pillbox',
                      tabBarIcon: ({ color }) => (
@@ -108,6 +115,7 @@ function MainStack() {
                     }}
                    />
      </Tab.Navigator>
+     </>
   );
 }
 

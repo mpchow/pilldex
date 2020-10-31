@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -6,25 +6,39 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
+  Alert
 } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import firebase, { utils } from '@react-native-firebase/app';
 
-
-
 function CheckPillScreen({ navigation, route }) {
-  //const { uri } = route.params;
+  const { info } = route.params;
+
   const [name, setName] = useState("");
   const [refillUnits, setRefillUnits] = useState("");
   const [freq, setFreq] = useState("");
   const [dosage, setDosageButton] = useState("");
-
   const [freqUnits, setFreqButton] = useState(null);
   const [foodButton, setFoodButton] = useState(null);
   const [drowsyButton, setDrowsyButton] = useState(null);
 
   function sendNewUserInfo(){
     console.log(name, firebase.auth().currentUser.uid, refillUnits, freq, freqUnits, foodButton, drowsyButton);
+
+    /* Make sure inputs are valid */
+    if (name == "") {
+      Alert.alert("Please enter a valid medication name");
+      return;
+    }
+    var refill = parseInt(refillUnits);
+    var dose = parseInt(dosage);
+    if (isNaN(refill) || refill <= 0) {
+      Alert.alert("Please enter a valid refill amount");
+      return;
+    } else if (isNaN(dose) || dose <= 0) {
+      Alert.alert("Please enter a valid dosage");
+      return;
+    }
 
     fetch('http://ec2-35-183-198-103.ca-central-1.compute.amazonaws.com:3000/pills', {
       method: 'POST',
@@ -36,18 +50,29 @@ function CheckPillScreen({ navigation, route }) {
         name: name,
         userId: firebase.auth().currentUser.uid,
         totalQuantity: refillUnits,
+        remaining: refillUnits,
         frequency: freq,
         frequencyUnit: freqUnits,
         withFood: foodButton,
         withSleep: drowsyButton,
-        dosage: 0,
+        dosage: 1,
       })
     })
     .catch((error) => {
       console.error(error);
     });
-    navigation.navigate('Home');
+
+    navigation.navigate("Home");
   }
+
+  useEffect(() => {
+    setName(name => info.name);
+    setRefillUnits(refillUnits => info.totalQuantity);
+    setFreq(freq => info.frequency);
+    setFreqButton(freqUnits => info.frequencyUnit);
+    setFoodButton(foodButton => info.withFood);
+    setDrowsyButton(drowsyButton => info.withSleep);
+  }, [info]);
 
   return (
     <ScrollView>
@@ -65,6 +90,7 @@ function CheckPillScreen({ navigation, route }) {
           autoCapitalize='none'
           autoCorrect={false}
           onChangeText = {(text) => setName(text)}
+          defaultValue = {name}
         />
 
         <Text style={styles.form_titles}>2 - Number of Units in Refill</Text>
@@ -76,6 +102,7 @@ function CheckPillScreen({ navigation, route }) {
             autoCorrect={false}
             keyboardType='numeric'
             onChangeText = {(text) => setRefillUnits(text)}
+            defaultValue = {refillUnits ? refillUnits.toString() : ""}
           />
           <Text style={styles.text}>  units</Text>
         </View>
@@ -90,15 +117,16 @@ function CheckPillScreen({ navigation, route }) {
             autoCorrect={false}
             keyboardType='numeric'
             onChangeText = {(text) => setFreq(text)}
+            defaultValue = {freq ? freq.toString() : ""}
           />
           <Text style={styles.text}>  units,</Text>
         </View>
         <View style={{flexDirection: 'row', alignItems: 'center', marginTop: -15}}>
-          <TouchableOpacity style={freqUnits == "Daily" ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setFreqButton("Daily")}/>
+          <TouchableOpacity style={freqUnits == "daily" ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setFreqButton("daily")}/>
           <Text style={styles.radioText}>  Daily</Text>
         </View>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <TouchableOpacity style={freqUnits == "Weekly" ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setFreqButton("Weekly")} />
+          <TouchableOpacity style={freqUnits == "weekly" ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setFreqButton("weekly")} />
           <Text style={styles.radioText}>  Weekly</Text>
         </View>
         <View style={{height: 20}} />

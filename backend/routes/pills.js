@@ -10,6 +10,7 @@ router.put('/', updatePill);
 router.delete('/', deletePill);
 router.get('/single', getPillById);
 router.post('/label', parseLabel);
+router.post('/refill', refill);
 router.post('/taken', pillTaken);
 
 module.exports = router;
@@ -21,10 +22,17 @@ function pillTaken(req, res, next) {
 		.catch(err => next(err));
 }
 
+function refill(req, res, next) {
+    console.log("In REFILL Route");
+    pillService.updateRemaining(req.body)
+        .then(pill => res.json(pill))
+        .catch(err => next(err));
+}
+
 function parseLabel(req, res, next) {
 	console.log("In PARSELABEL Route");
 	labelService.parseLabel(req.body)
-		.then((success) => res.json(success))
+		.then((pillData) => res.json(pillData))
 		.catch(err => next(err));
 }
 

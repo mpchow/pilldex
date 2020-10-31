@@ -6,36 +6,33 @@ import {
   TouchableOpacity,
   Dimensions
 } from 'react-native';
+import firebase, { utils } from '@react-native-firebase/app';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 function PillInfoScreen({ navigation, route }) {
-  var { pillName, pillAmount } = route.params;
-  const [pillsLeft, setPillsLeft] = useState(pillAmount);
+  const { pillInfo } = route.params;
 
-  const [info, setInfo] = useState(() => {
-    //do get request here with pill name
-    return {refillAmount: 30, frequency: 3, frequencyUnits: "Daily", withFood: true, withSleep: true, lastRefill: "10-23-2020"};
-  });
+  const [pillsLeft, setPillsLeft] = useState(pillInfo.pillsLeft);
 
-  function instructions() {
-    return info.withFood && info.withSleep ? <View>
+  function instructions(){
+    return pillInfo.withFood && pillInfo.withSleep ? <View>
                                     <Text style={styles.text}>This medication will make you drowsy.</Text>
                                     <Text style={styles.text}>Take with food.</Text>
                                   </View>
-          : info.withFood ? <Text style={styles.text}>Take with food.</Text>
-          : info.withSleep ? <Text style={styles.text}>This medication will make you drowsy.</Text>
+          : pillInfo.withFood ? <Text style={styles.text}>Take with food.</Text>
+          : pillInfo.withSleep ? <Text style={styles.text}>This medication will make you drowsy.</Text>
           : null;
   }
 
   function refillPill() {
-    setPillsLeft(pillsLeft + info.refillAmount);
+    console.log("TESTING")
+    setPillsLeft(pillsLeft => pillsLeft + pillInfo.totalQuantity);
   }
 
   return (
-
     <View style={styles.container}>
 
-      <Text style={styles.title}>{pillName}</Text>
+      <Text style={styles.title}>{pillInfo.name}</Text>
 
       <View style={{flexDirection: 'row', paddingTop: 20}}>
           <MaterialCommunityIcons name="pill" color='#84C0C6' size={40} />
@@ -47,20 +44,20 @@ function PillInfoScreen({ navigation, route }) {
         <View style={{height: 50, width: Dimensions.get('window').width}}/>
         <View style={styles.instruction}>
           <Text style={styles.subHeading}>Refill Size: </Text>
-          <Text style={styles.text}>{info.refillAmount}</Text>
+          <Text style={styles.text}>{pillInfo.totalQuantity}</Text>
         </View>
 
         <View style={{paddingBottom: 30}}>
           <Text style={styles.subHeading}>Instructions: </Text>
           <View style={{paddingLeft: 30}}>
-            <Text style={styles.text}>Take {info.frequency} units {info.frequencyUnits}.</Text>
+            <Text style={styles.text}>Take {pillInfo.frequency} units {pillInfo.frequencyUnit}.</Text>
             {instructions()}
           </View>
         </View>
 
         <View style={styles.instruction}>
           <Text style={styles.subHeading}>Last Refill: </Text>
-          <Text style={styles.text}>{info.lastRefill}</Text>
+          <Text style={styles.text}>{pillInfo.lastRefill || "GET FROM SERVER"}</Text>
         </View>
       </View>
 

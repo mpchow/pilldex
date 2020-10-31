@@ -11,10 +11,12 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import messaging from '@react-native-firebase/messaging';
 import firebase from '@react-native-firebase/app';
+import PNController, { displayNotification } from '../components/PNController.js';
 
 const width = Dimensions.get('window').width;
 
 function HomeScreen({ navigation }) {
+
   const dayArray = ["Sunday", "Monday", "Tuesday",
                     "Wednesday", "Thursday", "Friday", "Saturday"];
   const monthArray = ["January", "February", "March", "April", "May",
@@ -152,6 +154,11 @@ function HomeScreen({ navigation }) {
         <Text style={styles.btnText}>NEW PILL</Text>
       </TouchableOpacity>
       <View style={{height:30}} />
+        <TouchableOpacity style={styles.button}
+                          onPress={() => displayNotification("Test Notification")}>
+          <Text style={styles.btnText}>TEST</Text>
+        </TouchableOpacity>
+        <View style={{height:30}} />
     </View>
   );
 }
