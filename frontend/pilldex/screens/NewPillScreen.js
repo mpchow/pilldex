@@ -26,21 +26,29 @@ function NewPillScreen({ navigation }) {
       const processed = await vision().cloudDocumentTextRecognizerProcessImage(data.uri);
       console.log('Found text in document: ', processed.text);
 
-      processed.blocks.forEach(block => {
-        console.log('Found block with text: ', block.text);
-        console.log('Confidence in block: ', block.confidence);
-        console.log('Languages found in block: ', block.recognizedLanguages);
+      // Make post request
+      fetch('http://ec2-35-183-198-103.ca-central-1.compute.amazonaws.com:3000/pills/label', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          body: processed.text
+        })
+      })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log("Response from server is", responseJson);
+        navigation.navigate("CheckPill", {info: responseJson['pillData']});
+      })
+      .catch((error) => {
+        console.error(error);
       });
-
-      return data.uri;
     }
   }
 
-  function logPicture() {
-    const uri = takePicture();
 
-    navigation.navigate('CheckPill');
-  }
 
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff'}}>
@@ -60,11 +68,19 @@ function NewPillScreen({ navigation }) {
      </RNCamera>
      <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
        <TouchableOpacity style={styles.button}
-                        onPress={() => navigation.navigate('CheckPill', {uri: ""})}>
+                        onPress={() => navigation.navigate('CheckPill', {info: {
+                          name: null,
+                          totalQuantity: null,
+                          frequency: null,
+                          frequencyUnit: null,
+                          withFood: null,
+                          withSleep: null,
+                          dosage: null,
+                        }})}>
           <Text style={styles.btnText}>MANUAL</Text>
        </TouchableOpacity>
        <TouchableOpacity style={styles.button}
-                        onPress={() => logPicture()}>
+                        onPress={() => takePicture()}>
          <Text style={styles.btnText}>CONFIRM</Text>
        </TouchableOpacity>
      </View>

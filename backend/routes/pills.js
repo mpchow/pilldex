@@ -15,7 +15,7 @@ module.exports = router;
 function parseLabel(req, res, next) {
 	console.log("In PARSELABEL Route");
 	labelService.parseLabel(req.body)
-		.then((success) => res.json(success))
+		.then((pillData) => res.json(pillData))
 		.catch(err => next(err));
 }
 
