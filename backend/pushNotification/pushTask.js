@@ -6,10 +6,10 @@ const Profile = db.User;
 const pushTask = async () => {
    const currHour = new Date().getHours();
    const currMin = new Date().getMinutes();
-   const currDay = new Date().getDay();
+   const currDay = (currHour >= 0 && currHour < 7) ? new Date().getDay() - 1 : new Date().getDay();
    let profiles = await Profile.find({});
    (await profiles).forEach(profile => {
-      profile.schedule[currDay].forEach((pill) => {
+   profile.schedule[currDay].forEach((pill) => {
          if(pill.time.getHours() === currHour && pill.time.getMinutes() === currMin) {
 			const payload = {
 				notification: {
@@ -18,6 +18,7 @@ const pushTask = async () => {
 					priority: 'high',
 				}
 			 };
+			console.log("Sending notification");
             notifService.sendNotification(profile, payload);
          }
       });
