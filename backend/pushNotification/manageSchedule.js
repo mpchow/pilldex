@@ -87,13 +87,11 @@ const updateSchedule = async (reqBody) => {
 
             pillReminder.time.adjustedTimes.push(timeTakenConverted + timeAdjust);
          }
-
-
-
       }
    
       await Users.findOneAndUpdate({userId: user.userId}, {schedule: schedule});
 
+      return {msg: "Schedule Updated"}
    } 
 }
 

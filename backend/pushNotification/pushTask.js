@@ -13,8 +13,8 @@ const pushTask = async () => {
          if(pill.time.reminderTime.getHours() === currHour && pill.time.reminderTime,getMinutes() === currMin && !pill.takenEarly) {
 			const payload = {
 				notification: {
-					title: "Testing pushtask Function!",
-					body: `It is time to take ${pill.pillName}`,
+					title: "Notification",
+					body: `It is time to take ${pill.dosage} ${pill.pillName}`,
 					priority: 'high',
 				}
 			 };
