@@ -16,7 +16,7 @@ const create = async (profileParams) => {
 
 const update = async (profileParams) => {
    try {
-      await Profile.replaceOne({userId: profileParams.userId}, profileParams);
+      await Profile.findOneAndUpdate({userId: profileParams.userId}, profileParams);
       return {msg: 'Success'};
    }
    catch (error) {
