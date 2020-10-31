@@ -21,8 +21,8 @@ const getDefaultDate = (day, pill, user, userTimes) => {
    if (pill.withFood && pill.withSleep) {
       return {
          reminderTime: new Date(2020, 10, (userTimes.dinnerHr + (userTimes.dinnerHr - userTimes.sleepHr) / 2 + 7 > 24 ? day + 2 : day + 1), userTimes.dinnerHr + (userTimes.dinnerHr - userTimes.sleepHr) / 2, user.dinnerMin), 
-         leftBound: ,
-         rightBound:  
+         leftBound: 4,
+         rightBound: 4 
       }
    }
    else if (pill.withSleep) {
