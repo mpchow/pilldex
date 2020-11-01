@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">pilldex</string>
+    <string name="default_notification_channel_id">notifications</string>
 </resources>
