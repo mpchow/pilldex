@@ -32,15 +32,34 @@ function CheckPillScreen({ navigation, route }) {
     }
     var refill = parseInt(refillUnits);
     var dose = parseInt(dosage);
+    var frq = parseInt(freq);
     if (isNaN(refill) || refill <= 0) {
-      Alert.alert("Please enter a valid refill amount");
+      Alert.alert("Please enter a valid number of units for refill field");
       return;
-    } else if (isNaN(dose) || dose <= 0) {
-      Alert.alert("Please enter a valid dosage");
+    } /*else if (isNaN(dose) || dose <= 0 || dose > refill) {
+      Alert.alert("Please enter a valid number of units for dosage field");
+      return;
+    } */else if (isNaN(frq) || frq <= 0 || frq > refill) {
+      Alert.alert("Please enter a valid number of units for frequency field");
+      return;
+    } else if (freqUnits == null) {
+      Alert.alert("Make a selection for frequency field");
+      return;
+    } else if (foodButton == null) {
+      Alert.alert("Make a selection for food field");
+      return;
+    } else if (drowsyButton == null) {
+      Alert.alert("Make a selection for drowsiness field");
       return;
     }
 
-    fetch('http://ec2-35-183-198-103.ca-central-1.compute.amazonaws.com:3000/pills', {
+    /* MORE COMPLEX ERROR HANDLING */
+    if (freqUnits == "weekly" && (frq % 7 != 0)) { // eg. can't have 8 pills weekly
+      Alert.alert("Invalid number of pills for weekly frequency");
+      return;
+    }
+
+    fetch('http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/pills', {
       method: 'POST',
       headers: {
         Accept: 'application/json',

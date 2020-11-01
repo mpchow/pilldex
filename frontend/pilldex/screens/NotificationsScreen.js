@@ -6,15 +6,25 @@ import {
   TouchableOpacity,
   Dimensions
 } from 'react-native';
+import auth from '@react-native-firebase/auth';
 
 const width = Dimensions.get('window').width;
 
-/* Notification: userID, time closed, notification ID
- * 'http://ec2-35-183-198-103.ca-central-1.compute.amazonaws.com:3000/pills/label
- * takenEarly: true
-*/
-
 function NotificationsScreen({ navigation }) {
+
+  /*useEffect(() => {
+    fetch(`http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/users?userId=${firebase.auth().currentUser.uid}`, {
+      method: 'GET',
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      console.log("Response from server is", responseJson);
+    })
+    .catch((error) => {
+         console.error(error);
+    });
+  });*/
+
   return (
     <View style={styles.container}>
       <View style={{height: 20}} />

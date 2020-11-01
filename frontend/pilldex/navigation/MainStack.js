@@ -17,7 +17,7 @@ const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 function MainStack() {
-  const [notif, setNotif] = useState(true);
+  const [notifs, setNotifs] = useState([]);
 
   useEffect(() => {
     // foreground notification
@@ -25,6 +25,9 @@ function MainStack() {
       //setNotif(JSON.stringify(remoteMessage));
       console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
       displayNotification(remoteMessage.notification.body);
+      var copyNotifs = [...notifs];
+      copyNotifs.push(remoteMessage);
+      setNotifs(copyNotifs);
       /*Alert.alert('Notification',
         remoteMessage.notification.body,
         [
@@ -50,6 +53,9 @@ function MainStack() {
         remoteMessage.notification,
       );
       displayNotification(remoteMessage.notification.body);
+      var copyNotifs = [...notifs];
+      copyNotifs.push(remoteMessage);
+      setNotifs(copyNotifs);
     });
 
     // notification while app is in quit mode
@@ -62,6 +68,9 @@ function MainStack() {
             remoteMessage.notification,
           );
           displayNotification(remoteMessage.notification.body);
+          var copyNotifs = [...notifs];
+          copyNotifs.push(remoteMessage);
+          setNotifs(copyNotifs);
         }
       });
 
@@ -88,7 +97,7 @@ function MainStack() {
          }}
          >
        <Tab.Screen name='Profile'
-                   children={() => <ProfileStack propName={notif}/>}
+                   component={ProfileStack}
                    options = {{
                      tabBarLabel: 'Profile',
                      tabBarIcon: ({ color }) => (
@@ -97,7 +106,7 @@ function MainStack() {
                     }}
                    />
        <Tab.Screen name='Home'
-                   children={() => <HomeStack propName={notif}/>}
+                   component={HomeStack}
                    options = {{
                      tabBarLabel: 'Home',
                      tabBarIcon: ({ color }) => (
@@ -106,7 +115,7 @@ function MainStack() {
                     }}
                    />
        <Tab.Screen name='Pillbox'
-                   children={() => <PillBoxStack propName={true}/>}
+                   component={PillBoxStack}
                    options = {{
                      tabBarLabel: 'Pillbox',
                      tabBarIcon: ({ color }) => (

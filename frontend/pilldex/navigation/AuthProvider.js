@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }) => {
               await auth().createUserWithEmailAndPassword(email, password)
                     .then( async (user) => {
                       const token = await firebase.messaging().getToken();
-                      fetch('http://ec2-35-183-198-103.ca-central-1.compute.amazonaws.com:3000/users', {
+                      fetch('http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/users', {
                         method: 'POST',
                         headers: {
                           Accept: 'application/json',

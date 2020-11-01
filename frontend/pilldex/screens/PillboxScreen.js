@@ -24,7 +24,7 @@ function PillboxScreen( {navigation } ) {
 
   function getPills() {
 
-    fetch(`http://ec2-35-183-198-103.ca-central-1.compute.amazonaws.com:3000/pills?userId=${firebase.auth().currentUser.uid}`, {
+    fetch(`http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/pills?userId=${firebase.auth().currentUser.uid}`, {
       method: 'GET',
     })
     .then((response) => response.json())
@@ -48,7 +48,7 @@ function PillboxScreen( {navigation } ) {
   }, []);
 
   function showInfo(pillName) {
-    fetch(`http://ec2-35-183-198-103.ca-central-1.compute.amazonaws.com:3000/pills/single?userId=${firebase.auth().currentUser.uid}&name=${pillName}`, {
+    fetch(`http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/pills/single?userId=${firebase.auth().currentUser.uid}&name=${pillName}`, {
       method: 'GET',
     })
     .then((response) => response.json())

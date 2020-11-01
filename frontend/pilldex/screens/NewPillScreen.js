@@ -27,7 +27,7 @@ function NewPillScreen({ navigation }) {
       console.log('Found text in document: ', processed.text);
 
       // Make post request
-      fetch('http://ec2-35-183-198-103.ca-central-1.compute.amazonaws.com:3000/pills/label', {
+      fetch('http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/pills/label', {
         method: 'POST',
         headers: {
           Accept: 'application/json',

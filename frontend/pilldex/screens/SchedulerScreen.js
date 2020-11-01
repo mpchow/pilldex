@@ -115,7 +115,7 @@ function SchedulerScreen({ navigation, route }) {
 
       const hours = parseInt(timeCheck[0]);
       const mins = parseInt(timeCheck[1]);
-      if (isNaN(hours) || isNaN(mins) || hours <= 0 ||
+      if (isNaN(hours) || isNaN(mins) || hours < 1 ||
           hours > 12 || mins < 0 || mins >= 60) {
         Alert.alert("Please enter a valid time for " + elem.title);
         return;
@@ -132,7 +132,7 @@ function SchedulerScreen({ navigation, route }) {
       const bfast = routine[2]["time"].split(":");
       const lunch = routine[3]["time"].split(":");
       const din = routine[4]["time"].split(":");
-      fetch('http://ec2-35-183-198-103.ca-central-1.compute.amazonaws.com:3000/users', {
+      fetch('http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/users', {
         method: 'PUT',
         headers: {
           Accept: 'application/json',
