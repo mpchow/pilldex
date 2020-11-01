@@ -1,2 +1,2 @@
-test: ./backend/npm test 
+test:  
 	
