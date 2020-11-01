@@ -17,13 +17,13 @@ function CheckPillScreen({ navigation, route }) {
   const [name, setName] = useState("");
   const [refillUnits, setRefillUnits] = useState("");
   const [freq, setFreq] = useState("");
-  const [dosage, setDosageButton] = useState("");
+  const [dosage, setDosage] = useState("");
   const [freqUnits, setFreqButton] = useState(null);
   const [foodButton, setFoodButton] = useState(null);
   const [drowsyButton, setDrowsyButton] = useState(null);
 
   function sendNewUserInfo(){
-    console.log(name, firebase.auth().currentUser.uid, refillUnits, freq, freqUnits, foodButton, drowsyButton);
+    console.log(name, firebase.auth().currentUser.uid, refillUnits, dosage, freq, freqUnits, foodButton, drowsyButton);
 
     /* Make sure inputs are valid */
     if (name == "") {
@@ -74,7 +74,7 @@ function CheckPillScreen({ navigation, route }) {
         frequencyUnit: freqUnits,
         withFood: foodButton,
         withSleep: drowsyButton,
-        dosage: 1,
+        dosage: dosage,
       })
     })
     .catch((error) => {
@@ -91,6 +91,7 @@ function CheckPillScreen({ navigation, route }) {
     setFreqButton(freqUnits => info.frequencyUnit);
     setFoodButton(foodButton => info.withFood);
     setDrowsyButton(drowsyButton => info.withSleep);
+    setDosage(dosage => info.dosage);
   }, [info]);
 
   return (
@@ -135,10 +136,20 @@ function CheckPillScreen({ navigation, route }) {
             autoCapitalize='none'
             autoCorrect={false}
             keyboardType='numeric'
+            onChangeText = {(text) => setDosage(text)}
+            defaultValue = {dosage ? dosage.toString() : ""}
+          />
+          <Text style={styles.text}>  units, </Text>
+          <TextInput
+            placeholder = "Units"
+            style= {styles.number_input}
+            autoCapitalize='none'
+            autoCorrect={false}
+            keyboardType='numeric'
             onChangeText = {(text) => setFreq(text)}
             defaultValue = {freq ? freq.toString() : ""}
           />
-          <Text style={styles.text}>  units,</Text>
+          <Text style={styles.text}>  times</Text>
         </View>
         <View style={{flexDirection: 'row', alignItems: 'center', marginTop: -15}}>
           <TouchableOpacity style={freqUnits == "daily" ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setFreqButton("daily")}/>
