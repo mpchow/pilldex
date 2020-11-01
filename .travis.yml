@@ -13,6 +13,8 @@ addons:
 before_install:
   - npm i -g npm@6.14.8
 
+script: ./backend npm test 
+
 
 
 
