@@ -32,6 +32,17 @@ function PNController() {
       popInitialNotification: true,
       requestPermissions: true,
     });
+    PushNotification.createChannel(
+    {
+      channelId: "notifications", // (required)
+      channelName: "notifications", // (required)
+      channelDescription: "A channel for your notifications", // (optional) default: undefined.
+      soundName: "default", // (optional) See `soundName` parameter of `localNotification` function
+      importance: 4, // (optional) default: 4. Int value of the Android notification importance
+      vibrate: true, // (optional) default: true. Creates the default vibration patten if true.
+    },
+    (created) => console.log(`createChannel returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
+  );
   }, []);
 
   return <View />;
@@ -39,6 +50,7 @@ function PNController() {
 
 export const displayNotification = (message) => {
   PushNotification.localNotification({
+    channelId: "notifications",
     title: "Pill Reminder",
     message: message,
     playSound: false,
