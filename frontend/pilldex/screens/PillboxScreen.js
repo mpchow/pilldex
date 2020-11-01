@@ -17,15 +17,14 @@ const width = Dimensions.get('window').width;
 
 function PillboxScreen( {navigation } ) {
 
-
   const needRefill = 5; //below this amount, the text is red
 
   const [pills, setPills] = useState([]);
   console.log("PIll is", pills);
 
-  function getPills(){
-   
-    fetch(`http://ec2-35-183-198-103.ca-central-1.compute.amazonaws.com:3000/pills?userId=${firebase.auth().currentUser.uid}`, {
+  function getPills() {
+
+    fetch(`http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/pills?userId=${firebase.auth().currentUser.uid}`, {
       method: 'GET',
     })
     .then((response) => response.json())
@@ -33,23 +32,23 @@ function PillboxScreen( {navigation } ) {
 
       console.log("Response from server is", responseJson['pill']);
       setPills(responseJson['pill']);
-     
+
     })
     .catch((error) => {
          console.error(error);
     });
- 
+
   }
 
   useEffect(() => {
     console.log("Inside useEffect function");
     getPills();
-    
+
 
   }, []);
 
-  function showInfo(pillName){
-    fetch(`http://ec2-35-183-198-103.ca-central-1.compute.amazonaws.com:3000/pills/single?userId=${firebase.auth().currentUser.uid}&name=${pillName}`, {
+  function showInfo(pillName) {
+    fetch(`http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/pills/single?userId=${firebase.auth().currentUser.uid}&name=${pillName}`, {
       method: 'GET',
     })
     .then((response) => response.json())
@@ -83,21 +82,15 @@ function PillboxScreen( {navigation } ) {
                     <Text style={styles.details}>More Details</Text>
                     <View style = {{width: 10}}/>
                     <Icon name="arrow-right" size={15} color="#538083" style={{paddingTop: 4}}/>
-                  </TouchableOpacity>  
+                  </TouchableOpacity>
                 </View>
               </View>
             </View>
-            
+
           )}
         />
       </SafeAreaView>
-      <View style={{flexDirection: 'row', padding: 10, justifyContent:'space-between'}}>
-        <TouchableOpacity style={styles.button}
-                          onPress={() => navigation.goBack()}>
-          <Text style={styles.btnText}>BACK</Text>
-        </TouchableOpacity>
-      </View>
-      
+    <View style={{height: 30}} />
     </View>
   );
 }

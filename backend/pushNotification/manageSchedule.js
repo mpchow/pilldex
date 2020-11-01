@@ -1,45 +1,101 @@
 const db = require('../db/db');
 const Pills = db.Pill;
 const Users = db.User;
+const NormalDistribution = require('normal-distribution');
+const pill = require('../modules/pill');
+const dist = new NormalDistribution.default();
+// const {v4: uuidv4 } = require('uuid');
+const { uuid } = require('uuidv4');
 
-const getDate = (day, pill, user) => {
-    const lunchAM = user.lunchAM ? user.lunchAM : false;
-	const lunchHour = user.lunchHr ? (lunchAM ? user.lunchHr : user.lunchHr + 12) : 12;
-	const lunchMin = user.lunchMin ? user.lunchMin : 0;
 
-	const dinnerAM = user.dinnerAM ? user.dinnerAM : false;
-	const dinnerHour = user.dinnerHr ? (dinerAM ? user.dinnerHr: user.dinnerHr + 12) : 19;
-	const dinnerMin = user.dinnerMin ? user.dinnerMin : 0;
+const freqMap = [
+   [0],
+   [0, 4],
+   [0, 2, 4],
+   [0, 2, 4, 6],
+   [0, 2, 3, 4, 6],
+   [0, 1, 2, 3, 4, 5],
+   [0, 1, 2, 3, 4, 5, 6]
+];
 
-	const sleepAM = user.sleepAM ? user.sleepAM : false;
-	const sleepHour = user.sleepHr ? (sleepAM ? user.sleepHr : user.sleepHr + 12) : 22;
-	const sleepMin = user.sleepMin ? user.sleepMin : 0;
+const getDefaultDate = (day, pill, user, userTimes) => {
 
    if (pill.withFood && pill.withSleep) {
-	  return new Date(2020, 10, (dinnerHour + (dinnerHour - sleepHour) / 2 + 7 > 24 ? day + 2 : day + 1), dinnerHour + (dinnerHour - sleepHour) / 2, dinnerMin);
-   }
-   if (pill.withFood) {
-      return new Date(2020, 10, (lunchHour + 7 > 24 ? day + 2 : day + 1), lunchHour, lunchMin);
+      return {
+         reminderTime: new Date(2020, 10, (userTimes.dinnerHr + (userTimes.dinnerHr - userTimes.sleepHr) / 2 + 7 > 24 ? day + 2 : day + 1), userTimes.dinnerHr + (userTimes.dinnerHr - userTimes.sleepHr) / 2, user.dinnerMin), 
+         leftBound: 4,
+         rightBound: 4 
+      }
    }
    else if (pill.withSleep) {
-      return new Date(2020, 10, (sleepHour + 7 > 24 ? day + 2 : day + 1), sleepHour, sleepMin);
+      return {
+         reminderTime: new Date(2020, 10, (userTimes.sleepHr + 7 > 24 ? day + 2 : day + 1), userTimes.sleepHr, user.sleepMin),
+         leftBound: userTimes.sleepHr - userTimes.dinnerHr < 4 ? (userTimes.sleepHr - userTimes.dinnerHr) : 4,
+         rightBound: 4
+      }
    }
    else {
-      return new Date(2020, 10, (lunchHour + 9 > 24 ? day + 2 : day + 1), lunchHour + 2);
+      return {
+         reminderTime: new Date(2020, 10, (userTimes.lunchHr + 7 > 24 ? day + 2 : day + 1), userTimes.lunchHr, user.lunchMin),
+         leftBound: userTimes.lunchHr - userTimes.breakfastHr < 4 ? (userTimes.lunchHr - userTimes.breakfastHr) : 4,
+         rightBound: userTimes.dinnerHr - userTimes.lunchHr < 4 ? (userTimes.dinnerHr - userTimes.lunchHr) : 4
+      }
    }
-};
+}
  
-const updateSchedule = async (userID, pill) => {
-   let user = await Users.findOne({userId: userID});
+const updateSchedule = async (reqBody) => {
+   let user = await Users.findOne({userId: reqBody.userID});
    let schedule = user.schedule;
-   const freq = pill.frequencyUnit === 'Daily' ? 1 : 7;	
-   for (let i = 0; i < 7; i += freq) {
-		if(schedule[i]) {
-			schedule[i].push({time: getDate(i, pill, user), pillName: pill.name});
-		}
-   }
-  await Users.findOneAndUpdate({userId: userID}, {schedule: schedule});
 
+   const pill = await Pills.findOne({name: reqBody.pillName});
+   await Pills.findOneAndUpdate({name: reqBody.pillName}, {remaining: pill.remaining - pill.dosage});
+
+   let timeTaken = reqBody.timeTaken;
+   let id = reqBody.id;
+
+   let pillReminder = schedule[timeTaken.getDay()].find(reminders => reminders.id === id);
+
+   let timeTakenConverted = timeTaken.getHours() * 60 + timeTaken.getMinutes();
+   let reminderTimeConverted = pillReminder.time.reminderTime.getHours() * 60 + pillReminder.time.reminderTime.getMinutes();
+
+   let timeDiff = Math.abs(timeTakenConverted - reminderTimeConverted);
+
+   if (timeDiff > 30) {
+      pillReminder.timesLate++;
+      if(pillReminder.timesLate === 2) {
+         pillReminder.timesLate = 0;
+         pillReminder.takenEarly = false;
+
+         let newTime = 0;
+         for(let time in  pillReminder.adjustedTimes) {
+            newTime += time;
+         }
+         newTime /= pillReminder.adjustedTimes.length;
+         pillReminder.time.reminderTime = new Date(2020, 10, Math.floor(newTime/60) + 7 > 24 ? timeTaken.getDay() + 2 : timeTaken.getDay() + 1, newTime % 60);
+         pillReminder.adjustedTimes = [];
+      }
+      else {
+         pillReminder.timesLate++;
+         let percentageLate;
+         let timeAdjust
+         if(timeTakenConverted < reminderTimeConverted) {
+            percentageLate = timeDiff / (pillReminder.time.leftBound * 60);
+            timeAdjust = dist.cdf(3 * percentageLate);
+
+            pillReminder.time.adjustedTimes.push(timeTakenConverted - timeAdjust);
+         }  
+         else {
+            percentageLate = timeDiff / (pillReminder.time.rightBound * 60);
+            timeAdjust = dist.cdf(3 * percentageLate);
+
+            pillReminder.time.adjustedTimes.push(timeTakenConverted + timeAdjust);
+         }
+      }
+   
+      await Users.findOneAndUpdate({userId: user.userId}, {schedule: schedule});
+
+   } 
+   return {msg: "Schedule Updated"}
 }
 
 const deleteSchedule = async (userID, pill) => {
@@ -55,22 +111,122 @@ const deleteSchedule = async (userID, pill) => {
   await Users.findOneAndUpdate({userId: userID}, {schedule: schedule});
 };
 
-const createSchedule = async (userID) => {
-   //iterate through all of the pills
-   let pills = await Pills.find({userId: userID});
-   let user = await Users.findOne({userId: userID});
-   let schedule = [[], [], [], [], [], [], []];
+const createSchedule = async (pillParams) => {
+   let user = await Users.findOne({userId: pillParams.userId});
+   let schedule = user.schedule;
 
-   pills.forEach(pill => {
-      //Get when we need to take the pill
-      //Check frequency and whether we take it at night or with foodi
-      const freq = pill.frequencyUnit === 'Daily' ? 1 : 7;
-      for (let i = 0; i < 7; i += freq) {
-         schedule[i].push({time: getDate(i, pill, user), pillName: pill.name});
+   const userTimes = {
+      wakeupHr: user.wakeupAM ? user.wakeupHr + 12 : user.wakeupHr,
+      wakeupTime: (user.wakeupAM ? user.wakeupHr + 12 : user.wakeupHr) * 60 + user.wakeupMin,
+      sleepHr: user.sleepAM ? user.sleepHr + 12 : user.sleepHr,
+      sleepTime: (user.sleepAM ? user.sleepHr + 12 : user.sleepHr) * 60 + user.sleepMin,
+      breakfastHr: user.breakfastAM ? user.breakfastHr : user.breakfastHr + 12,
+      breakfastTime: (user.breakfastAM ? user.breakfastHr : user.breakfastHr + 12) * 60 + user.breakfastMin,
+      lunchHr: user.lunchAM ? user.lunchHr : user.lunchHr + 12,
+      lunchTime: (user.lunchAM ? user.lunchHr : user.lunchHr + 12) * 60 + user.lunchMin,
+      dinnerHr: user.dinnerAM ? user.dinnerHr: user.dinnerHr + 12,
+      dinnerTime: (user.dinnerAM ? user.dinnerHr: user.dinnerHr + 12) * 60 + user.dinnerMin
+   }
+
+   if(pillParams.frequencyUnit === 'Daily') {
+
+      if(pillParams.withSleep) {
+         for (let i = 0; i < 7; i++) {
+            schedule[i].push({
+               time: {
+                  reminderTime: new Date(2020, 10, userTimes.sleepHr, userTimes.sleepMin),
+                  leftBound: userTimes.sleepHr - userTimes.dinnerHr < 4 ? (userTimes.sleepHr - userTimes.dinnerHr) : 4,
+                  rightBound: 4
+               }, 
+               pillName: pill.name,
+               id: uuid(),
+               dosage: pillParams.dosage,
+               timesLate: 0,
+               adjustedTimes: [],
+               takenEarly: false
+            })
+         }
       }
-   });
+      else if(pillParams.withFood) {
+         for (let i = 0; i < 7; i++) {
+            for (let j = 0; j < pillParams.frequency; j++) {
+               let hour;
+               let minute;
+               let leftBound;
+               let rightBound;
+               if(j === 0) {
+                  hour = userTimes.breakfastHr;
+                  minute = user.breakfastMin;
+                  leftBound = userTimes.breakfastHr - userTimes.wakeupHr < 4 ? (userTimes.breakfastHr - userTimes.wakeupHr) : 4;
+                  rightBound = userTimes.lunchHr - userTimes.breakfastHr < 4 ? (userTimes.lunchHr - userTimes.breakfastHr) : 4;
+               }
+               else if (j === 1) {
+                  hour = userTimes.lunchHr;
+                  minute = user.lunchMin;
+                  leftBound = userTimes.lunchHr - userTimes.breakfastHr < 4 ? (userTimes.lunchHr - userTimes.breakfastHr) : 4;
+                  rightBound = userTimes.dinnerHr - userTimes.lunchHr < 4 ? (userTimes.dinnerHr - userTimes.lunchHr) : 4;
+               }
+               else {
+                  hour = userTimes.dinnerHr;
+                  minute = user.dinnerMin;
+                  leftBound = userTimes.dinnerHr - userTimes.lunchHr < 4 ? (userTimes.dinnerHr - userTimes.lunchHr) : 4;
+                  rightBound = userTimes.sleepHr - userTimes.dinnerHr < 4 ? (userTimes.sleepHr - userTimes.dinnerHr) : 4;
+               }
 
-  await Users.findOneAndUpdate({userId: userID}, {schedule: schedule});
+               schedule[i].push({
+                  time: {
+                     reminderTime: new Date(2020, 10, hour, minute),
+                     leftBound: leftBound,
+                     rightBound: rightBound
+                  }, 
+                  pillName: pill.name,
+                  id: uuid(),
+                  dosage: pillParams.dosage,
+                  timesLate: 0,
+                  adjustedTimes: [],
+                  takenEarly: false
+               });
+            }
+         }
+
+      }
+      else {
+         const timeSpacing = (userTimes.sleepTime - userTimes.wakeTime) / pillParams.frequency;
+   
+         for (let i = 0; i < 7; i++) {
+            for (let j = 0; j < pillParams.frequency; j++) {
+               schedule[i].push({
+                  time: {
+                     reminderTime: new Date(2020, 10, Math.floor((userTimes.wakeupTime + timeSpacing * (j + 1))/60), (userTimes.wakeupTime + timeSpacing * (j + 1)) % 60),
+                     leftBound: userTimes.lunchHr - userTimes.breakfastHr < 4 ? (userTimes.lunchHr - userTimes.breakfastHr) : 4,
+                     rightBound: userTimes.dinnerHr - userTimes.lunchHr < 4 ? (userTimes.dinnerHr - userTimes.lunchHr) : 4
+                  },
+                  pillName: pill.name,
+                  id: uuid(),
+                  dosage: pillParams.dosage,
+                  timesLate: 0,
+                  adjustedTimes: [],
+                  takenEarly: false
+               });
+            }
+         }
+      }
+   }
+   else {
+      for (let day in freqMap[pillParams.frequency - 1]) {
+         schedule[day].push({
+            time: getDefaultDate(i, pillParams, user, userTimes),
+            pillName: pill.name,
+            id: uuid(),
+            dosage: pillParams.dosage,
+            timesLate: 0,
+            adjustedTimes: [],
+            takenEarly: false
+         });
+      }
+   }
+
+   await Users.findOneAndUpdate({userId: pillParams.userId}, {schedule: schedule});
 } 
 
 module.exports = {createSchedule, updateSchedule, deleteSchedule};

@@ -11,11 +11,16 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import messaging from '@react-native-firebase/messaging';
 import firebase from '@react-native-firebase/app';
+import auth from '@react-native-firebase/auth';
+import PNController, { displayNotification } from '../components/PNController.js';
 
 const width = Dimensions.get('window').width;
-
+/* Notification: userID, time closed, notification ID
+ * 'http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/pills/label
+ * takenEarly: true
+*/
 function HomeScreen({ navigation }) {
-  
+
   const dayArray = ["Sunday", "Monday", "Tuesday",
                     "Wednesday", "Thursday", "Friday", "Saturday"];
   const monthArray = ["January", "February", "March", "April", "May",
@@ -66,6 +71,19 @@ function HomeScreen({ navigation }) {
         done: false, dateString: date2String}]
     );
   });
+
+  /*useEffect(() => {
+    fetch(`http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/users?userId=${firebase.auth().currentUser.uid}`, {
+      method: 'GET',
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      console.log("Response from server is", responseJson);
+    })
+    .catch((error) => {
+         console.error(error);
+    });
+  });*/
 
   console.log(date);
 
@@ -153,6 +171,11 @@ function HomeScreen({ navigation }) {
         <Text style={styles.btnText}>NEW PILL</Text>
       </TouchableOpacity>
       <View style={{height:30}} />
+        <TouchableOpacity style={styles.button}
+                          onPress={() => displayNotification("Test Notification")}>
+          <Text style={styles.btnText}>TEST</Text>
+        </TouchableOpacity>
+        <View style={{height:30}} />
     </View>
   );
 }

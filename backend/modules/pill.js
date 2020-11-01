@@ -1,4 +1,4 @@
-const manageSchedule = require('../pushNotification/manageSchedule');
+const scheduler = require('../pushNotification/manageSchedule');
 const db = require('./../db/db.js');
 const Pill = db.Pill;
 
@@ -7,7 +7,7 @@ const create = async (pillParams) => {
       await Pill.findOne({ name: pillParams.name, userId: pillParams.userId })
       const pill = new Pill(pillParams);
       pill.save();
-      manageSchedule.updateSchedule(pillParams.userId, pillParams);
+      await manageSchedule.updateSchedule(pillParams.userId, pillParams);
       return({msg: 'Success'});
    }
    catch (error) {
@@ -18,9 +18,9 @@ const create = async (pillParams) => {
 
 const update = async (pillParams) => {
 	try {
-        await Pill.replaceOne({name: pillParams.name, userId: pillParams.userId}, pillParams);
-		manageSchedule.removeSchedule(pillParams.userId, pillParams.name);
-		manageSchedule.updateSchedule(pillParams.userId, pillParams);
+      await Pill.replaceOne({name: pillParams.name, userId: pillParams.userId}, pillParams);
+		await scheduler.removeSchedule(pillParams.userId, pillParams.name);
+		await scheduler.createSchedule(pillParams.userId, pillParams);
 		return({msg: 'Success'});
 	}
 	catch (error) {
@@ -31,7 +31,7 @@ const update = async (pillParams) => {
 const remove = async (pillParams) => {
 	try {
 		await Pill.deleteOne({name: pillParams.name, userId: pillParams.userId});
-        manageSchedule.deleteSchedule(pillParams.userId, pillParams.name);
+      await manageSchedule.deleteSchedule(pillParams.userId, pillParams.name);
 		return({msg: 'Success'});
 	}
 	catch (error) {
@@ -57,17 +57,20 @@ const retrieveAll = async (pillParams) => {
 	}
 }
 
-const parseLabel = async (label) => {
-	try {
-		console.log(label);
-		return({msg: 'Success'});
-	}
-	catch (error) {
-	   throw `The label could not be parsed`;
-	}
+const updateRemaining = async (pillParams) => {
+    try {
+        newPill = await Pill.findOne({name: pillParams.name, userId: pillParams.userId});
+        newPill.remaining = newPill.remaining + newPill.totalQuantity;
+		console.log(newPill.remaining);
+        await Pill.replaceOne({name: pillParams.name, userId: pillParams.userId}, newPill);
+        return {newPill, msg:"Success"};
+    }
+    catch (error) {
+       throw `The remaining capsuls could not be updated`;
+    }
 }
 
-module.exports = {create, update, remove, retrieve, retrieveAll, parseLabel};
+module.exports = {create, update, remove, retrieve, retrieveAll, updateRemaining};
 
 // {name, userId, totalQuantity, frequency, 
 //    frequencyUnit, dosage, withFood, withSleep
