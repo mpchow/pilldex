@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "test": "jest"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -18,5 +19,8 @@
     "node-cron": "^2.0.3",
     "normal-distribution": "0.0.9",
     "uuidv4": "^6.2.4"
+  },
+  "devDependencies": {
+    "jest": "^26.6.1"
   }
 }
