@@ -28,6 +28,7 @@ const pushTask = async () => {
                   notification: {
                      title: "Notification",
                      body: `It is time to take ${pill.dosage} ${pill.pillName}`,
+                     reminderId: pill.reminderId,
                      priority: 'high',
                   }
                };
