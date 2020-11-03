@@ -4,7 +4,6 @@ const Users = db.User;
 const NormalDistribution = require('normal-distribution');
 const pill = require('../modules/pill');
 const dist = new NormalDistribution.default();
-// const {v4: uuidv4 } = require('uuid');
 const { uuid } = require('uuidv4');
 
 
@@ -23,8 +22,8 @@ const getDefaultDate = (day, pill, user, userTimes) => {
    if (pill.withFood && pill.withSleep) {
       return {
          reminderTime: new Date(2020, 10, (userTimes.dinnerHr + (userTimes.dinnerHr - userTimes.sleepHr) / 2 + 7 > 24 ? day + 2 : day + 1), userTimes.dinnerHr + (userTimes.dinnerHr - userTimes.sleepHr) / 2, user.dinnerMin), 
-         leftBound: 4,
-         rightBound: 4 
+         leftBound: userTimes.dinnerHr - userTimes.lunchHr < 4 ? (userTimes.dinnerHr - userTimes.lunchHr) : 4,
+         rightBound: userTimes.sleepHr - userTimes.dinnerHr < 4 ? (userTimes.sleepHr - userTimes.dinnerHr) : 4
       }
    }
    else if (pill.withSleep) {
@@ -44,16 +43,16 @@ const getDefaultDate = (day, pill, user, userTimes) => {
 }
  
 const updateSchedule = async (reqBody) => {
-   let user = await Users.findOne({userId: reqBody.userID});
+   let user = await Users.findOne({userId: reqBody.userId});
    let schedule = user.schedule;
 
    const pill = await Pills.findOne({name: reqBody.pillName});
    await Pills.findOneAndUpdate({name: reqBody.pillName}, {remaining: pill.remaining - pill.dosage});
 
    let timeTaken = reqBody.timeTaken;
-   let id = reqBody.id;
+   let reminderId = reqBody.reminderId;
 
-   let pillReminder = schedule[timeTaken.getDay()].find(reminders => reminders.id === id);
+   let pillReminder = schedule[timeTaken.getDay()].find(reminders => reminders.reminderId === reminderId);
 
    let timeTakenConverted = timeTaken.getHours() * 60 + timeTaken.getMinutes();
    let reminderTimeConverted = pillReminder.time.reminderTime.getHours() * 60 + pillReminder.time.reminderTime.getMinutes();
@@ -80,7 +79,7 @@ const updateSchedule = async (reqBody) => {
          let timeAdjust
          if(timeTakenConverted < reminderTimeConverted) {
             percentageLate = timeDiff / (pillReminder.time.leftBound * 60);
-            timeAdjust = dist.cdf(3 * percentageLate);
+            timeAdjust = dist.cdf(3 * percentageLate) * 0.1;
 
             pillReminder.time.adjustedTimes.push(timeTakenConverted - timeAdjust);
          }  
@@ -98,8 +97,8 @@ const updateSchedule = async (reqBody) => {
    return {msg: "Schedule Updated"}
 }
 
-const deleteSchedule = async (userID, pill) => {
-   let user = await Users.findOne({userId: userID});
+const deleteSchedule = async (userId, pill) => {
+   let user = await Users.findOne({userId: userId});
    let schedule = user.schedule;
 
    schedule = schedule.map(day => {
@@ -108,11 +107,12 @@ const deleteSchedule = async (userID, pill) => {
       })
    });
 
-  await Users.findOneAndUpdate({userId: userID}, {schedule: schedule});
+  await Users.findOneAndUpdate({userId: userId}, {schedule: schedule});
 };
 
 const createSchedule = async (pillParams) => {
    let user = await Users.findOne({userId: pillParams.userId});
+   console.log(user);
    let schedule = user.schedule;
 
    const userTimes = {
@@ -139,7 +139,7 @@ const createSchedule = async (pillParams) => {
                   rightBound: 4
                }, 
                pillName: pill.name,
-               id: uuid(),
+               reminderId: uuid(),
                dosage: pillParams.dosage,
                timesLate: 0,
                adjustedTimes: [],
@@ -180,7 +180,7 @@ const createSchedule = async (pillParams) => {
                      rightBound: rightBound
                   }, 
                   pillName: pill.name,
-                  id: uuid(),
+                  reminderId: uuid(),
                   dosage: pillParams.dosage,
                   timesLate: 0,
                   adjustedTimes: [],
@@ -202,7 +202,7 @@ const createSchedule = async (pillParams) => {
                      rightBound: userTimes.dinnerHr - userTimes.lunchHr < 4 ? (userTimes.dinnerHr - userTimes.lunchHr) : 4
                   },
                   pillName: pill.name,
-                  id: uuid(),
+                  reminderId: uuid(),
                   dosage: pillParams.dosage,
                   timesLate: 0,
                   adjustedTimes: [],
@@ -217,7 +217,7 @@ const createSchedule = async (pillParams) => {
          schedule[day].push({
             time: getDefaultDate(i, pillParams, user, userTimes),
             pillName: pill.name,
-            id: uuid(),
+            reminderId: uuid(),
             dosage: pillParams.dosage,
             timesLate: 0,
             adjustedTimes: [],
