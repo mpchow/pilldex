@@ -54,7 +54,7 @@ function CheckPillScreen({ navigation, route }) {
     }
 
     /* MORE COMPLEX ERROR HANDLING */
-    if (freqUnits == "weekly" && (frq % 7 != 0)) { // eg. can't have 8 pills weekly
+    if (freqUnits == "weekly" && (false)) { // eg. can't have 8 pills weekly //TODO: FIX THIS!
       Alert.alert("Invalid number of pills for weekly frequency");
       return;
     }

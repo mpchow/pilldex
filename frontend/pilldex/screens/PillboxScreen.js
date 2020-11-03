@@ -6,12 +6,14 @@ import {
   TouchableOpacity,
   Dimensions,
   FlatList,
-  SafeAreaView
+  SafeAreaView,
+  Alert
 } from 'react-native';
 
 import firebase, { utils } from '@react-native-firebase/app';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const width = Dimensions.get('window').width;
 
@@ -21,6 +23,36 @@ function PillboxScreen( {navigation } ) {
 
   const [pills, setPills] = useState([]);
   console.log("PIll is", pills);
+
+  function deletePills(pillName){
+    Alert.alert(  
+      `Delete ${pillName}`,  
+      `Are you sure you want to delete ${pillName}?`,  
+      [{  
+        text: 'Cancel',  
+        onPress: () => console.log('Cancel Pressed'),  
+        style: 'cancel',  
+        },  
+        {text: 'OK', onPress: () => {
+          fetch('http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/pills', {
+            method: 'DELETE',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              name: pillName,
+              userId: firebase.auth().currentUser.uid
+            })
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+          getPills();       
+        }}, 
+      ]  
+    );    
+  }
 
   function getPills() {
 
@@ -54,7 +86,7 @@ function PillboxScreen( {navigation } ) {
     .then((response) => response.json())
     .then((responseJson) => {
       console.log("Response from server is", responseJson['pill']);
-      navigation.navigate("PillInfo", {pillInfo: { ...responseJson['pill'], pillsLeft:50}}); //TODO: REMOVE pillsLeft: 50
+      navigation.navigate("PillInfo", {pillInfo: responseJson['pill']}); //TODO: REMOVE pillsLeft: 50
     })
     .catch((error) => {
          console.error(error);
@@ -62,7 +94,12 @@ function PillboxScreen( {navigation } ) {
   }
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Patient's Pillbox</Text>
+      <View style={{flexDirection: 'row'}}>
+        <Text style={styles.title}>Patient's Pillbox</Text>
+        <TouchableOpacity style={{paddingTop: 38, paddingLeft: 15}} onPress={()=>{getPills()}}>
+          <AntDesign name="sync" size={26} color="#46B1C9"/>
+        </TouchableOpacity>
+      </View>
       <SafeAreaView style={{flex: 1}} >
         <FlatList
           data={pills}
@@ -73,7 +110,12 @@ function PillboxScreen( {navigation } ) {
               <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', paddingLeft: 15}}>
                 <MaterialCommunityIcons name="pill" color='#84C0C6' size={40} />
                 <View style={{flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'space-evenly', marginLeft: 8}}>
-                  <Text style={styles.medName}>{item.name}</Text>
+                  <View style={{flexDirection: 'row'}}>
+                    <Text style={styles.medName}>{item.name}</Text>
+                    <TouchableOpacity style={{position: 'absolute', left: 225, top: 7}} onPress={()=>{deletePills(item.name)}}>
+                      <AntDesign name="close" size={25} color="#ba0c00"/>
+                    </TouchableOpacity>
+                  </View>
                   <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
                     <Text style={{color: item.totalQuantity <= needRefill ? 'red' : 'black'}}>{item.totalQuantity} Capsules Left</Text>
                   </View>
