@@ -112,6 +112,7 @@ const deleteSchedule = async (userId, pill) => {
 
 const createSchedule = async (pillParams) => {
    let user = await Users.findOne({userId: pillParams.userId});
+   console.log(user);
    let schedule = user.schedule;
 
    const userTimes = {

@@ -7,7 +7,7 @@ const create = async (pillParams) => {
       await Pill.findOne({ name: pillParams.name, userId: pillParams.userId })
       const pill = new Pill(pillParams);
       pill.save();
-      await manageSchedule.updateSchedule(pillParams.userId, pillParams);
+      await scheduler.createSchedule(pillParams);
       return({msg: 'Success'});
    }
    catch (error) {
@@ -18,9 +18,9 @@ const create = async (pillParams) => {
 
 const update = async (pillParams) => {
 	try {
-      await Pill.replaceOne({name: pillParams.name, userId: pillParams.userId}, pillParams);
+        await Pill.replaceOne({name: pillParams.name, userId: pillParams.userId}, pillParams);
 		await scheduler.removeSchedule(pillParams.userId, pillParams.name);
-		await scheduler.createSchedule(pillParams.userId, pillParams);
+		await scheduler.createSchedule(pillParams);
 		return({msg: 'Success'});
 	}
 	catch (error) {
@@ -31,7 +31,7 @@ const update = async (pillParams) => {
 const remove = async (pillParams) => {
 	try {
 		await Pill.deleteOne({name: pillParams.name, userId: pillParams.userId});
-      await manageSchedule.deleteSchedule(pillParams.userId, pillParams.name);
+        await scheduler.deleteSchedule(pillParams.userId, pillParams.name);
 		return({msg: 'Success'});
 	}
 	catch (error) {
