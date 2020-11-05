@@ -9,11 +9,11 @@ const pushTask = async () => {
    const currDay = (currHour >= 0 && currHour < 7) ? new Date().getDay() - 1 : new Date().getDay();
    let profiles = await Profile.find({});
    (await profiles).forEach(profile => {
-      profile.schedule[currDay].forEach(async (pill) => {
+      profile.schedule[currDay].forEach( (pill) => {
          if(pill.time.reminderTime.getHours() === currHour && pill.time.reminderTime.getMinutes() === currMin && !pill.takenEarly) {
-            const currPill = await Pill.findOne({name: pill.pillName});
-            let payload;
-
+            //const currPill = await Pill.findOne({name: pill.pillName});
+            //let payload;
+const currPill = {remaining: 1}
             if(currPill.remaining < 1) {
                payload = {
                   notification: {

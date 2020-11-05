@@ -128,7 +128,7 @@ const createSchedule = async (pillParams) => {
       dinnerTime: (user.dinnerAM ? user.dinnerHr: user.dinnerHr + 12) * 60 + user.dinnerMin
    }
 
-   if(pillParams.frequencyUnit === 'Daily') {
+   if(pillParams.frequencyUnit === 'daily') {
 
       if(pillParams.withSleep) {
          for (let i = 0; i < 7; i++) {
@@ -138,7 +138,7 @@ const createSchedule = async (pillParams) => {
                   leftBound: userTimes.sleepHr - userTimes.dinnerHr < 4 ? (userTimes.sleepHr - userTimes.dinnerHr) : 4,
                   rightBound: 4
                }, 
-               pillName: pill.name,
+               pillName: pillParams.name,
                reminderId: uuid(),
                dosage: pillParams.dosage,
                timesLate: 0,
@@ -179,7 +179,7 @@ const createSchedule = async (pillParams) => {
                      leftBound: leftBound,
                      rightBound: rightBound
                   }, 
-                  pillName: pill.name,
+                  pillName: pillParams.name,
                   reminderId: uuid(),
                   dosage: pillParams.dosage,
                   timesLate: 0,
@@ -201,7 +201,7 @@ const createSchedule = async (pillParams) => {
                      leftBound: userTimes.lunchHr - userTimes.breakfastHr < 4 ? (userTimes.lunchHr - userTimes.breakfastHr) : 4,
                      rightBound: userTimes.dinnerHr - userTimes.lunchHr < 4 ? (userTimes.dinnerHr - userTimes.lunchHr) : 4
                   },
-                  pillName: pill.name,
+                  pillName: pillParams.name,
                   reminderId: uuid(),
                   dosage: pillParams.dosage,
                   timesLate: 0,
@@ -215,8 +215,8 @@ const createSchedule = async (pillParams) => {
    else {
       for (let day in freqMap[pillParams.frequency - 1]) {
          schedule[day].push({
-            time: getDefaultDate(i, pillParams, user, userTimes),
-            pillName: pill.name,
+            time: getDefaultDate(day, pillParams, user, userTimes),
+            pillName: pillParams.name,
             reminderId: uuid(),
             dosage: pillParams.dosage,
             timesLate: 0,

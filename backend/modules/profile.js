@@ -4,7 +4,7 @@ const Pill = db.Pill;
 
 const retrieve = async (profileParams) => {
    try {
-      return {user: await Profile.findOne({userId: profileParams.userId}), msg: 'Success'};
+      return {user: await Profile.findOne({userId: profileParams.query.userId}), msg: 'Success'};
    }
    catch (error) {
       throw `The User ${profileParams.userId} could not be retrieved`;
