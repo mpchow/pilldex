@@ -8,6 +8,13 @@ router.post('/', newUser);
 router.put('/', updateUser);
 router.delete('/', deleteUser);
 router.get('/', getNotification);
+router.get('/', getUser);
+
+function getUser(req, res, next) {
+	profileService.retrieve(req.body)
+		.then((user) => res.json(user))
+		.catch(err => next(err));
+}
 
 function newUser(req, res, next) {
 	profileService.create(req.body) 
