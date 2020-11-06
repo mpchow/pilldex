@@ -20,7 +20,6 @@ const width = Dimensions.get('window').width;
  * takenEarly: true
 */
 function HomeScreen({ navigation }) {
-
   const dayArray = ["Sunday", "Monday", "Tuesday",
                     "Wednesday", "Thursday", "Friday", "Saturday"];
   const monthArray = ["January", "February", "March", "April", "May",
@@ -36,56 +35,55 @@ function HomeScreen({ navigation }) {
       year: now.getFullYear() // number
     });
   });
-  const [notifs, setNotifs] = useState(() => {
-    const date1 = new Date(2020, 9, 18);
-    const date2 = new Date(2020, 9, 18);
-    var date1String = "";
-    var date2String = "";
-    date1.setHours(12);
-    date2.setHours(18, 30);
+  const [schedule,setSchedule] = useState([]);
+  const [notifs, setNotifs] = useState([]);
 
-    var date1Mins = date1.getMinutes();
-    if (date1Mins < 10)
-      date1Mins = "0" + date1Mins;
-    var date2Mins = date2.getMinutes();
-    if (date2Mins < 10)
-      date2Mins = "0" + date2Mins;
+  useEffect(() => {
+    fetchSchedule();
+  }, []);
 
-    if (date1.getHours() >= 12)
-      date1String = (date1.getHours() % 24) + ":" + date1Mins + " PM";
-    else
-      date1String = date1.getHours() + ":" + date1Mins + " AM";
+  console.log(date);
 
-    if (date2.getHours() > 12)
-      date2String = (date2.getHours() % 24) + ":" + date2Mins + " PM";
-    else
-      date2String = date2.getHours() + ":" + date2Mins + " AM";
-
-    //const token = await firebase.messaging().getToken();
-    //console.log(token);
-    // set dummy notifications
-    return (
-      [{id: 0, name: "Advil", time: date1, food: true, drowsy: false,
-        done: false, dateString: date1String},
-       {id: 1, name: "Tylenol", time: date2, food: false, drowsy: true,
-        done: false, dateString: date2String}]
-    );
-  });
-
-  /*useEffect(() => {
+  function fetchSchedule() {
     fetch(`http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/users?userId=${firebase.auth().currentUser.uid}`, {
       method: 'GET',
     })
     .then((response) => response.json())
     .then((responseJson) => {
-      console.log("Response from server is", responseJson);
+      console.log("Response from server is", responseJson["user"]["schedule"]);
+      setSchedule(responseJson["user"]["schedule"]);
+      formatNotifs(responseJson["user"]["schedule"]);
     })
     .catch((error) => {
-         console.error(error);
+      console.error(error);
+      setSchedule([]);
     });
-  });*/
+  }
 
-  console.log(date);
+  function formatNotifs(data) {
+    var d = date.dateObj.getDay();
+    var ret = [];
+
+    data[d].forEach((e) => {
+      const t = Date.parse(e["time"]["reminderTime"]);
+      const time = new Date(t);
+      var dateString = "";
+
+      var mins = time.getMinutes();
+      if (mins < 10)
+        mins = "0" + mins;
+
+      if (time.getHours() > 12)
+        dateString = (time.getHours() - 12) + ":" + mins + " PM";
+      else
+        dateString = time.getHours() + ":" + mins + " AM";
+
+      ret.push({id: e['_id'], name: e['pillName'], time: time, food: true,
+               drowsy: true, done: e['takenEarly'], dateString: dateString});
+    });
+
+    setNotifs(ret);
+  }
 
   function toggleDate(dir) {
     var newDate = date.dateObj;
@@ -97,6 +95,7 @@ function HomeScreen({ navigation }) {
       date: newDate.getDate(),
       year: newDate.getFullYear()
     });
+    formatNotifs(schedule);
   }
 
   // set item.done to true and move notif to end of array
@@ -159,8 +158,9 @@ function HomeScreen({ navigation }) {
                   <Ionicons name="alarm-outline" color="#000" size={25} />
                   <Text style={styles.pillTime}>{item.dateString}</Text>
                 </View>
-                <Text>{item.food ? "Take with Food" :
-                       item.drowsy ? "Causes Drowsiness" : ""}</Text>
+                <Text>{item.food && item.drowsy ? "Take with Food, Causes Drowsiness" :
+                       item.drowsy ? "Causes Drowsiness" :
+                       item.food ? "Take with Food" : ""}</Text>
               </View>
             </View>
           </View>
@@ -170,12 +170,12 @@ function HomeScreen({ navigation }) {
                         onPress={() => navigation.navigate('NewPill')}>
         <Text style={styles.btnText}>NEW PILL</Text>
       </TouchableOpacity>
-      <View style={{height:30}} />
+      <View style={{height:10}} />
         <TouchableOpacity style={styles.button}
                           onPress={() => displayNotification("Test Notification")}>
           <Text style={styles.btnText}>TEST</Text>
         </TouchableOpacity>
-        <View style={{height:30}} />
+        <View style={{height:10}} />
     </View>
   );
 }
