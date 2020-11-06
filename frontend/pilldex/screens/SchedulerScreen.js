@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -20,6 +20,8 @@ function SchedulerScreen({ navigation, route }) {
   const { email, password } = route.params;
 
   // will go to default values or the user's prev settings
+  const [changeRoutine, setChangeRoutine] = useState(false);
+  const [userData, setUserData] = useState({});
   const [wakeup, setWakeup] = useState("");
   const [bedtime, setBedtime] = useState("");
   const [bfast, setBfast] = useState("");
@@ -32,6 +34,35 @@ function SchedulerScreen({ navigation, route }) {
     {title: "Lunch", "time": lunch, "AM": false, "PM": false},
     {title: "Dinner", "time": dinner, "AM": false, "PM": false}
   ]);
+
+  function getUserRoutine() {
+    fetch(`http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/users?userId=${firebase.auth().currentUser.uid}`, {
+      method: 'GET'
+    })
+    .then((response) => response.json())
+    .then((res) => {
+      console.log("in fetch scheduler");
+      console.log(res);
+      setWakeup(res["user"]['wakeupHr'] + ":" + res["user"]['wakeupMin']);
+      setBedtime(res["user"]['sleepHr'] + ":" + res["user"]['sleepMin']);
+      setBfast(res["user"]['breakfastHr'] + ":" + res["user"]['breakfastMin']);
+      setLunch(res["user"]['lunchHr'] + ":" + res["user"]['lunchMin']);
+      setDinner(res["user"]['dinnerHr'] + ":" + res["user"]['dinnerMin']);
+      console.log(dinner);
+      if (user) {
+        var data = { token: res["user"]['token'], userID: res["user"]['userId'], schedule: res["user"]['schedule']};
+        setUserData(data);
+      }
+    })
+    .catch((error) => {
+         console.error(error);
+    });
+  }
+
+  useEffect(() => {
+    if (user)
+      getUserRoutine();
+  }, [changeRoutine]);
 
   function updateRoutine(index, field, newValue) {
     var routineCopy = [...routine];
@@ -72,7 +103,7 @@ function SchedulerScreen({ navigation, route }) {
   }
 
   async function checkInputs() {
-    /* Update the state times first */
+    /* Update the state times first for error checking */
     var copy = [...routine];
     for (let i = 0; i < copy.length; i++) {
       switch(i) {
@@ -127,11 +158,11 @@ function SchedulerScreen({ navigation, route }) {
     else {
       /* PUT REQUEST HERE TO UPDATE USER'S SCHEDULE */
       const token = await firebase.messaging().getToken();
-      const wake = routine[0]["time"].split(":");
-      const sleep = routine[1]["time"].split(":");
-      const bfast = routine[2]["time"].split(":");
-      const lunch = routine[3]["time"].split(":");
-      const din = routine[4]["time"].split(":");
+      const wake = wakeup.split(":");
+      const sleep = bedtime.split(":");
+      const brfast = bfast.split(":");
+      const lnch = lunch.split(":");
+      const din = dinner.split(":");
       fetch('http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/users', {
         method: 'PUT',
         headers: {
@@ -147,16 +178,16 @@ function SchedulerScreen({ navigation, route }) {
           sleepHr: parseInt(sleep[0]),
           sleepMin: parseInt(sleep[1]),
           sleepAM: routine[1]["AM"],
-          breakfastHr: parseInt(bfast[0]),
-          breakfastMin: parseInt(bfast[1]),
+          breakfastHr: parseInt(brfast[0]),
+          breakfastMin: parseInt(brfast[1]),
           breakfastAM: routine[2]["AM"],
-          lunchHr: parseInt(lunch[0]),
-          lunchMin: parseInt(lunch[1]),
+          lunchHr: parseInt(lnch[0]),
+          lunchMin: parseInt(lnch[1]),
           lunchAM: routine[3]["AM"],
           dinnerHr: parseInt(din[0]),
           dinnerMin: parseInt(din[1]),
           dinnerAM: routine[4]["AM"],
-          schedule: [[], [], [], [], [], [], []]
+          schedule: userData.schedule
         })
       });
       navigation.navigate('Profile');
@@ -179,7 +210,7 @@ function SchedulerScreen({ navigation, route }) {
         <View style={{width: 7}}/>
         <View style={{alignItems: 'center', justifyContent: 'center'}}>
           <TextInput
-            placeholder = {routine[0]["time"]}
+            placeholder = { routine[0]["time"] }
             style= {styles.input}
             autoCapitalize='none'
             autoCorrect={false}
@@ -208,12 +239,12 @@ function SchedulerScreen({ navigation, route }) {
         <Text style={styles.bigRoutineText}>Bedtime:</Text>
         <View style={{marginLeft: 18, alignItems: 'center', justifyContent: 'center'}}>
           <TextInput
-            placeholder = {routine[1]["time"]}
+            placeholder = { routine[1]["time"] }
             style= {styles.input}
             autoCapitalize='none'
             autoCorrect={false}
             maxLength={5}
-            onChangeText={(text) => updateRoutine(1, "time", text)}
+            onChangeText={(text) => setBedtime(text)}
           />
           <View style={styles.line} />
         </View>
@@ -242,12 +273,12 @@ function SchedulerScreen({ navigation, route }) {
         <View style={{width: 15}}/>
         <View style={{alignItems: 'center', justifyContent: 'center'}}>
           <TextInput
-            placeholder = {routine[2]["time"]}
+            placeholder = { routine[2]["time"] }
             style= {styles.input}
             autoCapitalize='none'
             autoCorrect={false}
             maxLength={5}
-            onChangeText={(text) => updateRoutine(2, "time", text)}
+            onChangeText={(text) => setBfast(text)}
           />
           <View style={styles.line} />
         </View>
@@ -272,12 +303,12 @@ function SchedulerScreen({ navigation, route }) {
         <View style={{width: 45}}/>
         <View style={{alignItems: 'center', justifyContent: 'center'}}>
           <TextInput
-            placeholder = {routine[3]["time"]}
+            placeholder = { routine[3]["time"] }
             style= {styles.input}
             autoCapitalize='none'
             autoCorrect={false}
             maxLength={5}
-            onChangeText={(text) => updateRoutine(3, "time", text)}
+            onChangeText={(text) => setLunch(text)}
           />
           <View style={styles.line} />
         </View>
@@ -303,12 +334,12 @@ function SchedulerScreen({ navigation, route }) {
         <View style={{width: 39}}/>
         <View style={{alignItems: 'center', justifyContent: 'center'}}>
           <TextInput
-            placeholder = {routine[4]["time"]}
+            placeholder = { routine[4]["time"] }
             style= {styles.input}
             autoCapitalize='none'
             autoCorrect={false}
             maxLength={5}
-            onChangeText={(text) => updateRoutine(4, "time", text)}
+            onChangeText={(text) => setDinner(text)}
           />
           <View style={styles.line} />
         </View>

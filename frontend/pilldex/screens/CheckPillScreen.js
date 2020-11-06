@@ -54,8 +54,14 @@ function CheckPillScreen({ navigation, route }) {
     }
 
     /* MORE COMPLEX ERROR HANDLING */
-    if (freqUnits == "weekly" && (false)) { // eg. can't have 8 pills weekly //TODO: FIX THIS!
+    if (freqUnits == "weekly" && (frq > 6)) { // eg. can't have 8 pills weekly
       Alert.alert("Invalid number of pills for weekly frequency");
+      return;
+    } else if (foodButton && (frq > 3)) {
+      Alert.alert("Invalid frequency for a pill taken with food");
+      return;
+    } else if (drowsyButton && (frq != 1)) {
+      Alert.alert("Invalid frequency for a pill causing drowsiness");
       return;
     }
 
@@ -172,7 +178,7 @@ function CheckPillScreen({ navigation, route }) {
         </View>
         <View style={{height: 20}} />
 
-        <Text style={styles.form_titles}>5 - Does it make you drowsy?</Text>
+        <Text style={styles.form_titles}>5 - Does it cause drowsiness?</Text>
         <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 10}}>
           <TouchableOpacity style={drowsyButton == true ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setDrowsyButton(true)}/>
           <Text style={styles.radioText}>  Yes</Text>

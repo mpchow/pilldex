@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -7,23 +7,26 @@ import {
   Dimensions
 } from 'react-native';
 import auth from '@react-native-firebase/auth';
+import firebase from '@react-native-firebase/app';
 
 const width = Dimensions.get('window').width;
 
 function NotificationsScreen({ navigation }) {
 
-  /*useEffect(() => {
+  useEffect(() => {
     fetch(`http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/users?userId=${firebase.auth().currentUser.uid}`, {
       method: 'GET',
     })
     .then((response) => response.json())
     .then((responseJson) => {
       console.log("Response from server is", responseJson);
+      console.log(responseJson["user"]["schedule"]);
+      console.log(responseJson["user"]["schedule"][0]);
     })
     .catch((error) => {
          console.error(error);
     });
-  });*/
+  }, []);
 
   return (
     <View style={styles.container}>
