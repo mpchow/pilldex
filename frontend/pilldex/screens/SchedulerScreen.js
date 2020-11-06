@@ -35,6 +35,11 @@ function SchedulerScreen({ navigation, route }) {
     {title: "Dinner", "time": dinner, "AM": false, "PM": false}
   ]);
 
+  useEffect(() => {
+    if (user)
+      getUserRoutine();
+  }, [changeRoutine]);
+
   function getUserRoutine() {
     fetch(`http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/users?userId=${firebase.auth().currentUser.uid}`, {
       method: 'GET'
@@ -42,27 +47,42 @@ function SchedulerScreen({ navigation, route }) {
     .then((response) => response.json())
     .then((res) => {
       console.log("in fetch scheduler");
-      console.log(res);
+      console.log(res["user"]);
       setWakeup(res["user"]['wakeupHr'] + ":" + res["user"]['wakeupMin']);
       setBedtime(res["user"]['sleepHr'] + ":" + res["user"]['sleepMin']);
       setBfast(res["user"]['breakfastHr'] + ":" + res["user"]['breakfastMin']);
       setLunch(res["user"]['lunchHr'] + ":" + res["user"]['lunchMin']);
       setDinner(res["user"]['dinnerHr'] + ":" + res["user"]['dinnerMin']);
-      console.log(dinner);
-      if (user) {
-        var data = { token: res["user"]['token'], userID: res["user"]['userId'], schedule: res["user"]['schedule']};
-        setUserData(data);
-      }
+      formatRoutine(res["user"]);
+
+      var data = { token: res["user"]['token'], userID: res["user"]['userId'], schedule: res["user"]['schedule']};
+      setUserData(data);
     })
     .catch((error) => {
          console.error(error);
     });
   }
 
-  useEffect(() => {
-    if (user)
-      getUserRoutine();
-  }, [changeRoutine]);
+  function formatRoutine(data) {
+    setRoutine([
+      {title: "Wake-up", "time": formatTime(data['wakeupHr'], data['wakeupMin']),
+             "AM": data['wakeupAM'], "PM": !data['wakeupAM']},
+      {title: "Bedtime", "time": formatTime(data['sleepHr'], data['sleepMin']),
+             "AM": data['sleepAM'], "PM": !data['sleepAM']},
+      {title: "Breakfast", "time": formatTime(data['breakfastHr'], data['breakfastMin']),
+             "AM": data['breakfastAM'], "PM": !data['breakfastAM']},
+      {title: "Lunch", "time": formatTime(data['lunchHr'], data['lunchMin']),
+             "AM": data['lunchAM'], "PM": !data['lunchAM']},
+      {title: "Dinner", "time": formatTime(data['dinnerHr'], data['dinnerMin']),
+             "AM": data['dinnerAM'], "PM": !data['dinnerAM']}
+    ]);
+  }
+
+  function formatTime(hours, mins) {
+    if (mins < 10)
+      mins = "0" + mins;
+    return hours + ":" + mins;
+  }
 
   function updateRoutine(index, field, newValue) {
     var routineCopy = [...routine];
