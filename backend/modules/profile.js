@@ -1,7 +1,13 @@
+/* User Module - contains all function related to a user/profile */
+
 const db = require('./../db/db.js'); 
 const Profile = db.User;
 const Pill = db.Pill;
 
+/* 
+ * Get user's profile
+ * profileParams.query.userId = userId of target user
+ */
 const retrieve = async (profileParams) => {
    try {
       return {user: await Profile.findOne({userId: profileParams.query.userId}), msg: 'Success'};
@@ -11,6 +17,9 @@ const retrieve = async (profileParams) => {
   }
 }
 
+/* 
+ * Create a new profile
+ */
 const create = async (profileParams) => {
    try {
       await Profile.findOne({ userId: profileParams.userId})
@@ -23,6 +32,10 @@ const create = async (profileParams) => {
    }
 }
 
+/* 
+ * Update a user's profile
+ * profileParams.userId = userId of target user
+ */
 const update = async (profileParams) => {
    try {
       await Profile.findOneAndUpdate({userId: profileParams.userId}, profileParams);
@@ -33,6 +46,10 @@ const update = async (profileParams) => {
    }
 }
 
+/* 
+ * Remove a user's profile 
+ * profileParams.userId = userId of target user
+ */
 const remove = async (profileParams) => {
    try {
       await Profile.deleteOne({userId: profileParams.userId});

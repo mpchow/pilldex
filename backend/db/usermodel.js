@@ -1,6 +1,20 @@
+/* User schema for storage in the mongodb database */
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+/* 
+ * token = user's unique device token for notifications 
+ * userId = user's unique id used for authentication
+ * NOTE: following fields split up to make it easier for the frontend to update the UI
+ * 		 These fields will be used for scheduling the user's pills
+ * wakeup = time the user wakes up
+ * sleep = time the user goes to sleep 
+ * breakfast = time the user eats breakfast
+ * lunch = time the user eats lunch
+ * dinner = time the user eats dinner
+ * schedule = the user's pill schedule
+ * 		  Each day of the week has a list of pills, and the time they should take it 
+ */
 const userSchema = new Schema({
 	token: String,
 	userId: {type: String, unique: true, required: true}, 

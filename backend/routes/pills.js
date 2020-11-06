@@ -1,3 +1,4 @@
+/* Routes for the pill module */
 const express = require('express');
 const router = express.Router();
 const pillService = require('./../modules/pill.js');
@@ -15,6 +16,7 @@ router.post('/taken', pillTaken);
 
 module.exports = router;
 
+/* Decrement the number of capsules remaining */
 function pillTaken(req, res, next) {
 	console.log("In PILLTAKEN route");
 	scheduler.updateSchedule(req.body)
@@ -22,6 +24,9 @@ function pillTaken(req, res, next) {
 		.catch(err => next(err));
 }
 
+/* Increment the number of capsules remaining 
+ * by the totalQuantity provided in a refill
+ */
 function refill(req, res, next) {
     console.log("In REFILL Route");
     pillService.updateRemaining(req.body)
@@ -29,6 +34,10 @@ function refill(req, res, next) {
         .catch(err => next(err));
 }
 
+/* Parse the text of the pill's label 
+ * Returns a pill object with its fields filled 
+ * with predicted values based on the label text 
+ */
 function parseLabel(req, res, next) {
 	console.log("In PARSELABEL Route");
 	labelService.parseLabel(req.body)
@@ -36,6 +45,7 @@ function parseLabel(req, res, next) {
 		.catch(err => next(err));
 }
 
+/* Creates a new pill and saves it to the database */
 function newPill(req, res, next) {
 	console.log("In NEWPILL Route");
 	pillService.create(req.body) 
@@ -43,6 +53,7 @@ function newPill(req, res, next) {
 		.catch(err => next(err));
 }
 
+/* Returns all the pills of the target user */
 function getPills(req, res, next) {
 	console.log("In GETALLPILL Route");
 	pillService.retrieveAll(req) 
@@ -50,6 +61,7 @@ function getPills(req, res, next) {
 		.catch(err => next(err));
 }
 
+/* Returns the pill associated with the provided userId and pillName */
 function getPillById(req, res, next) {
 	console.log("In GETPILL Route");
 	pillService.retrieve(req) 
@@ -57,6 +69,7 @@ function getPillById(req, res, next) {
 		.catch(err => next(err));
 }
 
+/* Updates the pill's fields */
 function updatePill(req, res, next) {
 	console.log("In UPDATEPILL Route");
 	pillService.update(req.body) 
@@ -64,6 +77,7 @@ function updatePill(req, res, next) {
 		.catch(err => next(err));
 }
 
+/* Deletes the pill from the db */
 function deletePill(req, res, next) {
 	console.log("In DELETEPILL Route");
 	pillService.remove(req.body) 
