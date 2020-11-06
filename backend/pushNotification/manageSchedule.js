@@ -116,10 +116,10 @@ const createSchedule = async (pillParams) => {
    let schedule = user.schedule;
 
    const userTimes = {
-      wakeupHr: user.wakeupAM ? user.wakeupHr + 12 : user.wakeupHr,
-      wakeupTime: (user.wakeupAM ? user.wakeupHr + 12 : user.wakeupHr) * 60 + user.wakeupMin,
-      sleepHr: user.sleepAM ? user.sleepHr + 12 : user.sleepHr,
-      sleepTime: (user.sleepAM ? user.sleepHr + 12 : user.sleepHr) * 60 + user.sleepMin,
+      wakeupHr: user.wakeupAM ? (user.wakeupHr === 12 ? 0 : user.wakeupHr) : user.wakeupHr + 12,
+      wakeupTime: (user.wakeupAM ? user.wakeupHr : user.wakeupHr + 12) * 60 + user.wakeupMin,
+      sleepHr: user.sleepAM ? user.sleepHr : user.sleepHr + 12,
+      sleepTime: (user.sleepAM ? user.sleepHr : user.sleepHr + 12) * 60 + user.sleepMin,
       breakfastHr: user.breakfastAM ? user.breakfastHr : user.breakfastHr + 12,
       breakfastTime: (user.breakfastAM ? user.breakfastHr : user.breakfastHr + 12) * 60 + user.breakfastMin,
       lunchHr: user.lunchAM ? user.lunchHr : user.lunchHr + 12,
@@ -129,12 +129,12 @@ const createSchedule = async (pillParams) => {
    }
 
    if(pillParams.frequencyUnit === 'daily') {
-
+console.log(userTimes.wakeupHr);
       if(pillParams.withSleep) {
          for (let i = 0; i < 7; i++) {
             schedule[i].push({
                time: {
-                  reminderTime: new Date(2020, 10, userTimes.sleepHr, userTimes.sleepMin),
+                  reminderTime: new Date(2020, 10, i + 1, userTimes.sleepHr, user.sleepMin),
                   leftBound: userTimes.sleepHr - userTimes.dinnerHr < 4 ? (userTimes.sleepHr - userTimes.dinnerHr) : 4,
                   rightBound: 4
                }, 
@@ -175,7 +175,7 @@ const createSchedule = async (pillParams) => {
 
                schedule[i].push({
                   time: {
-                     reminderTime: new Date(2020, 10, hour, minute),
+                     reminderTime: new Date(2020, 10, i + 1, hour, minute),
                      leftBound: leftBound,
                      rightBound: rightBound
                   }, 
@@ -197,7 +197,7 @@ const createSchedule = async (pillParams) => {
             for (let j = 0; j < pillParams.frequency; j++) {
                schedule[i].push({
                   time: {
-                     reminderTime: new Date(2020, 10, Math.floor((userTimes.wakeupTime + timeSpacing * (j + 1))/60), (userTimes.wakeupTime + timeSpacing * (j + 1)) % 60),
+                     reminderTime: new Date(2020, 10, i + 1, Math.floor((userTimes.wakeupTime + timeSpacing * (j + 1))/60), (userTimes.wakeupTime + timeSpacing * (j + 1)) % 60),
                      leftBound: userTimes.lunchHr - userTimes.breakfastHr < 4 ? (userTimes.lunchHr - userTimes.breakfastHr) : 4,
                      rightBound: userTimes.dinnerHr - userTimes.lunchHr < 4 ? (userTimes.dinnerHr - userTimes.lunchHr) : 4
                   },
