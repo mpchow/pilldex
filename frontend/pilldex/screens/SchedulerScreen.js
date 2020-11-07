@@ -16,6 +16,7 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 function SchedulerScreen({ navigation, route }) {
+
   const { user, register } = useContext(AuthContext);
   const { email, password } = route.params;
 

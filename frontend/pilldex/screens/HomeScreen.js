@@ -20,6 +20,7 @@ const width = Dimensions.get('window').width;
  * takenEarly: true
 */
 function HomeScreen({ navigation }) {
+
   const dayArray = ["Sunday", "Monday", "Tuesday",
                     "Wednesday", "Thursday", "Friday", "Saturday"];
   const monthArray = ["January", "February", "March", "April", "May",
@@ -35,6 +36,7 @@ function HomeScreen({ navigation }) {
       year: now.getFullYear() // number
     });
   });
+  
   const [schedule,setSchedule] = useState([]);
   const [notifs, setNotifs] = useState([]);
   const [refresh, setRefresh] = useState(false);

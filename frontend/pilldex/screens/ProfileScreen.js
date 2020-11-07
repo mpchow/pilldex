@@ -11,23 +11,23 @@ import { AuthContext } from '../navigation/AuthProvider';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 
 const width = Dimensions.get('window').width;
+
 function ProfileScreen({ navigation }) {
+
   const { logout } = useContext(AuthContext);
 
   function signOut() {
     Alert.alert('Sign Out',
       'Sign out of pilldex?',
-      [
-        {
+      [{
           text: 'Yes',
           onPress: () => logout()
-        },
-        {
+       },
+       {
           text: 'Cancel',
           onPress: () => console.log('Cancel Pressed'),
           style: 'cancel'
-        },
-      ],
+       }],
       { cancelable: false }
     );
   }
