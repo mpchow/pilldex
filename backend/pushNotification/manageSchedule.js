@@ -21,21 +21,21 @@ const getDefaultDate = (day, pill, user, userTimes) => {
 
    if (pill.withFood && pill.withSleep) {
       return {
-         reminderTime: new Date(2020, 10, (userTimes.dinnerHr + (userTimes.dinnerHr - userTimes.sleepHr) / 2 + 7 > 24 ? day + 2 : day + 1), userTimes.dinnerHr + (userTimes.dinnerHr - userTimes.sleepHr) / 2, user.dinnerMin), 
+         reminderTime: new Date(2020, 10, day + 1, userTimes.dinnerHr + (userTimes.dinnerHr - userTimes.sleepHr) / 2, user.dinnerMin), 
          leftBound: userTimes.dinnerHr - userTimes.lunchHr < 4 ? (userTimes.dinnerHr - userTimes.lunchHr) : 4,
          rightBound: userTimes.sleepHr - userTimes.dinnerHr < 4 ? (userTimes.sleepHr - userTimes.dinnerHr) : 4
       }
    }
    else if (pill.withSleep) {
       return {
-         reminderTime: new Date(2020, 10, (userTimes.sleepHr + 7 > 24 ? day + 2 : day + 1), userTimes.sleepHr, user.sleepMin),
+         reminderTime: new Date(2020, 10, day + 1, userTimes.sleepHr, user.sleepMin),
          leftBound: userTimes.sleepHr - userTimes.dinnerHr < 4 ? (userTimes.sleepHr - userTimes.dinnerHr) : 4,
          rightBound: 4
       }
    }
    else {
       return {
-         reminderTime: new Date(2020, 10, (userTimes.lunchHr + 7 > 24 ? day + 2 : day + 1), userTimes.lunchHr, user.lunchMin),
+         reminderTime: new Date(2020, 10, day + 1, userTimes.lunchHr, user.lunchMin),
          leftBound: userTimes.lunchHr - userTimes.breakfastHr < 4 ? (userTimes.lunchHr - userTimes.breakfastHr) : 4,
          rightBound: userTimes.dinnerHr - userTimes.lunchHr < 4 ? (userTimes.dinnerHr - userTimes.lunchHr) : 4
       }
@@ -129,8 +129,26 @@ const createSchedule = async (pillParams) => {
    }
 
    if(pillParams.frequencyUnit === 'daily') {
-console.log(userTimes.wakeupHr);
-      if(pillParams.withSleep) {
+      if(pillParams.withFood && pillParams.withSleep) {
+         for(let i = 0; i < 7; i++) {
+            schedule[i].push({
+               time: {
+                  reminderTime: new Date(2020, 10, day + 1, userTimes.dinnerHr + (userTimes.dinnerHr - userTimes.sleepHr) / 2, user.dinnerMin), 
+                  leftBound: userTimes.dinnerHr - userTimes.lunchHr < 4 ? (userTimes.dinnerHr - userTimes.lunchHr) : 4,
+                  rightBound: userTimes.sleepHr - userTimes.dinnerHr < 4 ? (userTimes.sleepHr - userTimes.dinnerHr) : 4
+               },
+               pillName: pillParams.name,
+               reminderId: uuid(),
+               dosage: pillParams.dosage,
+               timesLate: 0,
+               adjustedTimes: [],
+               takenEarly: false,
+               withFood: true,
+               withSleep: true
+            });
+         }
+      }
+      else if(pillParams.withSleep) {
          for (let i = 0; i < 7; i++) {
             schedule[i].push({
                time: {
@@ -143,7 +161,9 @@ console.log(userTimes.wakeupHr);
                dosage: pillParams.dosage,
                timesLate: 0,
                adjustedTimes: [],
-               takenEarly: false
+               takenEarly: false,
+               withFood: false,
+               withSleep: true,
             })
          }
       }
@@ -184,7 +204,9 @@ console.log(userTimes.wakeupHr);
                   dosage: pillParams.dosage,
                   timesLate: 0,
                   adjustedTimes: [],
-                  takenEarly: false
+                  takenEarly: false,
+                  withFood: true,
+                  withSleep: false
                });
             }
          }
@@ -206,7 +228,9 @@ console.log(userTimes.wakeupHr);
                   dosage: pillParams.dosage,
                   timesLate: 0,
                   adjustedTimes: [],
-                  takenEarly: false
+                  takenEarly: false,
+                  withFood: false,
+                  withSleep: false
                });
             }
          }
@@ -221,7 +245,9 @@ console.log(userTimes.wakeupHr);
             dosage: pillParams.dosage,
             timesLate: 0,
             adjustedTimes: [],
-            takenEarly: false
+            takenEarly: false,
+            withFood: pillParams.withFood,
+            withSleep: pillParams.withSleep
          });
       }
    }

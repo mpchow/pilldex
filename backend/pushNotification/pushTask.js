@@ -6,7 +6,7 @@ const Pill = db.Pill;
 const pushTask = async () => {
    const currHour = new Date().getHours() > 7 ? new Date().getHours() - 8 : 24 - (8 - new Date().getHours());
    const currMin = new Date().getMinutes();
-   const currDay = (currHour >= 0 && currHour < 8) ? new Date().getDay() - 1 : new Date().getDay();
+   const currDay = currHour < 8 ? new Date().getDay() - 1 : new Date().getDay();
    let profiles = await Profile.find({});
    (await profiles).forEach(async profile => {
       (await profile.schedule[currDay]).forEach(async (pill) => {

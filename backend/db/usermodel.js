@@ -39,13 +39,13 @@ const userSchema = new Schema({
 	dinnerAM: {type: Boolean, required: false},
 	dinnerPM: {type: Boolean, required: false},
 	schedule: [
-		[{ time: {reminderTime: Date, leftBound: Number, rightBound: Number}, pillName: String, reminderId: String, dosage: Number, timesLate: Number, adjustedTimes: [], takenEarly: Boolean}],
-		[{ time: {reminderTime: Date, leftBound: Number, rightBound: Number}, pillName: String, reminderId: String, dosage: Number, timesLate: Number, adjustedTimes: [], takenEarly: Boolean}],
-		[{ time: {reminderTime: Date, leftBound: Number, rightBound: Number}, pillName: String, reminderId: String, dosage: Number, timesLate: Number, adjustedTimes: [], takenEarly: Boolean}],
-		[{ time: {reminderTime: Date, leftBound: Number, rightBound: Number}, pillName: String, reminderId: String, dosage: Number, timesLate: Number, adjustedTimes: [], takenEarly: Boolean}],
-		[{ time: {reminderTime: Date, leftBound: Number, rightBound: Number}, pillName: String, reminderId: String, dosage: Number, timesLate: Number, adjustedTimes: [], takenEarly: Boolean}],
-		[{ time: {reminderTime: Date, leftBound: Number, rightBound: Number}, pillName: String, reminderId: String, dosage: Number, timesLate: Number, adjustedTimes: [], takenEarly: Boolean}],
-		[{ time: {reminderTime: Date, leftBound: Number, rightBound: Number}, pillName: String, reminderId: String, dosage: Number, timesLate: Number, adjustedTimes: [], takenEarly: Boolean}]
+		[{ time: {reminderTime: Date, leftBound: Number, rightBound: Number}, pillName: String, reminderId: String, dosage: Number, timesLate: Number, adjustedTimes: [], takenEarly: Boolean, withFood: Boolean, withSleep: Boolean}],
+		[{ time: {reminderTime: Date, leftBound: Number, rightBound: Number}, pillName: String, reminderId: String, dosage: Number, timesLate: Number, adjustedTimes: [], takenEarly: Boolean, withFood: Boolean, withSleep: Boolean}],
+		[{ time: {reminderTime: Date, leftBound: Number, rightBound: Number}, pillName: String, reminderId: String, dosage: Number, timesLate: Number, adjustedTimes: [], takenEarly: Boolean, withFood: Boolean, withSleep: Boolean}],
+		[{ time: {reminderTime: Date, leftBound: Number, rightBound: Number}, pillName: String, reminderId: String, dosage: Number, timesLate: Number, adjustedTimes: [], takenEarly: Boolean, withFood: Boolean, withSleep: Boolean}],
+		[{ time: {reminderTime: Date, leftBound: Number, rightBound: Number}, pillName: String, reminderId: String, dosage: Number, timesLate: Number, adjustedTimes: [], takenEarly: Boolean, withFood: Boolean, withSleep: Boolean}],
+		[{ time: {reminderTime: Date, leftBound: Number, rightBound: Number}, pillName: String, reminderId: String, dosage: Number, timesLate: Number, adjustedTimes: [], takenEarly: Boolean, withFood: Boolean, withSleep: Boolean}],
+		[{ time: {reminderTime: Date, leftBound: Number, rightBound: Number}, pillName: String, reminderId: String, dosage: Number, timesLate: Number, adjustedTimes: [], takenEarly: Boolean, withFood: Boolean, withSleep: Boolean}]
 	]
 }); 
 
