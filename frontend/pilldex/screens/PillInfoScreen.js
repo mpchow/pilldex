@@ -10,6 +10,7 @@ import firebase, { utils } from '@react-native-firebase/app';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 function PillInfoScreen({ navigation, route }) {
+  
   const { pillInfo } = route.params;
 
   const [pillsLeft, setPillsLeft] = useState(pillInfo.pillsLeft);

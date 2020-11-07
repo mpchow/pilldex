@@ -12,6 +12,7 @@ import auth from '@react-native-firebase/auth';
 import firebase, { utils } from '@react-native-firebase/app';
 
 function CheckPillScreen({ navigation, route }) {
+
   const { info } = route.params;
 
   const [name, setName] = useState("");
@@ -36,10 +37,7 @@ function CheckPillScreen({ navigation, route }) {
     if (isNaN(refill) || refill <= 0) {
       Alert.alert("Please enter a valid number of units for refill field");
       return;
-    } /*else if (isNaN(dose) || dose <= 0 || dose > refill) {
-      Alert.alert("Please enter a valid number of units for dosage field");
-      return;
-    } */else if (isNaN(frq) || frq <= 0 || frq > refill) {
+    } else if (isNaN(frq) || frq <= 0 || frq > refill) {
       Alert.alert("Please enter a valid number of units for frequency field");
       return;
     } else if (freqUnits == null) {
@@ -61,7 +59,7 @@ function CheckPillScreen({ navigation, route }) {
       Alert.alert("Invalid frequency for a pill taken with food");
       return;
     } else if (drowsyButton && (frq != 1)) {
-      Alert.alert("Invalid frequency for a pill causing drowsiness");
+      Alert.alert("Pills causing drowsiness can only be scheduled once a day!");
       return;
     }
 

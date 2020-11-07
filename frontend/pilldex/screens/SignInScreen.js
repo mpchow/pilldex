@@ -12,7 +12,9 @@ import Logo from '../components/Logo.js'
 import LoginStack from '../navigation/LoginStack.js';
 
 const width = Dimensions.get('window').width;
+
 function SignInScreen({ navigation }) {
+  
   const { register, login } = useContext(AuthContext);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
