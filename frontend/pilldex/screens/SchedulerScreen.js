@@ -183,6 +183,13 @@ function SchedulerScreen({ navigation, route }) {
       const brfast = bfast.split(":");
       const lnch = lunch.split(":");
       const din = dinner.split(":");
+
+      const wakeHr = (parseInt(wake[0]) === 12 && routine[0]["AM"]) ? 0 : parseInt(wake[0]);
+      const sleepHr = (parseInt(sleep[0]) === 12 && routine[1]["AM"]) ? 0 : parseInt(sleep[0]);
+      const bfastHr = (parseInt(brfast[0]) === 12 && routine[2]["AM"]) ? 0 : parseInt(brfast[0]);
+      const lunchHr = (parseInt(lnch[0]) === 12 && routine[3]["AM"]) ? 0 : parseInt(lnch[0]);
+      const dinHr = (parseInt(din[0]) === 12 && routine[4]["AM"]) ? 0 : parseInt(din[0]);
+
       fetch('http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/users', {
         method: 'PUT',
         headers: {
@@ -192,19 +199,19 @@ function SchedulerScreen({ navigation, route }) {
         body: JSON.stringify({
           token: token,
           userId: firebase.auth().currentUser.uid,
-          wakeupHr: parseInt(wake[0]),
+          wakeupHr: wakeHr,
           wakeupMin: parseInt(wake[1]),
           wakeupAM: routine[0]["AM"],
-          sleepHr: parseInt(sleep[0]),
+          sleepHr: sleepHr,
           sleepMin: parseInt(sleep[1]),
           sleepAM: routine[1]["AM"],
-          breakfastHr: parseInt(brfast[0]),
+          breakfastHr: bfastHr,
           breakfastMin: parseInt(brfast[1]),
           breakfastAM: routine[2]["AM"],
-          lunchHr: parseInt(lnch[0]),
+          lunchHr: lunchHr,
           lunchMin: parseInt(lnch[1]),
           lunchAM: routine[3]["AM"],
-          dinnerHr: parseInt(din[0]),
+          dinnerHr: dinHr,
           dinnerMin: parseInt(din[1]),
           dinnerAM: routine[4]["AM"],
           schedule: userData.schedule

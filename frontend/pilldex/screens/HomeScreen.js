@@ -37,10 +37,11 @@ function HomeScreen({ navigation }) {
   });
   const [schedule,setSchedule] = useState([]);
   const [notifs, setNotifs] = useState([]);
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     fetchSchedule();
-  }, []);
+  }, [refresh]);
 
   console.log(date);
 
@@ -63,6 +64,9 @@ function HomeScreen({ navigation }) {
   function formatNotifs(data) {
     var d = date.dateObj.getDay();
     var ret = [];
+
+    if (data[d] == undefined)
+      return;
 
     data[d].forEach((e) => {
       const t = Date.parse(e["time"]["reminderTime"]);
