@@ -29,11 +29,14 @@ function PillboxScreen( {navigation } ) {
     Alert.alert(  
       `Delete ${pillName}`,  
       `Are you sure you want to delete ${pillName}?`,  
-      [{text: 'Cancel',  
-        onPress: () => console.log('Cancel Pressed'),  
-        style: 'cancel',  
+      [
+        {
+          text: 'Cancel',  
+          onPress: () => console.log('Cancel Pressed'),  
+          style: 'cancel',  
         },  
-        {text: 'OK', onPress: () => {
+        {
+          text: 'OK', onPress: () => {
           fetch('http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/pills', {
             method: 'DELETE',
             headers: {
@@ -49,8 +52,9 @@ function PillboxScreen( {navigation } ) {
             console.error(error);
           });
           getPills();       
+          }
         }
-      }]  
+      ]  
     );    
   }
 
