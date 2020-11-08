@@ -29,5 +29,6 @@ public class DetoxTest {
         detoxConfig.rnContextLoadTimeoutSec = (BuildConfig.DEBUG ? 180 : 60);
 
         Detox.runTests(mActivityRule, detoxConfig);
+        assert(true);
     }
 }
