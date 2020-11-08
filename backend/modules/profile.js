@@ -39,7 +39,7 @@ const create = async (profileParams) => {
 const update = async (profileParams) => {
    try {
       await Profile.findOneAndUpdate({userId: profileParams.userId}, profileParams);
-      return {msg: 'Success'};
+      return ({msg: 'Success'});
    }
    catch (error) {
       throw `The profile for ${profileParams.name} could not be updated`;
