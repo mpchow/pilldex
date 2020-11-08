@@ -24,12 +24,12 @@ function PillboxScreen( {navigation } ) {
   const [pills, setPills] = useState([]);
   console.log("PIll is", pills);
 
-  function deletePills(pillName){
+  function deletePills(pillName)
+  {
     Alert.alert(  
       `Delete ${pillName}`,  
       `Are you sure you want to delete ${pillName}?`,  
-      [{  
-        text: 'Cancel',  
+      [{text: 'Cancel',  
         onPress: () => console.log('Cancel Pressed'),  
         style: 'cancel',  
         },  
@@ -49,7 +49,8 @@ function PillboxScreen( {navigation } ) {
             console.error(error);
           });
           getPills();       
-        }}]  
+        }
+      }]  
     );    
   }
 
