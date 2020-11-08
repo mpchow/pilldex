@@ -7,7 +7,6 @@ const notifService = require('./../pushNotification/notifications.js');
 router.post('/', newUser);
 router.put('/', updateUser);
 router.delete('/', deleteUser);
-//router.get('/', getNotification);
 router.get('/', getUser);
 
 function getUser(req, res, next) {
@@ -30,20 +29,6 @@ function updateUser(req, res, next) {
 
 function deleteUser(req, res, next) {
 	profileService.remove(req.body) 
-		.then((success) => res.json(success))
-		.catch(err => next(err));
-}
-
-function getNotification(req, res, next) {
-	const payload = {
-		notification: {
-			title: "Test Notification!",
-			body: "HI FRIEND - This is a new notification!",
-			priority: 'high',
-		}
-	 };
-
-	notifService.sendNotification(req.body, payload)
 		.then((success) => res.json(success))
 		.catch(err => next(err));
 }
