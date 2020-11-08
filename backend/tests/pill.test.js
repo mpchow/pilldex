@@ -7,23 +7,24 @@ const testPill = {"userId":"testId", "name":"testPill", "totalQuantity":10, "fre
 // Mocks the retrieveAll function from the pill module
 const mockGetPills = jest.fn().mockImplementation((pillParams) => {
 	// Check for valid userId
-	if (pillParams.userId == "testId")
-		res: {
-          status:  200,
-          headers: { "content-type": "application/json" },
-          body: testPill   
-      	}
+	if (pillParams.userId == "testId") {
+		res = {
+         status:  200,
+         headers: { "content-type": "application/json" },
+         body: testPill   
+      }
 		return res;
+	}
 
 	// Otherwise return error status
 	else {
-		res: {
-          status:  404,
-          headers: { "content-type": "application/json" },
-          body: "User Not Found" 
-      	}
+		res = {
+         status:  404,
+         headers: { "content-type": "application/json" },
+         body: "User Not Found" 
+      }
 		return res;
-    }
+   }
 	
 });
 
