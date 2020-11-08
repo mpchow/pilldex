@@ -49,8 +49,7 @@ function PillboxScreen( {navigation } ) {
             console.error(error);
           });
           getPills();       
-        }}, 
-      ]  
+        }}]  
     );    
   }
 
