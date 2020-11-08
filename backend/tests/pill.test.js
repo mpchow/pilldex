@@ -1,6 +1,6 @@
-const pillRoute = require('./../routes/pills.js');
+//const pillRoute = require('./../routes/pills.js');
 
-jest.mock('./mocks/pill-mocks.js');
+//jest.mock('./mocks/pill-mocks.js');
 
 // TODO: create a testing database instead
 const testPill = {"userId":"testId", "name":"testPill", "totalQuantity":10, "frequency":2, "frequencyUnit":"daily", "dosage":1,
