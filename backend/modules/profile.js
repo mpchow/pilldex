@@ -54,7 +54,7 @@ const remove = async (profileParams) => {
    try {
       await Profile.deleteOne({userId: profileParams.userId});
 	   await Pill.deleteMany({userId: profileParams.userId});
-      return {msg: 'Success'};
+      return ({msg: 'Success'});
    }
    catch (error) {
       throw `The profile for ${profileParams.name} could not be removed`;
