@@ -75,4 +75,4 @@ class reminderFactory {
 }
 
 
-module.exports = scheduleFactory;
+module.exports = reminderFactory;
