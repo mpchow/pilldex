@@ -47,7 +47,7 @@ class reminderFactory {
          rightBound = spacing;
       }
    
-      return {hour: hour, minute: minute, leftBound: leftBound, rightBound: rightBound};
+      return ({hour: hour, minute: minute, leftBound: leftBound, rightBound: rightBound});
    }
 
    createReminder = (mode, hour = null, minute = null, spacing = null) => {
