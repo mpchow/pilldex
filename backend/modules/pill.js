@@ -3,6 +3,7 @@
 const scheduler = require('../pushNotification/manageSchedule');
 const db = require('./../db/db.js');
 const Pill = db.Pill;
+const User = db.User;
 
 /* Create a new pill object 
  * pillParams.name = name of target pill
@@ -10,20 +11,20 @@ const Pill = db.Pill;
  */
 const create = async (pillParams) => {
    try {
-	  // TODO: Check for existing user
-	  
-      // Create new pill with provided fields and save to db
-      await Pill.findOne({ name: pillParams.name, userId: pillParams.userId })
-      const pill = new Pill(pillParams);
-      pill.save();
+		user = await User.findOne({ userId: pillParams.userId })
+		if (user === null)
+			throw "User Not Found";
+
+      	const pill = new Pill(pillParams);
+      	pill.save();
      
-      // Create a schedule based on the provided parameters
-      await scheduler.createSchedule(pillParams);
-      return({msg: 'Success'});
+     	// Create a schedule based on the provided parameters
+		await scheduler.createSchedule(pillParams);
+		return({status: 200, msg: 'Pill Created Successfully'});
    }
    catch (error) {
-	  console.log(error);
-      throw 'The Pill ' + name + ' is already in the pilldex';
+		return({status: 404, msg: "User Not Found"})
+		console.log(error);
    }
 }
 
@@ -38,10 +39,10 @@ const update = async (pillParams) => {
         await Pill.replaceOne({name: pillParams.name, userId: pillParams.userId}, pillParams);
 		await scheduler.removeSchedule(pillParams.userId, pillParams.name);
 		await scheduler.createSchedule(pillParams);
-		return({msg: 'Success'});
+		return({status: 200, msg: 'Pill Updated Successfully'});
 	}
 	catch (error) {
-		throw `The Pill ${pillParams.name} could not be updated`;
+		return getErrorMessage(pillParams);
 	}
 }
 
@@ -56,10 +57,11 @@ const remove = async (pillParams) => {
 		await Pill.deleteOne({name: pillParams.name, userId: pillParams.userId});
 		// Delete the pill's corresponding schedule so outdated notifications are not sent
         await scheduler.deleteSchedule(pillParams.userId, pillParams.name);
-		return({msg: 'Success'});
+		return({status: 200, msg: 'Pill Removed Successfully'});
+		
 	}
 	catch (error) {
-		throw `The Pill ${pillParams.name} could not be deleted`;
+		return getErrorMessage(pillParams);
 	}  
 }
 
@@ -70,10 +72,13 @@ const remove = async (pillParams) => {
  */
 const retrieve = async (pillParams) => {
 	try {
-		return {pill: await Pill.findOne({name: pillParams.query.name, userId: pillParams.query.userId}), msg: 'Success'};
+		pill = await Pill.findOne({name: pillParams.query.name, userId: pillParams.query.userId})
+		if (pill === null)
+			throw "Could not find pill";
+		return {pill: pill, status: 200, msg: 'Retrieved Pill Successfully'};
     }
     catch (error) {
-        throw `The Pill ${pillParams.name} could not be retrieved`;
+		return getErrorMessage(pillParams);
     }
 }
 
@@ -83,10 +88,16 @@ const retrieve = async (pillParams) => {
  */
 const retrieveAll = async (pillParams) => {
 	try {
-	   return {pill: await Pill.find({userId: pillParams.query.userId}), msg: 'Success'};
+		user = await User.findOne({ userId: pillParams.query.userId })
+		if (user === null)
+			throw "Could not find user";
+
+		return {pill: Pill.find({userId: pillParams.query.userId}), status: 200, msg: 'Retrieved Pills Successfully'};
+
 	}
 	catch (error) {
-	   throw `The Pills could not be retrieved`;
+		const newParams = {userId: pillParams.query.userId};
+		return getErrorMessage(pillParams);
 	}
 }
 
@@ -98,17 +109,32 @@ const retrieveAll = async (pillParams) => {
  */
 const updateRemaining = async (pillParams) => {
     try {
-        newPill = await Pill.findOne({name: pillParams.name, userId: pillParams.userId});
+        await Pill.findOne({name: pillParams.name, userId: pillParams.userId});
 
 		// Number of remaining pills increments by total quantity of 1 prescription
         newPill.remaining = newPill.remaining + newPill.totalQuantity;
 		console.log(newPill.remaining);
         await Pill.replaceOne({name: pillParams.name, userId: pillParams.userId}, newPill);
-        return {newPill, msg:"Success"};
+        return {newPill, status: 200, msg:"Success"};
     }
     catch (error) {
-       throw `The remaining capsuls could not be updated`;
+		getErrorMessage(pillParams);
     }
+}
+
+const getErrorMessage = async (pillParams) => {
+	user = await User.findOne({ userId: pillParams.userId })
+	if (user === null) {
+		return({status: 404, msg: "User Not Found"})
+	}
+
+	if (pillParams.hasAttribute(name)) {
+		pill = await Pill.findOne({ userId: pillParams.userId, name: pillParams.name })
+		if (pill === null) {
+			return({status: 404, msg: "Pill Not Found"})
+		}
+	}
+	return({status: 500, msg: "Request Failed"})
 }
 
 module.exports = {create, update, remove, retrieve, retrieveAll, updateRemaining};
