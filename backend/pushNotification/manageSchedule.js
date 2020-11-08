@@ -4,7 +4,7 @@ const Users = db.User;
 const NormalDistribution = require('normal-distribution');
 const pill = require('../modules/pill');
 const dist = new NormalDistribution.default();
-const { uuid } = require('uuidv4');
+const reminderFactory = require('./reminderFactory');
 
 
 const freqMap = [
@@ -17,29 +17,8 @@ const freqMap = [
    [0, 1, 2, 3, 4, 5, 6]
 ];
 
-const getDefaultDate = (day, pill, user, userTimes) => {
-
-   if (pill.withFood && pill.withSleep) {
-      return {
-         reminderTime: new Date(2020, 10, day + 1, userTimes.dinnerHr + (userTimes.dinnerHr - userTimes.sleepHr) / 2, user.dinnerMin), 
-         leftBound: userTimes.dinnerHr - userTimes.lunchHr < 4 ? (userTimes.dinnerHr - userTimes.lunchHr) : 4,
-         rightBound: userTimes.sleepHr - userTimes.dinnerHr < 4 ? (userTimes.sleepHr - userTimes.dinnerHr) : 4
-      }
-   }
-   else if (pill.withSleep) {
-      return {
-         reminderTime: new Date(2020, 10, day + 1, userTimes.sleepHr, user.sleepMin),
-         leftBound: userTimes.sleepHr - userTimes.dinnerHr < 4 ? (userTimes.sleepHr - userTimes.dinnerHr) : 4,
-         rightBound: 4
-      }
-   }
-   else {
-      return {
-         reminderTime: new Date(2020, 10, day + 1, userTimes.lunchHr, user.lunchMin),
-         leftBound: userTimes.lunchHr - userTimes.breakfastHr < 4 ? (userTimes.lunchHr - userTimes.breakfastHr) : 4,
-         rightBound: userTimes.dinnerHr - userTimes.lunchHr < 4 ? (userTimes.dinnerHr - userTimes.lunchHr) : 4
-      }
-   }
+const getContext = (pillParams) => {
+   return (pillParams.withFood && pillParams.withSleep) ? "FoodSleep" : pillParams.withSleep ? "Sleep" : pillParams.withFood ? "Food" : "Spaced";
 }
  
 const updateSchedule = async (reqBody) => {
@@ -112,9 +91,9 @@ const deleteSchedule = async (userId, pill) => {
 
 const createSchedule = async (pillParams) => {
    let user = await Users.findOne({userId: pillParams.userId});
-   console.log(user);
    let schedule = user.schedule;
-
+   let context = getContext(pillParams);
+   
    const userTimes = {
       wakeupHr: user.wakeupAM ? (user.wakeupHr === 12 ? 0 : user.wakeupHr) : user.wakeupHr + 12,
       wakeupTime: (user.wakeupAM ? user.wakeupHr : user.wakeupHr + 12) * 60 + user.wakeupMin,
@@ -127,128 +106,39 @@ const createSchedule = async (pillParams) => {
       dinnerHr: user.dinnerAM ? user.dinnerHr: user.dinnerHr + 12,
       dinnerTime: (user.dinnerAM ? user.dinnerHr: user.dinnerHr + 12) * 60 + user.dinnerMin
    }
+   
+   let reminder = new reminderFactory(pillParams, user, userTimes);
 
    if(pillParams.frequencyUnit === 'daily') {
-      if(pillParams.withFood && pillParams.withSleep) {
+      if(context === "FoodSleep" || context === "Sleep") {
          for(let i = 0; i < 7; i++) {
-            schedule[i].push({
-               time: {
-                  reminderTime: new Date(2020, 10, day + 1, userTimes.dinnerHr + (userTimes.dinnerHr - userTimes.sleepHr) / 2, user.dinnerMin), 
-                  leftBound: userTimes.dinnerHr - userTimes.lunchHr < 4 ? (userTimes.dinnerHr - userTimes.lunchHr) : 4,
-                  rightBound: userTimes.sleepHr - userTimes.dinnerHr < 4 ? (userTimes.sleepHr - userTimes.dinnerHr) : 4
-               },
-               pillName: pillParams.name,
-               reminderId: uuid(),
-               dosage: pillParams.dosage,
-               timesLate: 0,
-               adjustedTimes: [],
-               takenEarly: false,
-               withFood: true,
-               withSleep: true
-            });
+            schedule[i].push(reminder.createReminder(context));
          }
       }
-      else if(pillParams.withSleep) {
+      else if(context === "Food") {
          for (let i = 0; i < 7; i++) {
-            schedule[i].push({
-               time: {
-                  reminderTime: new Date(2020, 10, i + 1, userTimes.sleepHr, user.sleepMin),
-                  leftBound: userTimes.sleepHr - userTimes.dinnerHr < 4 ? (userTimes.sleepHr - userTimes.dinnerHr) : 4,
-                  rightBound: 4
-               }, 
-               pillName: pillParams.name,
-               reminderId: uuid(),
-               dosage: pillParams.dosage,
-               timesLate: 0,
-               adjustedTimes: [],
-               takenEarly: false,
-               withFood: false,
-               withSleep: true,
-            })
-         }
-      }
-      else if(pillParams.withFood) {
-         for (let i = 0; i < 7; i++) {
+            let mode;
             for (let j = 0; j < pillParams.frequency; j++) {
-               let hour;
-               let minute;
-               let leftBound;
-               let rightBound;
-               if(j === 0) {
-                  hour = userTimes.breakfastHr;
-                  minute = user.breakfastMin;
-                  leftBound = userTimes.breakfastHr - userTimes.wakeupHr < 4 ? (userTimes.breakfastHr - userTimes.wakeupHr) : 4;
-                  rightBound = userTimes.lunchHr - userTimes.breakfastHr < 4 ? (userTimes.lunchHr - userTimes.breakfastHr) : 4;
-               }
-               else if (j === 1) {
-                  hour = userTimes.lunchHr;
-                  minute = user.lunchMin;
-                  leftBound = userTimes.lunchHr - userTimes.breakfastHr < 4 ? (userTimes.lunchHr - userTimes.breakfastHr) : 4;
-                  rightBound = userTimes.dinnerHr - userTimes.lunchHr < 4 ? (userTimes.dinnerHr - userTimes.lunchHr) : 4;
-               }
-               else {
-                  hour = userTimes.dinnerHr;
-                  minute = user.dinnerMin;
-                  leftBound = userTimes.dinnerHr - userTimes.lunchHr < 4 ? (userTimes.dinnerHr - userTimes.lunchHr) : 4;
-                  rightBound = userTimes.sleepHr - userTimes.dinnerHr < 4 ? (userTimes.sleepHr - userTimes.dinnerHr) : 4;
-               }
-
-               schedule[i].push({
-                  time: {
-                     reminderTime: new Date(2020, 10, i + 1, hour, minute),
-                     leftBound: leftBound,
-                     rightBound: rightBound
-                  }, 
-                  pillName: pillParams.name,
-                  reminderId: uuid(),
-                  dosage: pillParams.dosage,
-                  timesLate: 0,
-                  adjustedTimes: [],
-                  takenEarly: false,
-                  withFood: true,
-                  withSleep: false
-               });
+               mode = j === 0 ? "Breakfast" : j === 1 ? "Lunch" : "Dinner";
+               schedule[i].push(reminder.createReminder(mode));
             }
          }
-
       }
       else {
          const timeSpacing = (userTimes.sleepTime - userTimes.wakeTime) / pillParams.frequency;
    
          for (let i = 0; i < 7; i++) {
             for (let j = 0; j < pillParams.frequency; j++) {
-               schedule[i].push({
-                  time: {
-                     reminderTime: new Date(2020, 10, i + 1, Math.floor((userTimes.wakeupTime + timeSpacing * (j + 1))/60), (userTimes.wakeupTime + timeSpacing * (j + 1)) % 60),
-                     leftBound: userTimes.lunchHr - userTimes.breakfastHr < 4 ? (userTimes.lunchHr - userTimes.breakfastHr) : 4,
-                     rightBound: userTimes.dinnerHr - userTimes.lunchHr < 4 ? (userTimes.dinnerHr - userTimes.lunchHr) : 4
-                  },
-                  pillName: pillParams.name,
-                  reminderId: uuid(),
-                  dosage: pillParams.dosage,
-                  timesLate: 0,
-                  adjustedTimes: [],
-                  takenEarly: false,
-                  withFood: false,
-                  withSleep: false
-               });
+               hour = Math.floor((userTimes.wakeupTime + timeSpacing * (j + 1))/60);
+               minute = (userTimes.wakeupTime + timeSpacing * (j + 1)) % 60;
+               schedule[i].push(reminder.createReminder(context, hour, minute, Math.floor(timeSpacing / 60)));
             }
          }
       }
    }
    else {
       for (let day in freqMap[pillParams.frequency - 1]) {
-         schedule[day].push({
-            time: getDefaultDate(day, pillParams, user, userTimes),
-            pillName: pillParams.name,
-            reminderId: uuid(),
-            dosage: pillParams.dosage,
-            timesLate: 0,
-            adjustedTimes: [],
-            takenEarly: false,
-            withFood: pillParams.withFood,
-            withSleep: pillParams.withSleep
-         });
+         schedule[day].push(reminder.createReminder(context));
       }
    }
 
