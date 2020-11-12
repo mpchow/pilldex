@@ -1,7 +1,7 @@
 describe('Add Pill Test', () => {
   
     it ('Login with user', async () => {
-  
+    
       const email = element(by.id('Email-Input-Login'));
       const pw = element(by.id('Password-Input-Login'));
   
@@ -9,22 +9,17 @@ describe('Add Pill Test', () => {
       await pw.replaceText('testuser6');
   
       await element(by.text("SIGN IN")).tap();
-      await expect(element(by.text("My Pilldex"))).toBeVisible();
+      await waitFor(element(by.text("My Pilldex"))).toBeVisible().withTimeout(10000);
     });
 
     it ('Launches the Camera module', async () => {  
         await element(by.text("NEW PILL")).tap();
-        await expect(element(by.text("New Prescription"))).toBeVisible();
-    });
-
-    it ('Launches the Camera module', async () => {  
-        await element(by.text("NEW PILL")).tap();
-        await expect(element(by.text("New Prescription"))).toBeVisible();
+        await waitFor(element(by.text("New Prescription"))).toBeVisible().withTimeout(10000);
     });
 
     it ('Should take a picture', async () => {  
         await element(by.text("CONFIRM")).tap();
-        await expect(element(by.text("1 - Medication Name"))).toBeVisible();
+        await waitFor(element(by.text("1 - Medication Name"))).toBeVisible().withTimeout(10000);
     });
 
     it ('Catches missing information', async () => {  
@@ -71,7 +66,7 @@ describe('Add Pill Test', () => {
         await element(by.id('Medication-Name')).replaceText("TestPill");
 
         await element(by.text('Verify')).tap();
-        await expect(element(by.text("My Pilldex"))).toBeVisible();
+        await waitFor(element(by.text("My Pilldex"))).toBeVisible().withTimeout(10000);
     });
 
     
