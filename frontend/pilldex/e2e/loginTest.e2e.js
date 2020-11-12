@@ -42,7 +42,7 @@ describe('Create Account Test', () => {
     await element(by.text("OK")).tap();
   });
 
-  it ('Create User Bad Password', async () => {
+  it ('Create User Bad Password', async () => { // put a timeout thing here
     await element(by.text("NEW USER")).tap();
 
     const email = element(by.id('Email-Input'));
@@ -106,7 +106,7 @@ describe('Create Account Test', () => {
 
     await element(by.text("CREATE ACCOUNT")).tap();
 
-    await expect(element(by.text("Scheduler Screen"))).toBeVisible();
+    await expect(element(by.text("Smart Scheduler"))).toBeVisible();
     const wake = element(by.id('Wakeup'));
     const bed = element(by.id('Bedtime'));
     const brfst = element(by.id('Breakfast'));
