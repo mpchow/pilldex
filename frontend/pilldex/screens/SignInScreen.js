@@ -33,6 +33,7 @@ function SignInScreen({ navigation }) {
       />
     <View style={{height: 0.5, width: width - 60, marginTop: -5, backgroundColor:'#000'}} />
       <TextInput
+        testID="Email-Input-Login"
         placeholder = "Email"
         style= {styles.input}
         autoCapitalize='none'
@@ -41,6 +42,7 @@ function SignInScreen({ navigation }) {
       />
     <View style={{height: 0.5, width: width - 60, marginTop: -5, backgroundColor:'#000'}} />
       <TextInput
+        testID="Password-Input-Login"
         placeholder = "Password"
         style= {styles.input}
         secureTextEntry={true}

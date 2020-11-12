@@ -109,6 +109,7 @@ function CheckPillScreen({ navigation, route }) {
 
         <Text style={styles.form_titles}>1 - Medication Name</Text>
         <TextInput
+          testID="Medication-Name"
           placeholder = "Medication Name"
           style= {styles.input}
           autoCapitalize='none'
@@ -120,6 +121,7 @@ function CheckPillScreen({ navigation, route }) {
         <Text style={styles.form_titles}>2 - Number of Units in Refill</Text>
         <View style={{flexDirection: 'row'}}>
           <TextInput
+            testID="Units-Refill"
             placeholder = "Units"
             style= {styles.number_input}
             autoCapitalize='none'
@@ -135,6 +137,7 @@ function CheckPillScreen({ navigation, route }) {
         <View style={{flexDirection: 'row'}}>
           <Text style={styles.text}>Take  </Text>
           <TextInput
+            testID="Units-Dosage"
             placeholder = "Units"
             style= {styles.number_input}
             autoCapitalize='none'
@@ -146,6 +149,7 @@ function CheckPillScreen({ navigation, route }) {
           <Text style={styles.text}>  units, </Text>
           <TextInput
             placeholder = "Units"
+            testID="Units-Frequency"
             style= {styles.number_input}
             autoCapitalize='none'
             autoCorrect={false}
@@ -156,33 +160,33 @@ function CheckPillScreen({ navigation, route }) {
           <Text style={styles.text}>  times</Text>
         </View>
         <View style={{flexDirection: 'row', alignItems: 'center', marginTop: -15}}>
-          <TouchableOpacity style={freqUnits == "daily" ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setFreqButton("daily")}/>
+          <TouchableOpacity testID="Daily" style={freqUnits == "daily" ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setFreqButton("daily")}/>
           <Text style={styles.radioText}>  Daily</Text>
         </View>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <TouchableOpacity style={freqUnits == "weekly" ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setFreqButton("weekly")} />
+          <TouchableOpacity testID="Weekly" style={freqUnits == "weekly" ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setFreqButton("weekly")} />
           <Text style={styles.radioText}>  Weekly</Text>
         </View>
         <View style={{height: 20}} />
 
         <Text style={styles.form_titles}>4 - Take with Food?</Text>
         <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 10}}>
-          <TouchableOpacity style={foodButton == true ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setFoodButton(true)}/>
+          <TouchableOpacity testID="Food-Yes" style={foodButton == true ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setFoodButton(true)}/>
           <Text style={styles.radioText}>  Yes</Text>
         </View>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <TouchableOpacity style={foodButton == false ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setFoodButton(false)} />
+          <TouchableOpacity testID="Food-No" style={foodButton == false ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setFoodButton(false)} />
           <Text style={styles.radioText}>  No</Text>
         </View>
         <View style={{height: 20}} />
 
         <Text style={styles.form_titles}>5 - Does it cause drowsiness?</Text>
         <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 10}}>
-          <TouchableOpacity style={drowsyButton == true ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setDrowsyButton(true)}/>
+          <TouchableOpacity testID="Sleep-Yes" style={drowsyButton == true ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setDrowsyButton(true)}/>
           <Text style={styles.radioText}>  Yes</Text>
         </View>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <TouchableOpacity style={drowsyButton == false ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setDrowsyButton(false)} />
+          <TouchableOpacity testID="Sleep-No" style={drowsyButton == false ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setDrowsyButton(false)} />
           <Text style={styles.radioText}>  No</Text>
         </View>
         <View style={{height: 20}} />

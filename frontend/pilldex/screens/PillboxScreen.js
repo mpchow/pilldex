@@ -100,7 +100,7 @@ function PillboxScreen( {navigation } ) {
     <View style={styles.container}>
       <View style={{flexDirection: 'row'}}>
         <Text style={styles.title}>Patient's Pillbox</Text>
-        <TouchableOpacity style={{paddingTop: 38, paddingLeft: 15}} onPress={()=>{getPills()}}>
+        <TouchableOpacity testID="Refresh" style={{paddingTop: 38, paddingLeft: 15}} onPress={()=>{getPills()}}>
           <AntDesign name="sync" size={26} color="#46B1C9"/>
         </TouchableOpacity>
       </View>
@@ -116,7 +116,7 @@ function PillboxScreen( {navigation } ) {
                 <View style={{flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'space-evenly', marginLeft: 8}}>
                   <View style={{flexDirection: 'row'}}>
                     <Text style={styles.medName}>{item.name}</Text>
-                    <TouchableOpacity style={{position: 'absolute', left: 225, top: 7}} onPress={()=>{deletePills(item.name)}}>
+                    <TouchableOpacity testID="Delete-Pill" style={{position: 'absolute', left: 225, top: 7}} onPress={()=>{deletePills(item.name)}}>
                       <AntDesign name="close" size={25} color="#ba0c00"/>
                     </TouchableOpacity>
                   </View>

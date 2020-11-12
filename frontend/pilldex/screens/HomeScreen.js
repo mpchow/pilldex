@@ -53,6 +53,8 @@ function HomeScreen({ navigation }) {
     })
     .then((response) => response.json())
     .then((responseJson) => {
+      if(responseJson["user"] == null || responseJson["user"] == undefined)
+        return;
       console.log("Response from server is", responseJson["user"]["schedule"]);
       setSchedule(responseJson["user"]["schedule"]);
       formatNotifs(responseJson["user"]["schedule"]);
