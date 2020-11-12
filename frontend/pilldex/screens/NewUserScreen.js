@@ -4,7 +4,8 @@ import {
   View,
   Text,
   TouchableOpacity,
-  TextInput
+  TextInput,
+  Alert
 } from 'react-native';
 import { AuthContext } from '../navigation/AuthProvider';
 import Logo from '../components/Logo';
@@ -19,6 +20,17 @@ function NewUserScreen({ navigation }) {
 
   const { register } = useContext(AuthContext);
 
+  function checkFields() {
+    if (password.length < 6) {
+      Alert.alert("This password is too weak, please enter a new one");
+      return;
+    } else if (email.split('@').length != 2) {
+      Alert.alert("Invalid Email Address");
+      return;
+    }
+    navigation.navigate('Scheduler', {email: email, password: password});
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Create Account</Text>
@@ -32,6 +44,7 @@ function NewUserScreen({ navigation }) {
           onChangeText = {(text) => setName(text)}
       />
       <TextInput
+          testID="Email-Input"
           placeholder = "Email"
           style= {styles.input}
           autoCapitalize='none'
@@ -39,6 +52,7 @@ function NewUserScreen({ navigation }) {
           onChangeText = {(text) => setEmail(text)}
       />
       <TextInput
+          testID="Password-Input"
           placeholder = "Password"
           secureTextEntry={true}
           style= {styles.input}
@@ -61,7 +75,7 @@ function NewUserScreen({ navigation }) {
           <Text style={styles.btnText}>BACK</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button}
-                          onPress={() => {navigation.navigate('Scheduler', {email: email, password: password})}}>
+                          onPress={() => checkFields()}>
           <Text style={styles.btnText}>CREATE ACCOUNT</Text>
         </TouchableOpacity>
       </View>

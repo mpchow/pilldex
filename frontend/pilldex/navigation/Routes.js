@@ -5,7 +5,7 @@ import { AuthContext } from './AuthProvider';
 import MainStack from './MainStack';
 import LoginStack from './LoginStack';
 
-export default function Routes() {
+function Routes() {
   const { user, setUser } = useContext(AuthContext);
   const [initializing, setInitializing] = useState(true);
 
@@ -28,3 +28,5 @@ export default function Routes() {
     </NavigationContainer>
   );
 }
+
+export default Routes;
