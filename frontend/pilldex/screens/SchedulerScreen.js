@@ -238,6 +238,7 @@ function SchedulerScreen({ navigation, route }) {
         <View style={{width: 7}}/>
         <View style={{alignItems: 'center', justifyContent: 'center'}}>
           <TextInput
+            testID="Wakeup"
             placeholder = { routine[0]["time"] }
             style= {styles.input}
             autoCapitalize='none'
@@ -250,12 +251,14 @@ function SchedulerScreen({ navigation, route }) {
         <View style={{width: 7}}/>
         <TouchableOpacity style={routine[0]["AM"] ? styles.filledCircle :
                                  styles.openCircle}
+                          testID="WakeupAM"
                           onPress={() => updateRoutine(0, "AM", true)}>
         </TouchableOpacity>
         <Text style={styles.timeOption}>AM</Text>
         <View style={{width: 7}}/>
         <TouchableOpacity style={routine[0]["PM"] ? styles.filledCircle :
                                  styles.openCircle}
+                          testID="WakeupPM"
                           onPress={() => updateRoutine(0, "PM", true)}>
         </TouchableOpacity>
         <Text style={styles.timeOption}>PM</Text>
@@ -267,6 +270,7 @@ function SchedulerScreen({ navigation, route }) {
         <Text style={styles.bigRoutineText}>Bedtime:</Text>
         <View style={{marginLeft: 18, alignItems: 'center', justifyContent: 'center'}}>
           <TextInput
+            testID="Bedtime"
             placeholder = { routine[1]["time"] }
             style= {styles.input}
             autoCapitalize='none'
@@ -279,12 +283,14 @@ function SchedulerScreen({ navigation, route }) {
         <View style={{width: 7}}/>
         <TouchableOpacity style={routine[1]["AM"] ? styles.filledCircle :
                                  styles.openCircle}
+                          testID="BedtimeAM"
                           onPress={() => updateRoutine(1, "AM", true)}>
         </TouchableOpacity>
         <Text style={styles.timeOption}>AM</Text>
         <View style={{width: 7}}/>
         <TouchableOpacity style={routine[1]["PM"] ? styles.filledCircle :
                                  styles.openCircle}
+                          testID="BedtimePM"
                           onPress={() => updateRoutine(1, "PM", true)}>
         </TouchableOpacity>
         <Text style={styles.timeOption}>PM</Text>
@@ -301,6 +307,7 @@ function SchedulerScreen({ navigation, route }) {
         <View style={{width: 15}}/>
         <View style={{alignItems: 'center', justifyContent: 'center'}}>
           <TextInput
+            testID="Breakfast"
             placeholder = { routine[2]["time"] }
             style= {styles.input}
             autoCapitalize='none'
@@ -313,12 +320,14 @@ function SchedulerScreen({ navigation, route }) {
         <View style={{width: 7}}/>
         <TouchableOpacity style={routine[2]["AM"] ? styles.filledCircle :
                                  styles.openCircle}
+                          testID="BreakfastAM"
                           onPress={() => updateRoutine(2, "AM", true)}>
         </TouchableOpacity>
         <Text style={styles.timeOption}>AM</Text>
         <View style={{width: 7}}/>
         <TouchableOpacity style={routine[2]["PM"] ? styles.filledCircle :
                                  styles.openCircle}
+                          testID="BreakfastPM"
                           onPress={() => updateRoutine(2, "PM", true)}>
         </TouchableOpacity>
         <Text style={styles.timeOption}>PM</Text>
@@ -331,6 +340,7 @@ function SchedulerScreen({ navigation, route }) {
         <View style={{width: 45}}/>
         <View style={{alignItems: 'center', justifyContent: 'center'}}>
           <TextInput
+            testID="Lunch"
             placeholder = { routine[3]["time"] }
             style= {styles.input}
             autoCapitalize='none'
@@ -343,12 +353,14 @@ function SchedulerScreen({ navigation, route }) {
         <View style={{width: 7}}/>
         <TouchableOpacity style={routine[3]["AM"] ? styles.filledCircle :
                                  styles.openCircle}
+                          testID="LunchAM"
                           onPress={() => updateRoutine(3, "AM", true)}>
         </TouchableOpacity>
         <Text style={styles.timeOption}>AM</Text>
         <View style={{width: 7}}/>
         <TouchableOpacity style={routine[3]["PM"] ? styles.filledCircle :
                                  styles.openCircle}
+                          testID="LunchPM"
                           onPress={() => updateRoutine(3, "PM", true)}>
         </TouchableOpacity>
         <Text style={styles.timeOption}>PM</Text>
@@ -362,6 +374,7 @@ function SchedulerScreen({ navigation, route }) {
         <View style={{width: 39}}/>
         <View style={{alignItems: 'center', justifyContent: 'center'}}>
           <TextInput
+            testID="Dinner"
             placeholder = { routine[4]["time"] }
             style= {styles.input}
             autoCapitalize='none'
@@ -374,12 +387,14 @@ function SchedulerScreen({ navigation, route }) {
         <View style={{width: 7}}/>
         <TouchableOpacity style={routine[4]["AM"] ? styles.filledCircle :
                                  styles.openCircle}
+                          testID="DinnerAM"
                           onPress={() => updateRoutine(4, "AM", true)}>
         </TouchableOpacity>
         <Text style={styles.timeOption}>AM</Text>
         <View style={{width: 7}}/>
         <TouchableOpacity style={routine[4]["PM"] ? styles.filledCircle :
                                  styles.openCircle}
+                          testID="DinnerPM"
                           onPress={() => updateRoutine(4, "PM", true)}>
         </TouchableOpacity>
         <Text style={styles.timeOption}>PM</Text>
