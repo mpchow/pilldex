@@ -19,7 +19,7 @@ describe('Add Pill Test', () => {
 
     it ('Should take a picture', async () => {  
         await element(by.text("CONFIRM")).tap();
-        await waitFor(element(by.text("1 - Medication Name"))).toBeVisible().withTimeout(10000);
+        await waitFor(element(by.text("1 - Medication Name"))).toBeVisible().withTimeout(20000);
     });
 
     it ('Catches missing information', async () => {  
