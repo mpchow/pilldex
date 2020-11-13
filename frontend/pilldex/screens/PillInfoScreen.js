@@ -24,7 +24,7 @@ function PillInfoScreen({ navigation, route }) {
           : pillInfo.withSleep ? <Text style={styles.text}>This medication will make you drowsy.</Text>
           : null;
   }
-
+  //TODO: FIX THIS FUNCTION
   function refillPill() {
     console.log("TESTING")
     setPillsLeft(pillsLeft => pillsLeft + pillInfo.totalQuantity);

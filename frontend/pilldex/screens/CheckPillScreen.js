@@ -99,30 +99,33 @@ function CheckPillScreen({ navigation, route }) {
   }, [info]);
 
   return (
-    <ScrollView>
+    
       <View  style={styles.container}>
-      <Text style={styles.title}>New Prescription</Text>
-
-      <View style={{height: 30}} />
+        <View style={{height: 30}} />
+        <Text style={styles.title}>New Prescription</Text>
+        <View style={{height: 30}} />
 
       <View style={styles.form_container}>
 
-        <Text style={styles.form_titles}>1 - Medication Name</Text>
-        <TextInput
-          testID="Medication-Name"
-          placeholder = "Medication Name"
-          style= {styles.input}
-          autoCapitalize='none'
-          autoCorrect={false}
-          onChangeText = {(text) => setName(text)}
-          defaultValue = {name}
-        />
-
-        <Text style={styles.form_titles}>2 - Number of Units in Refill</Text>
         <View style={{flexDirection: 'row'}}>
+          <Text style={styles.form_titles}>Pill Name:</Text>
+          <Text>  </Text>
+          <TextInput
+            testID="Medication-Name"
+            placeholder = "Medication Name"
+            style= {styles.input}
+            autoCapitalize='none'
+            autoCorrect={false}
+            onChangeText = {(text) => setName(text)}
+            defaultValue = {name}
+          />
+        </View>
+        <View style={{flexDirection: 'row'}}>
+          <Text style={styles.form_titles}>Refill Amount:</Text>
+          <Text>  </Text>
           <TextInput
             testID="Units-Refill"
-            placeholder = "Units"
+            placeholder = "Unit"
             style= {styles.number_input}
             autoCapitalize='none'
             autoCorrect={false}
@@ -130,15 +133,14 @@ function CheckPillScreen({ navigation, route }) {
             onChangeText = {(text) => setRefillUnits(text)}
             defaultValue = {refillUnits ? refillUnits.toString() : ""}
           />
-          <Text style={styles.text}>  units</Text>
+          <Text style={styles.text}>  pills</Text>
         </View>
-
-        <Text style={styles.form_titles}>3 - Frequency</Text>
         <View style={{flexDirection: 'row'}}>
-          <Text style={styles.text}>Take  </Text>
+          <Text style={styles.form_titles}>Frequency:</Text>
+          <Text style={styles.text}> Take  </Text>
           <TextInput
             testID="Units-Dosage"
-            placeholder = "Units"
+            placeholder = "Unit"
             style= {styles.number_input}
             autoCapitalize='none'
             autoCorrect={false}
@@ -146,9 +148,9 @@ function CheckPillScreen({ navigation, route }) {
             onChangeText = {(text) => setDosage(text)}
             defaultValue = {dosage ? dosage.toString() : ""}
           />
-          <Text style={styles.text}>  units, </Text>
+          <Text style={styles.text}>  pills,  </Text>
           <TextInput
-            placeholder = "Units"
+            placeholder = "Freq"
             testID="Units-Frequency"
             style= {styles.number_input}
             autoCapitalize='none'
@@ -159,40 +161,38 @@ function CheckPillScreen({ navigation, route }) {
           />
           <Text style={styles.text}>  times</Text>
         </View>
-        <View style={{flexDirection: 'row', alignItems: 'center', marginTop: -15}}>
+        <View style={{height: 40}} />
+        <View style={{flexDirection: 'row', alignItems: 'center', marginTop: -45}}>
           <TouchableOpacity testID="Daily" style={freqUnits == "daily" ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setFreqButton("daily")}/>
           <Text style={styles.radioText}>  Daily</Text>
-        </View>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <View style={{width: 15}} />
           <TouchableOpacity testID="Weekly" style={freqUnits == "weekly" ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setFreqButton("weekly")} />
           <Text style={styles.radioText}>  Weekly</Text>
         </View>
-        <View style={{height: 20}} />
-
-        <Text style={styles.form_titles}>4 - Take with Food?</Text>
+        <View style={{height: 24}} />
+        <Text style={styles.form_titles}>Take with Food?</Text>
         <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 10}}>
-          <TouchableOpacity testID="Food-Yes" style={foodButton == true ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setFoodButton(true)}/>
+          <TouchableOpacity testID="Food-Yes" style={foodButton == true ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setFoodButton(true)}>
+          </TouchableOpacity>
           <Text style={styles.radioText}>  Yes</Text>
-        </View>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <TouchableOpacity testID="Food-No" style={foodButton == false ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setFoodButton(false)} />
+          <View style={{width: 15}} />
+          <TouchableOpacity testID="Food-No" style={foodButton == false ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setFoodButton(false)}>
+          </TouchableOpacity>
           <Text style={styles.radioText}>  No</Text>
         </View>
-        <View style={{height: 20}} />
-
-        <Text style={styles.form_titles}>5 - Does it cause drowsiness?</Text>
+        <View style={{height: 24}} />
+        <Text style={styles.form_titles}>Causes Drowsiness?</Text>
         <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 10}}>
-          <TouchableOpacity testID="Sleep-Yes" style={drowsyButton == true ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setDrowsyButton(true)}/>
+          <TouchableOpacity testID="Sleep-Yes" style={drowsyButton == true ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setDrowsyButton(true)}>
+          </TouchableOpacity>
           <Text style={styles.radioText}>  Yes</Text>
-        </View>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <TouchableOpacity testID="Sleep-No" style={drowsyButton == false ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setDrowsyButton(false)} />
+          <View style={{width: 15}} />
+          <TouchableOpacity testID="Sleep-No" style={drowsyButton == false ? styles.radioButtonPressed : styles.radioButtonUnPressed} onPress={()=>setDrowsyButton(false)}>
+          </TouchableOpacity>
           <Text style={styles.radioText}>  No</Text>
         </View>
-        <View style={{height: 20}} />
-
+        <View style={{height: 10}} />
       </View>
-
       <View style={{flexDirection: 'row', padding: 10, justifyContent:'space-between'}}>
         <TouchableOpacity style={styles.button}
                           onPress={() => navigation.goBack()}>
@@ -205,7 +205,6 @@ function CheckPillScreen({ navigation, route }) {
       </View>
 
       </View>
-    </ScrollView>
   );
 }
 
@@ -214,11 +213,12 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: 'white'
   },
   title: {
     fontFamily: 'Quicksand-Bold',
     fontSize: 35,
-    color: '#538083'
+    color: '#538083',
   },
   form_container: {
     flex: 1,
@@ -226,35 +226,35 @@ const styles = StyleSheet.create({
   form_titles: {
     fontFamily: 'Quicksand',
     fontSize: 20,
-    color: '#538083',
-    textDecorationLine: "underline",
+    fontWeight: "bold",
+    color: '#84C0C6',
   },
   input: {
-    width: 315,
-    height: 38,
+    width: 250,
+    height: 34,
     borderWidth: 0.5,
     borderColor: '#000',
     padding: 5,
-    marginTop: 20,
-    marginBottom: 20,
-    fontSize: 18,
-    fontFamily: 'Inter-Light'
+    fontSize: 16,
+    fontFamily: 'Inter-Light',
+    bottom: 2,
+    marginBottom: 20
   },
   number_input: {
-    width: 53,
-    height: 38,
+    width: 40,
+    height: 34,
     borderWidth: 0.5,
     borderColor: '#000',
     padding: 5,
-    marginTop: 20,
-    marginBottom: 20,
-    fontSize: 18,
+    fontSize: 15,
     fontFamily: 'Inter-Light',
+    marginBottom: 20
   },
   text: {
     fontFamily: 'Quicksand',
-    fontSize: 20, color: '#000000',
-    paddingTop: 26,
+    fontSize: 18, 
+    color: '#000000',
+    top: 2,
   },
   button: {
     height: 60,
@@ -274,24 +274,57 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   radioButtonPressed:{
-    backgroundColor: '#538083',
+    backgroundColor: '#84C0C6',
     borderRadius: 100,
-    height: 20,
-    width: 20,
-    marginTop: 0
+    height: 24,
+    width: 24,
+    marginTop: 0,
+    borderColor: '#538083',
+    borderWidth: 1.5
   },
   radioButtonUnPressed:{
     borderRadius: 100,
-    height: 20,
-    width: 20,
+    height: 24,
+    width: 24,
     marginTop: 0,
     borderWidth: 1.5,
     borderColor: '#538083',
   },
   radioText: {
     fontFamily: 'Quicksand',
-    fontSize: 20, color: '#000000',
-  }
+    fontSize: 18, color: '#000000',
+  },
+  yesButtonPressed:{
+    backgroundColor: '#84C0C6',
+    borderColor: '#538083',
+    borderWidth: 1.5,
+    borderRadius: 80,
+    height: 30,
+    width: 50,
+    marginTop: 0
+  },
+  yesButtonUnPressed:{
+    borderColor: '#538083',
+    borderWidth: 1.5,
+    borderRadius: 80,
+    height: 30,
+    width: 50,
+    marginTop: 0,
+  },
+  yesText: {
+    fontFamily: 'Quicksand',
+    fontSize: 18, 
+    color: '#000000',
+    top: 1,
+    left: 0
+  },
+  noText: {
+    fontFamily: 'Quicksand',
+    fontSize: 18, 
+    color: '#000000',
+    top: 1,
+    left: 3.5
+  },
 });
 
 export default CheckPillScreen;

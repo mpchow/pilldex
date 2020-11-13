@@ -19,19 +19,17 @@ describe('Add Pill Test', () => {
 
     it ('Should take a picture', async () => {  
         await element(by.text("CONFIRM")).tap();
-        await waitFor(element(by.text("1 - Medication Name"))).toBeVisible().withTimeout(30000);
+        await waitFor(element(by.text("VERIFY"))).toBeVisible().withTimeout(30000);
     });
 
     it ('Catches missing information', async () => {  
         await element(by.id('Medication-Name')).replaceText('TestMed');
-        await element(by.id('Units-Refill')).replaceText('10');
+        await element(by.id('Units-Refill')).replaceText('a');
         await element(by.id('Units-Dosage')).replaceText('1');
         await element(by.id('Units-Frequency')).replaceText('2');
         await element(by.id('Daily')).tap();
         await element(by.id('Sleep-Yes')).tap();
-
         await element(by.id('Food-Yes')).tap();
-        await element(by.id('Units-Refill')).replaceText('a');
 
         await element(by.text('VERIFY')).tap();
         await expect(element(by.text("Please enter a valid number of units for refill field"))).toBeVisible();

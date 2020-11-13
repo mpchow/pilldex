@@ -22,7 +22,7 @@ function PillboxScreen( {navigation } ) {
   const needRefill = 5; //below this amount, the text is red
 
   const [pills, setPills] = useState([]);
-  console.log("PIll is", pills);
+  console.log("Pill is", pills);
 
   function deletePills(pillName)
   {
@@ -90,7 +90,7 @@ function PillboxScreen( {navigation } ) {
     .then((response) => response.json())
     .then((responseJson) => {
       console.log("Response from server is", responseJson['pill']);
-      navigation.navigate("PillInfo", {pillInfo: responseJson['pill']}); //TODO: REMOVE pillsLeft: 50
+      navigation.navigate("PillInfo", {pillInfo: responseJson['pill']}); 
     })
     .catch((error) => {
          console.error(error);
