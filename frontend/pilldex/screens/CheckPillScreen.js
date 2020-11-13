@@ -99,7 +99,7 @@ function CheckPillScreen({ navigation, route }) {
   }, [info]);
 
   return (
-    
+
       <View  style={styles.container}>
         <View style={{height: 30}} />
         <Text style={styles.title}>New Prescription</Text>
@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: 'Quicksand',
-    fontSize: 18, 
+    fontSize: 18,
     color: '#000000',
     top: 2,
   },
@@ -292,38 +292,8 @@ const styles = StyleSheet.create({
   },
   radioText: {
     fontFamily: 'Quicksand',
-    fontSize: 18, color: '#000000',
-  },
-  yesButtonPressed:{
-    backgroundColor: '#84C0C6',
-    borderColor: '#538083',
-    borderWidth: 1.5,
-    borderRadius: 80,
-    height: 30,
-    width: 50,
-    marginTop: 0
-  },
-  yesButtonUnPressed:{
-    borderColor: '#538083',
-    borderWidth: 1.5,
-    borderRadius: 80,
-    height: 30,
-    width: 50,
-    marginTop: 0,
-  },
-  yesText: {
-    fontFamily: 'Quicksand',
     fontSize: 18, 
     color: '#000000',
-    top: 1,
-    left: 0
-  },
-  noText: {
-    fontFamily: 'Quicksand',
-    fontSize: 18, 
-    color: '#000000',
-    top: 1,
-    left: 3.5
   },
 });
 
