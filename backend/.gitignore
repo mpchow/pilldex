@@ -1,4 +1,5 @@
-node_module/*
+node_modules/
+node_modules
 *.swp
 firebaseServiceKey.json
 npm-debug.log

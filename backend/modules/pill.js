@@ -15,12 +15,15 @@ const create = async (pillParams) => {
 		if (user === null)
 			throw "User Not Found";
 
-      	const pill = new Pill(pillParams);
-      	pill.save();
-     
-     	// Create a schedule based on the provided parameters
-		await scheduler.createSchedule(pillParams);
-		return({status: 200, msg: 'Pill Created Successfully'});
+		else {
+			console.log("SAVING NEW PILL");
+	      	const pill = new Pill(pillParams);
+    	  	pill.save();
+    	 
+    	 	// Create a schedule based on the provided parameters
+			await scheduler.createSchedule(pillParams);
+			return({status: 200, msg: 'Pill Created Successfully'});
+		}
    }
    catch (error) {
 		return({status: 404, msg: "User Not Found"})
@@ -54,14 +57,19 @@ const update = async (pillParams) => {
 const remove = async (pillParams) => {
 	try {
 		// Check if pill is in the db, and remove
-		await Pill.deleteOne({name: pillParams.name, userId: pillParams.userId});
+		pill = await Pill.findOne({name: pillParams.query.name, userId: pillParams.query.userId});
+		console.log(pill);
+		if (pill === null)
+			throw "Pill Not Found";
+		await Pill.deleteOne({name: pillParams.query.name, userId: pillParams.query.userId});
 		// Delete the pill's corresponding schedule so outdated notifications are not sent
-        await scheduler.deleteSchedule(pillParams.userId, pillParams.name);
+        await scheduler.deleteSchedule(pillParams.query.userId, pillParams.query.name);
 		return({status: 200, msg: 'Pill Removed Successfully'});
 		
 	}
 	catch (error) {
-		return getErrorMessage(pillParams);
+		const newParams = {userId: pillParams.query.userId, name: pillParams.query.name};
+		return getErrorMessage(newParams);
 	}  
 }
 
@@ -78,7 +86,8 @@ const retrieve = async (pillParams) => {
 		return {pill: pill, status: 200, msg: 'Retrieved Pill Successfully'};
     }
     catch (error) {
-		return getErrorMessage(pillParams);
+		const newParams = {userId: pillParams.query.userId, name: pillParams.query.name};
+		return getErrorMessage(newParams);
     }
 }
 
@@ -91,13 +100,14 @@ const retrieveAll = async (pillParams) => {
 		user = await User.findOne({ userId: pillParams.query.userId })
 		if (user === null)
 			throw "Could not find user";
-
-		return {pill: Pill.find({userId: pillParams.query.userId}), status: 200, msg: 'Retrieved Pills Successfully'};
+		
+		pills = await Pill.find({userId: pillParams.query.userId});
+		return {pills: pills, status: 200, msg: 'Retrieved Pills Successfully'};
 
 	}
 	catch (error) {
 		const newParams = {userId: pillParams.query.userId};
-		return getErrorMessage(pillParams);
+		return getErrorMessage(newParams);
 	}
 }
 
@@ -123,17 +133,20 @@ const updateRemaining = async (pillParams) => {
 }
 
 const getErrorMessage = async (pillParams) => {
+	console.log("IN ERROR");
+	console.log(pillParams.userId);
 	user = await User.findOne({ userId: pillParams.userId })
 	if (user === null) {
 		return({status: 404, msg: "User Not Found"})
 	}
 
-	if (pillParams.hasAttribute(name)) {
-		pill = await Pill.findOne({ userId: pillParams.userId, name: pillParams.name })
-		if (pill === null) {
-			return({status: 404, msg: "Pill Not Found"})
-		}
+	//if (pillParams.hasAttribute(name)) {
+	console.log(pillParams.name);
+	pill = await Pill.findOne({ userId: pillParams.userId, name: pillParams.name })
+	if (pill === null) {
+		return({status: 404, msg: "Pill Not Found"})
 	}
+//	}
 	return({status: 500, msg: "Request Failed"})
 }
 

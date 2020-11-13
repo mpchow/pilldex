@@ -80,7 +80,7 @@ function updatePill(req, res, next) {
 /* Deletes the pill from the db */
 function deletePill(req, res, next) {
 	console.log("In DELETEPILL Route");
-	pillService.remove(req.body) 
+	pillService.remove(req) 
 		.then((success) => res.json(success))
 		.catch(err => next(err));
 }
