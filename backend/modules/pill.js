@@ -16,7 +16,6 @@ const create = async (pillParams) => {
 			throw "User Not Found";
 
 		else {
-			console.log("SAVING NEW PILL");
 	      	const pill = new Pill(pillParams);
     	  	pill.save();
     	 
@@ -27,7 +26,6 @@ const create = async (pillParams) => {
    }
    catch (error) {
 		return({status: 404, msg: "User Not Found"})
-		console.log(error);
    }
 }
 
@@ -39,6 +37,10 @@ const create = async (pillParams) => {
 const update = async (pillParams) => {
 	try {
 		// Update fields, and create new schedule based on updated info
+		pill = await Pill.findOne({name: pillParams.name, userId: pillParams.userId});
+		if (pill === null)
+			throw 'Pill Not Found';
+
         await Pill.replaceOne({name: pillParams.name, userId: pillParams.userId}, pillParams);
 		await scheduler.removeSchedule(pillParams.userId, pillParams.name);
 		await scheduler.createSchedule(pillParams);
@@ -58,7 +60,6 @@ const remove = async (pillParams) => {
 	try {
 		// Check if pill is in the db, and remove
 		pill = await Pill.findOne({name: pillParams.query.name, userId: pillParams.query.userId});
-		console.log(pill);
 		if (pill === null)
 			throw "Pill Not Found";
 		await Pill.deleteOne({name: pillParams.query.name, userId: pillParams.query.userId});
@@ -119,29 +120,28 @@ const retrieveAll = async (pillParams) => {
  */
 const updateRemaining = async (pillParams) => {
     try {
-        await Pill.findOne({name: pillParams.name, userId: pillParams.userId});
+        newPill = await Pill.findOne({name: pillParams.name, userId: pillParams.userId});
+		if (newPill === null) {
+			throw 'Not Found';
+		}
 
 		// Number of remaining pills increments by total quantity of 1 prescription
         newPill.remaining = newPill.remaining + newPill.totalQuantity;
-		console.log(newPill.remaining);
         await Pill.replaceOne({name: pillParams.name, userId: pillParams.userId}, newPill);
-        return {newPill, status: 200, msg:"Success"};
+        return {status: 200, msg:"Success"};
     }
     catch (error) {
-		getErrorMessage(pillParams);
+		return getErrorMessage(pillParams);
     }
 }
 
 const getErrorMessage = async (pillParams) => {
-	console.log("IN ERROR");
-	console.log(pillParams.userId);
 	user = await User.findOne({ userId: pillParams.userId })
 	if (user === null) {
 		return({status: 404, msg: "User Not Found"})
 	}
 
 	//if (pillParams.hasAttribute(name)) {
-	console.log(pillParams.name);
 	pill = await Pill.findOne({ userId: pillParams.userId, name: pillParams.name })
 	if (pill === null) {
 		return({status: 404, msg: "Pill Not Found"})

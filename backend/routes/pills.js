@@ -29,6 +29,7 @@ function pillTaken(req, res, next) {
  */
 function refill(req, res, next) {
     console.log("In REFILL Route");
+	console.log(req.body.userId);
     pillService.updateRemaining(req.body)
         .then(pill => res.json(pill))
         .catch(err => next(err));

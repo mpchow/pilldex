@@ -44,7 +44,7 @@ const create = async (profileParams) => {
  */
 const update = async (profileParams) => {
 	try {
-		user = Profile.findOne({ userId: profileParams.userId });
+		user = await Profile.findOne({ userId: profileParams.userId });
 		if (user === null)
 			throw 'User Not Found';
 
