@@ -36,7 +36,7 @@ function HomeScreen({ navigation }) {
       year: now.getFullYear() // number
     });
   });
-  
+
   const [schedule,setSchedule] = useState([]);
   const [notifs, setNotifs] = useState([]);
   const [refresh, setRefresh] = useState(false);
@@ -73,20 +73,21 @@ function HomeScreen({ navigation }) {
       return;
 
     data[d].forEach((e) => {
-      const t = Date.parse(e["time"]["reminderTime"]);
-      const time = new Date(t);
+      //const t = Date.parse(e["time"]["reminderTime"]);
+      //const time = new Date(t);
       var dateString = "";
 
-      var mins = time.getMinutes();
+      var mins = e["time"]["reminderTime"]["minute"];
+      var hours = parseInt(e["time"]["reminderTime"]["hour"], 10);
       if (mins < 10)
         mins = "0" + mins;
 
-      if (time.getHours() > 12)
-        dateString = (time.getHours() - 12) + ":" + mins + " PM";
+      if (hours > 12)
+        dateString = (hours - 12) + ":" + mins + " PM";
       else
-        dateString = time.getHours() + ":" + mins + " AM";
+        dateString = hours + ":" + mins + " AM";
 
-      ret.push({id: e['_id'], name: e['pillName'], time: time, food: true,
+      ret.push({id: e['_id'], name: e['pillName'], food: true,
                drowsy: true, done: e['takenEarly'], dateString: dateString});
     });
 

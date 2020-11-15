@@ -1,28 +1,28 @@
 describe('Add Pill Test', () => {
-  
+
     it ('Login with user', async () => {
-    
+
       const email = element(by.id('Email-Input-Login'));
       const pw = element(by.id('Password-Input-Login'));
-  
-      await email.replaceText('testuser6@gmail.com');
-      await pw.replaceText('testuser6');
-  
+
+      await email.replaceText('mootemop@gmail.com');
+      await pw.replaceText('mootemop');
+
       await element(by.text("SIGN IN")).tap();
       await waitFor(element(by.text("My Pilldex"))).toBeVisible().withTimeout(10000);
     });
 
-    it ('Launches the Camera module', async () => {  
+    it ('Launches the Camera module', async () => {
         await element(by.text("NEW PILL")).tap();
         await waitFor(element(by.text("New Prescription"))).toBeVisible().withTimeout(10000);
     });
 
-    it ('Should take a picture', async () => {  
+    it ('Should take a picture', async () => {
         await element(by.text("CONFIRM")).tap();
         await waitFor(element(by.text("VERIFY"))).toBeVisible().withTimeout(30000);
     });
 
-    it ('Catches missing information', async () => {  
+    it ('Catches missing information', async () => {
         await element(by.id('Medication-Name')).replaceText('TestMed');
         await element(by.id('Units-Refill')).replaceText('a');
         await element(by.id('Units-Dosage')).replaceText('1');
@@ -37,7 +37,7 @@ describe('Add Pill Test', () => {
     });
 
 
-    it ('Catches NaN input for frequency', async () => {  
+    it ('Catches NaN input for frequency', async () => {
         await element(by.id('Units-Refill')).replaceText('10');
         await element(by.id('Units-Frequency')).replaceText('a');
 
@@ -46,7 +46,7 @@ describe('Add Pill Test', () => {
         await element(by.text('OK')).tap();
     });
 
-    it ('Catches missing medication name', async () => {  
+    it ('Catches missing medication name', async () => {
         await element(by.id('Units-Frequency')).replaceText('1');
         await element(by.id('Medication-Name')).replaceText("");
 
@@ -62,6 +62,5 @@ describe('Add Pill Test', () => {
         await waitFor(element(by.text("My Pilldex"))).toBeVisible().withTimeout(10000);
     });
 
-    
+
 });
-  
