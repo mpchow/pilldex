@@ -78,6 +78,28 @@ export const AuthProvider = ({ children }) => {
                           schedule: [[], [], [], [], [], [], []]
                         })
                       });
+                      console.log(
+                        JSON.stringify({
+                          token: token,
+                          userId: user.user.uid,
+                          wakeupHr: parseInt(wake[0], 10),
+                          wakeupMin: parseInt(wake[1], 10),
+                          wakeupAM: routine[0]["AM"],
+                          sleepHr: parseInt(sleep[0], 10),
+                          sleepMin: parseInt(sleep[1], 10),
+                          sleepAM: routine[1]["AM"],
+                          breakfastHr: parseInt(bfast[0], 10),
+                          breakfastMin: parseInt(bfast[1], 10),
+                          breakfastAM: routine[2]["AM"],
+                          lunchHr: parseInt(lunch[0], 10),
+                          lunchMin: parseInt(lunch[1], 10),
+                          lunchAM: routine[3]["AM"],
+                          dinnerHr: parseInt(din[0], 10),
+                          dinnerMin: parseInt(din[1], 10),
+                          dinnerAM: routine[4]["AM"],
+                          schedule: [[], [], [], [], [], [], []]
+                        })
+                      )
                     });
             }
           } catch (e) {
