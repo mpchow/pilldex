@@ -9,7 +9,7 @@ describe('Screen Navigation Tests', () => {
     await pw.replaceText('motmeep');
 
     await element(by.text("SIGN IN")).tap();
-    await waitFor(element(by.text("My Pilldex"))).toBeVisible().withTimeout(10000);
+    await waitFor(element(by.text("My Pilldex"))).toBeVisible().withTimeout(20000);
   });
 
   it ('Launches the Camera module', async () => {
@@ -20,5 +20,9 @@ describe('Screen Navigation Tests', () => {
 
     if ((cam - now) > 3000)
       console.error("Camera took too long to launch");
+    else {
+      console.log("Passed Camera Test");
+    }
   });
-}
+
+});

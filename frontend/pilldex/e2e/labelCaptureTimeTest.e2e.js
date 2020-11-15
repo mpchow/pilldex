@@ -23,7 +23,12 @@ describe('Non Functional Requirement 2: time to translate label', () => {
         var time2 = Date.now();
         
         // Check if time less than 8 seconds
-        console.assert(time2 - time1 <= 8000);
+        if (time2 - time1 > 8000)
+          console.error("Took too long to parse label");
+        else {
+          console.log("Capture label test passed");
+        }
+
     });
 
     
