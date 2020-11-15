@@ -1,6 +1,3 @@
-const db = require('../db/db');
-const Pills = db.Pill;
-const Users = db.User;
 const NormalDistribution = require('normal-distribution');
 const dist = new NormalDistribution.default();
 const Reminder = require('./reminder');
