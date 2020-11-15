@@ -20,6 +20,8 @@ const updatePill = {"userId":"validUserId2", "name":"testPill", "totalQuantity":
 
 const testLabel = {"body":"Local Pharmacy RX# 0004921—39S CUSTOMER NAME GENERIC RX 500 MG TABLET\n TAKE ONE TABLET TWICE DAILY\n PRESCRIPTION NO. STORE NO.PRESCRIBED BY: A. DOCTOR QTY: 20 NO REFILLS REMAIN PRESCRIBER AUTH REQUIRED 123 RX AVENUE NEW YORK, NY NEW DATE FILLED: 02/05/2019 DISCARD BY: 02/05/2020 (555) 555 -555"};
 
+const testLabel2 = {"body":"Local Pharmacy RX# 0004921—39S CUSTOMER NAME acetaminophen 500 MG TABLET\n TAKE ONE TABLET TWICE DAILY BEFORE BED WITH FOOD\n PRESCRIPTION NO. STORE NO.PRESCRIBED BY: A. DOCTOR QTY: 20 NO REFILLS REMAIN PRESCRIBER AUTH REQUIRED 123 RX AVENUE NEW YORK, NY NEW DATE FILLED: 02/05/2019 DISCARD BY: 02/05/2020 (555) 555 -555"};
+
 const parsedLabel = {
         "name": null,
         "totalQuantity": 20,
@@ -188,6 +190,25 @@ describe("Parse Label Integration Test", () => {
 		expect(res.body.pillData).toStrictEqual(parsedLabel);
 		done();
 	})
+	it('Tests Parsing of a label with additional conditions ', async done => {
+		// Sends POST Request to /pills/label endpoint
+		const res = await request.post('/pills/label').send(testLabel2);
+		expect(res.status).toBe(200);
+		expect(res.body.msg).toBe('Success');
+		expect(res.body.pillData).toStrictEqual(parsedLabel);
+		done();
+	})
+});
+
+describe("User Dismisses Notification Integration Test", () => {
+	it('Tests Pill Taken with valid userId', async done => {
+		// Sends POST Request to /pills/taken endpoint
+		const res = await request.post('/pills/taken').send(testPillValid);
+		expect(res.status).toBe(200);
+		expect(res.body.msg).toBe('Pill Updated Successfully');
+		done();
+	})
+
 });
 
 /*

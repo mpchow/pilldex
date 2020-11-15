@@ -53,7 +53,6 @@ const update = async (pillParams) => {
 		newSchedule = scheduler.createSchedule(pillParams, user);
 		await User.findOneAndUpdate({userId: pillParams.userId}, {schedule: newSchedule});
 
-
 		return({status: 200, msg: 'Pill Updated Successfully'});
 	}
 	catch (error) {
@@ -76,6 +75,8 @@ const remove = async (pillParams) => {
 		await Pill.deleteOne({name: pillParams.query.name, userId: pillParams.query.userId});
 		// Delete the pill's corresponding schedule so outdated notifications are not sent
 		let user = await User.findOne({ userId: pillParams.userId });
+		console.log("DELETING PILL");
+		console.log(user);
 		if (user === null)
 			throw "User Not Found";
 
