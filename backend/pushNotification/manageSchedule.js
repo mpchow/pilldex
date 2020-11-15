@@ -4,7 +4,7 @@ const Users = db.User;
 const NormalDistribution = require('normal-distribution');
 const pill = require('../modules/pill');
 const dist = new NormalDistribution.default();
-const reminderFactory = require('./reminderFactory');
+const reminder = require('./reminder');
 
 
 const freqMap = [
@@ -21,12 +21,8 @@ const getContext = (pillParams) => {
    return (pillParams.withFood && pillParams.withSleep) ? "FoodSleep" : pillParams.withSleep ? "Sleep" : pillParams.withFood ? "Food" : "Spaced";
 }
  
-const updateSchedule = async (reqBody) => {
-   let user = await Users.findOne({userId: reqBody.userId});
+const updateSchedule = async (reqBody, user) => {
    let schedule = user.schedule;
-
-   const pill = await Pills.findOne({name: reqBody.pillName});
-   await Pills.findOneAndUpdate({name: reqBody.pillName}, {remaining: pill.remaining - pill.dosage});
 
    let timeTaken = reqBody.timeTaken;
    let reminderId = reqBody.reminderId;
@@ -69,15 +65,12 @@ const updateSchedule = async (reqBody) => {
             pillReminder.time.adjustedTimes.push(timeTakenConverted + timeAdjust);
          }
       }
-   
-      await Users.findOneAndUpdate({userId: user.userId}, {schedule: schedule});
-
    } 
-   return ({msg: "Schedule Updated"});
+
+   return schedule;
 }
 
-const deleteSchedule = async (userId, pill) => {
-   let user = await Users.findOne({userId: userId});
+const deleteSchedule = async (user, pill) => {
    let schedule = user.schedule;
 
    schedule = schedule.map(day => {
@@ -86,11 +79,10 @@ const deleteSchedule = async (userId, pill) => {
       })
    });
 
-  await Users.findOneAndUpdate({userId: userId}, {schedule: schedule});
+   return schedule;
 };
 
-const createSchedule = async (pillParams) => {
-   let user = await Users.findOne({userId: pillParams.userId});
+const createSchedule = async (pillParams, user) => {
    let schedule = user.schedule;
    let context = getContext(pillParams);
    
@@ -107,7 +99,7 @@ const createSchedule = async (pillParams) => {
       dinnerTime: (user.dinnerAM ? user.dinnerHr: user.dinnerHr + 12) * 60 + user.dinnerMin
    }
    
-   let reminder = new reminderFactory(pillParams, user, userTimes);
+   let reminder = new reminder(pillParams, user, userTimes);
 
    if(pillParams.frequencyUnit === 'daily') {
       if(context === "FoodSleep" || context === "Sleep") {
@@ -142,7 +134,7 @@ const createSchedule = async (pillParams) => {
       }
    }
 
-   await Users.findOneAndUpdate({userId: pillParams.userId}, {schedule: schedule});
+   return schedule;
 } 
 
 module.exports = {createSchedule, updateSchedule, deleteSchedule};
