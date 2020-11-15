@@ -4,7 +4,7 @@ const Users = db.User;
 const NormalDistribution = require('normal-distribution');
 const pill = require('../modules/pill');
 const dist = new NormalDistribution.default();
-const reminder = require('./reminder');
+const Reminder = require('./reminder');
 
 
 const freqMap = [
@@ -99,7 +99,7 @@ const createSchedule = (pillParams, user) => {
       dinnerTime: (user.dinnerAM ? user.dinnerHr: user.dinnerHr + 12) * 60 + user.dinnerMin
    }
    
-   let reminder = new reminder(pillParams, user, userTimes);
+   let reminder = new Reminder(pillParams, user, userTimes);
 
    if(pillParams.frequencyUnit === 'daily') {
       if(context === "FoodSleep" || context === "Sleep") {
