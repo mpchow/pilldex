@@ -19,7 +19,7 @@ module.exports = router;
 /* Decrement the number of capsules remaining */
 function pillTaken(req, res, next) {
 	console.log("In PILLTAKEN route");
-	scheduler.updateSchedule(req.body)
+	pillService.updateTaken(req.body)
 		.then((success) => req.json(success))
 		.catch(err => next(err));
 }
@@ -29,6 +29,7 @@ function pillTaken(req, res, next) {
  */
 function refill(req, res, next) {
     console.log("In REFILL Route");
+	 console.log(req.body.userId);
     pillService.updateRemaining(req.body)
         .then(pill => res.json(pill))
         .catch(err => next(err));
@@ -80,7 +81,7 @@ function updatePill(req, res, next) {
 /* Deletes the pill from the db */
 function deletePill(req, res, next) {
 	console.log("In DELETEPILL Route");
-	pillService.remove(req.body) 
+	pillService.remove(req) 
 		.then((success) => res.json(success))
 		.catch(err => next(err));
 }

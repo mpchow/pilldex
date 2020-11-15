@@ -26,15 +26,15 @@ function PillboxScreen( {navigation } ) {
 
   function deletePills(pillName)
   {
-    Alert.alert(  
-      `Delete ${pillName}`,  
-      `Are you sure you want to delete ${pillName}?`,  
+    Alert.alert(
+      `Delete ${pillName}`,
+      `Are you sure you want to delete ${pillName}?`,
       [
         {
-          text: 'Cancel',  
-          onPress: () => console.log('Cancel Pressed'),  
-          style: 'cancel',  
-        },  
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
         {
           text: 'OK', onPress: () => {
           fetch('http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/pills', {
@@ -51,14 +51,14 @@ function PillboxScreen( {navigation } ) {
           .catch((error) => {
             console.error(error);
           });
-          getPills();       
+          getPills();
           }
         }
-      ]  
-    );    
+      ]
+    );
   }
 
-  function getPills() {
+  function getPills() { // RESPONSE FROM SERVER UNDEFINED
 
     fetch(`http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/pills?userId=${firebase.auth().currentUser.uid}`, {
       method: 'GET',
@@ -90,7 +90,7 @@ function PillboxScreen( {navigation } ) {
     .then((response) => response.json())
     .then((responseJson) => {
       console.log("Response from server is", responseJson['pill']);
-      navigation.navigate("PillInfo", {pillInfo: responseJson['pill']}); 
+      navigation.navigate("PillInfo", {pillInfo: responseJson['pill']});
     })
     .catch((error) => {
          console.error(error);

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "test": "jest"
+    "test": "jest --detectOpenHandles"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -20,7 +20,11 @@
     "node-cron": "^2.0.3",
     "normal-distribution": "0.0.9",
     "pm2": "^4.5.0",
+    "sinon": "^9.2.1",
     "uuidv4": "^6.2.4"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@shelf/jest-mongodb": "^1.2.3",
+    "supertest": "^6.0.1"
+  }
 }

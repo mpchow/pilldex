@@ -9,11 +9,14 @@ const Pill = db.Pill;
  * profileParams.query.userId = userId of target user
  */
 const retrieve = async (profileParams) => {
-   try {
-      return {user: await Profile.findOne({userId: profileParams.query.userId}), msg: 'Success'};
+	try {
+		let user = await Profile.findOne({userId: profileParams.query.userId});	
+		if (user === null)
+			throw 'User Not Found';
+      	return {user: user, msg: 'Success'};
    }
    catch (error) {
-      throw `The User ${profileParams.userId} could not be retrieved`;
+		return {msg: "User Not Found"};
   }
 }
 
@@ -21,14 +24,17 @@ const retrieve = async (profileParams) => {
  * Create a new profile
  */
 const create = async (profileParams) => {
-   try {
-      await Profile.findOne({ userId: profileParams.userId})
-      const profile = new Profile(profileParams);
-      profile.save();
-      return({msg: 'Success'});
+	try {
+		let user = await Profile.findOne({ userId: profileParams.userId})
+		if (user !== null)
+			throw "user already exists";
+
+		const profile = new Profile(profileParams);
+		profile.save();
+		return({msg: 'Success'});
    }
    catch (error) {
-      throw 'The user ' + profileParams.userId + ' is already in the database';
+		return {msg: "User Already Exists"};
    }
 }
 
@@ -37,12 +43,16 @@ const create = async (profileParams) => {
  * profileParams.userId = userId of target user
  */
 const update = async (profileParams) => {
-   try {
-      await Profile.findOneAndUpdate({userId: profileParams.userId}, profileParams);
-      return ({msg: 'Success'});
+	try {
+		let user = await Profile.findOne({ userId: profileParams.userId });
+		if (user === null)
+			throw 'User Not Found';
+
+      	await Profile.findOneAndUpdate({userId: profileParams.userId}, profileParams);
+      	return ({msg: 'Success'});
    }
    catch (error) {
-      throw `The profile for ${profileParams.name} could not be updated`;
+		return {msg: "User Not Found"};
    }
 }
 
@@ -51,14 +61,20 @@ const update = async (profileParams) => {
  * profileParams.userId = userId of target user
  */
 const remove = async (profileParams) => {
-   try {
-      await Profile.deleteOne({userId: profileParams.userId});
-	   await Pill.deleteMany({userId: profileParams.userId});
-      return ({msg: 'Success'});
-   }
-   catch (error) {
-      throw `The profile for ${profileParams.name} could not be removed`;
-   }
+	try {
+		console.log(profileParams.query.userId);
+		let user = await Profile.findOne({ userId: profileParams.query.userId });
+		if (user === null)
+			throw 'User Not Found';
+      	
+		await Profile.deleteOne({userId: profileParams.query.userId});
+		await Pill.deleteMany({userId: profileParams.query.userId});
+		return ({msg: 'Success'});
+			
+	}	
+	catch (error) {
+		return {msg: "User Not Found"};
+	}
 
 }
 
