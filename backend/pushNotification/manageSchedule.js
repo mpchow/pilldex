@@ -21,7 +21,7 @@ const getContext = (pillParams) => {
    return (pillParams.withFood && pillParams.withSleep) ? "FoodSleep" : pillParams.withSleep ? "Sleep" : pillParams.withFood ? "Food" : "Spaced";
 }
  
-const updateSchedule = async (reqBody, user) => {
+const updateSchedule = (reqBody, user) => {
    let schedule = user.schedule;
 
    let timeTaken = reqBody.timeTaken;
@@ -70,7 +70,7 @@ const updateSchedule = async (reqBody, user) => {
    return schedule;
 }
 
-const deleteSchedule = async (user, pill) => {
+const deleteSchedule = (user, pill) => {
    let schedule = user.schedule;
 
    schedule = schedule.map(day => {
@@ -82,7 +82,7 @@ const deleteSchedule = async (user, pill) => {
    return schedule;
 };
 
-const createSchedule = async (pillParams, user) => {
+const createSchedule = (pillParams, user) => {
    let schedule = user.schedule;
    let context = getContext(pillParams);
    
