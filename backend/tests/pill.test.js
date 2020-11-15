@@ -20,7 +20,7 @@ const updatePill = {"userId":"validUserId2", "name":"testPill", "totalQuantity":
 
 const testLabel = {"body":"Local Pharmacy RX# 0004921—39S CUSTOMER NAME GENERIC RX 500 MG TABLET\n TAKE ONE TABLET TWICE DAILY\n PRESCRIPTION NO. STORE NO.PRESCRIBED BY: A. DOCTOR QTY: 20 NO REFILLS REMAIN PRESCRIBER AUTH REQUIRED 123 RX AVENUE NEW YORK, NY NEW DATE FILLED: 02/05/2019 DISCARD BY: 02/05/2020 (555) 555 -555"};
 
-const testLabel2 = {"body":"Local Pharmacy RX# 0004921—39S CUSTOMER NAME acetaminophen 500 MG TABLET\n TAKE ONE TABLET TWICE DAILY BEFORE BED WITH FOOD\n PRESCRIPTION NO. STORE NO.PRESCRIBED BY: A. DOCTOR QTY: 20 NO REFILLS REMAIN PRESCRIBER AUTH REQUIRED 123 RX AVENUE NEW YORK, NY NEW DATE FILLED: 02/05/2019 DISCARD BY: 02/05/2020 (555) 555 -555"};
+const testLabel2 = {"body":"Local Pharmacy RX# 0004921—39S CUSTOMER NAME 82 acetaminophen 500 MG TABLET\n TAKE ONE TABLET TWICE DAILY BEFORE BED WITH FOOD\n PRESCRIPTION NO. STORE NO.PRESCRIBED BY: A. DOCTOR REMAIN PRESCRIBER AUTH REQUIRED 123 RX AVENUE NEW YORK, NY NEW DATE FILLED: 02/05/2019 DISCARD BY: 02/05/2020 (555) 555 -555"};
 
 const parsedLabel = {
         "name": null,
@@ -30,7 +30,17 @@ const parsedLabel = {
         "dosage": 1,
         "withFood": false,
         "withSleep": false
-    };
+};
+
+const parsedLabel2 = {
+        "name": "acetaminophen",
+        "totalQuantity": 82,
+        "frequency": 2,
+        "frequencyUnit": "daily",
+        "dosage": 1,
+        "withFood": true,
+        "withSleep": true 
+};
 
 
 // Expected error results
@@ -195,7 +205,8 @@ describe("Parse Label Integration Test", () => {
 		const res = await request.post('/pills/label').send(testLabel2);
 		expect(res.status).toBe(200);
 		expect(res.body.msg).toBe('Success');
-		expect(res.body.pillData).toStrictEqual(parsedLabel);
+		expect(res.body.pillData).toStrictEqual(parsedLabel2);
+		console.log(res);
 		done();
 	})
 });
@@ -210,32 +221,4 @@ describe("User Dismisses Notification Integration Test", () => {
 	})
 
 });
-
-/*
-describe("Get Pills Function", () => {
-	// Testing MOCK FUNCTION
-	// Tests that the pill is retreived 
-	test('gets pill', () => {
-		expect(mockRetrievePills({"userId":"testId"}).status).toBe(200);
-		expect(mockRetrievePills({"userId":"testId"}).pills).toBe(testPill);
-		expect(mockRetrievePills({"userId":"testId"}).msg).toBe("Retrieved Pills Successfully");
-	});
-	
-	// Tests that an error is returned 
-	test('Invalid getPills call', () => {
-	 	expect(mockRetrievePills({"userId":"invalidId"})).toBe(userNotFound);
-	});
-});
-*/
-/*
-    beforeAll(async () => {
-        await mongoose.connect(global.__MONGO_URI__, { useNewUrlParser: true, useCreateIndex: true }, (err) => {
-            if (err) {
-                console.error(err);
-                process.exit(1);
-            }
-        });
-    });
-
-*/
 

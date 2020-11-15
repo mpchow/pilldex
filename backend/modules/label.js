@@ -9,7 +9,6 @@ const parseLabel = async (label) => {
 		var pillData = {"name": null, "totalQuantity" : null, "frequency" : null, "frequencyUnit" : null, "dosage" : null, "withFood" : false, "withSleep" : false};
 
 		let splitLabel = helpers.formatLabel(label);
-		console.log(splitLabel);
 
 		for (var i = 0; i < splitLabel.length; i++) {
 
