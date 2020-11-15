@@ -91,7 +91,7 @@ describe('Create Account Test', () => {
     await element(by.id('DinnerPM')).tap();
 
     await element(by.text("SUBMIT")).tap();
-    await waitFor(element(by.text("An account already exists with this email"))).toBeVisible().withTimeout(10000);
+    await waitFor(element(by.text("An account already exists with this email"))).toBeVisible().withTimeout(30000);
     await element(by.text("OK")).tap();
   });
 

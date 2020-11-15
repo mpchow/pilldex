@@ -9,17 +9,17 @@ describe('Add Pill Test', () => {
       await pw.replaceText('testuser6');
   
       await element(by.text("SIGN IN")).tap();
-      await waitFor(element(by.text("My Pilldex"))).toBeVisible().withTimeout(10000);
+      await waitFor(element(by.text("My Pilldex"))).toBeVisible().withTimeout(30000);
     });
 
     it ('Launches the Camera module', async () => {  
         await element(by.text("NEW PILL")).tap();
-        await waitFor(element(by.text("New Prescription"))).toBeVisible().withTimeout(10000);
+        await waitFor(element(by.text("New Prescription"))).toBeVisible().withTimeout(30000);
     });
 
     it ('Should take a picture', async () => {  
         await element(by.text("CONFIRM")).tap();
-        await waitFor(element(by.text("VERIFY"))).toBeVisible().withTimeout(30000);
+        await waitFor(element(by.text("VERIFY"))).toBeVisible().withTimeout(60000);
     });
 
     it ('Catches missing information', async () => {  
@@ -59,7 +59,7 @@ describe('Add Pill Test', () => {
         await element(by.id('Medication-Name')).replaceText("TestPill");
 
         await element(by.text('VERIFY')).tap();
-        await waitFor(element(by.text("My Pilldex"))).toBeVisible().withTimeout(10000);
+        await waitFor(element(by.text("My Pilldex"))).toBeVisible().withTimeout(30000);
     });
 
     
