@@ -19,14 +19,14 @@ const updateUserInvalid = {"token":"testToken", "userId":"invalidUserId", "wakeu
 // Integrated tests
 describe("Create User Integrated Test", () => {
 	it('Tests POST endpoint with new user', async done => {
-		// Sends POST Request to /pills endpoint
+		// Sends POST Request to /users endpoint
 		const res = await request.post('/users').send(newUser);
 		expect(res.status).toBe(200);
 		expect(res.body.msg).toBe('Success');
 		done();
 	})
 	it('Tests POST endpoint with user that already exists', async done => {
-		// Sends POST Request to /pills endpoint
+		// Sends POST Request to /users endpoint
 		const res = await request.post('/users').send(newUser);
 		expect(res.status).toBe(200);
 		expect(res.body.msg).toBe('User Already Exists');
@@ -36,14 +36,14 @@ describe("Create User Integrated Test", () => {
 
 describe("Get User Integrated Test", () => {
 	it('Tests GET endpoint with valid userId', async done => {
-		// Sends POST Request to /pills endpoint
+		// Sends GET Request to /users endpoint
 		const res = await request.get('/users?userId=validUserId');
 		expect(res.status).toBe(200);
 		expect(res.body.msg).toBe('Success');
 		done();
 	})
 	it('Tests GET endpoint with invalid userId', async done => {
-		// Sends POST Request to /pills endpoint
+		// Sends GET Request to /users endpoint
 		const res = await request.get('/users?userId=invalidUserId');
 		expect(res.status).toBe(200);
 		expect(res.body.msg).toBe('User Not Found');
@@ -53,7 +53,7 @@ describe("Get User Integrated Test", () => {
 
 describe("Update User Integrated Test", () => {
 	it('Tests PUT endpoint with invalid userId', async done => {
-		// Sends PUT Request to /pills endpoint with invalid userId
+		// Sends PUT Request to /users endpoint with invalid userId
 		const res = await request.put('/users').send(updateUserInvalid);
 		expect(res.status).toBe(200);
 		expect(res.body.msg).toBe('User Not Found');
@@ -61,7 +61,7 @@ describe("Update User Integrated Test", () => {
 	})
 	
 	it('Tests PUT endpoint with valid userId', async done => {
-		// Sends PUT Request to /pills endpoint
+		// Sends PUT Request to /users endpoint
 		const res = await request.put('/users').send(updateUserValid);
 		expect(res.status).toBe(200);
 		expect(res.body.msg).toBe('Success');
@@ -71,14 +71,14 @@ describe("Update User Integrated Test", () => {
 
 describe("Delete User Integrated Test", () => {
 	it('Tests DELETE endpoint with valid userId', async done => {
-		// Sends POST Request to /pills endpoint
+		// Sends DELETE Request to /users endpoint
 		const res = await request.delete('/users?userId=validUserId');
 		expect(res.status).toBe(200);
 		expect(res.body.msg).toBe('Success');
 		done();
 	})
 	it('Tests DELETE endpoint with invalid userId', async done => {
-		// Sends POST Request to /pills endpoint
+		// Sends DELETE Request to /users endpoint
 		const res = await request.delete('/users?userId=invalidUserId');
 		expect(res.status).toBe(200);
 		expect(res.body.msg).toBe('User Not Found');

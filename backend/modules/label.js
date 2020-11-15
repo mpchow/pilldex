@@ -1,6 +1,6 @@
 /* Contains logic to parse through a label image's text and return the pill object fields */
 
-helpers = require('./label-helpers');
+let helpers = require('./label-helpers');
 
 /* Parses through the label text and returns a json object with populated pill fields */
 const parseLabel = async (label) => {
@@ -8,7 +8,7 @@ const parseLabel = async (label) => {
 		// JSON object mimicking the pill object
 		var pillData = {"name": null, "totalQuantity" : null, "frequency" : null, "frequencyUnit" : null, "dosage" : null, "withFood" : false, "withSleep" : false};
 
-		splitLabel = helpers.formatLabel(label);
+		let splitLabel = helpers.formatLabel(label);
 		console.log(splitLabel);
 
 		for (var i = 0; i < splitLabel.length; i++) {

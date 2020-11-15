@@ -10,7 +10,7 @@ const Pill = db.Pill;
  */
 const retrieve = async (profileParams) => {
 	try {
-		user = await Profile.findOne({userId: profileParams.query.userId});	
+		let user = await Profile.findOne({userId: profileParams.query.userId});	
 		if (user === null)
 			throw 'User Not Found';
       	return {user: user, msg: 'Success'};
@@ -25,7 +25,7 @@ const retrieve = async (profileParams) => {
  */
 const create = async (profileParams) => {
 	try {
-		user = await Profile.findOne({ userId: profileParams.userId})
+		let user = await Profile.findOne({ userId: profileParams.userId})
 		if (user !== null)
 			throw "user already exists";
 
@@ -44,7 +44,7 @@ const create = async (profileParams) => {
  */
 const update = async (profileParams) => {
 	try {
-		user = await Profile.findOne({ userId: profileParams.userId });
+		let user = await Profile.findOne({ userId: profileParams.userId });
 		if (user === null)
 			throw 'User Not Found';
 
@@ -63,12 +63,14 @@ const update = async (profileParams) => {
 const remove = async (profileParams) => {
 	try {
 		console.log(profileParams.query.userId);
-		user = await Profile.findOne({ userId: profileParams.query.userId });
+		let user = await Profile.findOne({ userId: profileParams.query.userId });
 		if (user === null)
 			throw 'User Not Found';
       	
 		await Profile.deleteOne({userId: profileParams.query.userId});
-      	return ({msg: 'Success'});
+		await Pill.deleteMany({userId: profileParams.query.userId});
+		return ({msg: 'Success'});
+			
 	}	
 	catch (error) {
 		return {msg: "User Not Found"};

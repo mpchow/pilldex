@@ -1,6 +1,6 @@
 const { uuid } = require('uuidv4');
 
-class reminderFactory {
+class reminder {
    constructor(pillParams, user, userTime) {
       this.pillParams = pillParams;
       this.user = user;
@@ -75,4 +75,4 @@ class reminderFactory {
 }
 
 
-module.exports = reminderFactory;
+module.exports = reminder;
