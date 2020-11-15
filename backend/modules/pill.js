@@ -20,7 +20,7 @@ const create = async (pillParams) => {
     	  	pill.save();
     	 
     	 	// Create a schedule based on the provided parameters
-			const newSchedule = await scheduler.createSchedule(pillParams, user);
+			const newSchedule = scheduler.createSchedule(pillParams, user);
 			await User.findOneAndUpdate({userId: pillParams.userId}, {schedule: newSchedule});
 
 			return({status: 200, msg: 'Pill Created Successfully'});
@@ -49,14 +49,14 @@ const update = async (pillParams) => {
 		if (user === null)
 			throw "User Not Found";
 
-		let newSchedule = await scheduler.deleteSchedule(user, pillParams.query.name);
+		let newSchedule = scheduler.deleteSchedule(user, pillParams.query.name);
 		await User.findOneAndUpdate({userId: pillParams.userId}, {schedule: newSchedule});
 
 		user = await User.findOne({ userId: pillParams.userId });
 		if (user === null)
 			throw "User Not Found";
 
-		newSchedule = await scheduler.createSchedule(pillParams, user);
+		newSchedule = scheduler.createSchedule(pillParams, user);
 		await User.findOneAndUpdate({userId: pillParams.userId}, {schedule: newSchedule});
 
 
@@ -85,7 +85,7 @@ const remove = async (pillParams) => {
 		if (user === null)
 			throw "User Not Found";
 
-		let newSchedule = await scheduler.deleteSchedule(user, pillParams.query.name);
+		let newSchedule = scheduler.deleteSchedule(user, pillParams.query.name);
 		await User.findOneAndUpdate({userId: pillParams.userId}, {schedule: newSchedule});
 
 		return({status: 200, msg: 'Pill Removed Successfully'});
@@ -143,7 +143,7 @@ const updateTaken = async (pillParams) => {
 	if(user === null)
 		throw "User Not Found";
 	else {
-		const newSchedule = await scheduler.updateSchedule(pillParams, user);
+		const newSchedule = scheduler.updateSchedule(pillParams, user);
 		await User.findOneAndUpdate({userId: user.userId}, {schedule: newSchedule});
 
 		const pill = await Pill.findOne({name: pillParams.pillName});
