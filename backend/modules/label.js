@@ -1,6 +1,6 @@
 /* Contains logic to parse through a label image's text and return the pill object fields */
 
-let helpers = require('./label-helpers');
+let helpers = require('./label_helpers');
 
 /* Parses through the label text and returns a json object with populated pill fields */
 const parseLabel = async (label) => {

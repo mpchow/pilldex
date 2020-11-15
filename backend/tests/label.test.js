@@ -5,7 +5,7 @@ const app = require('../app') // Link to your server file
 const supertest = require('supertest')
 const request = supertest(app)
 
-jest.mock('../modules/label-helpers');
+jest.mock('../modules/label_helpers');
 const parser = require('../modules/label');
 
 const testLabel = {"body":"Local Pharmacy RX# 0004921—39S CUSTOMER NAME GENERIC RX 500 MG TABLET\n TAKE ONE TABLET TWICE DAILY\n PRESCRIPTION NO. STORE NO.PRESCRIBED BY: A. DOCTOR QTY: 20 NO REFILLS REMAIN PRESCRIBER AUTH REQUIRED 123 RX AVENUE NEW YORK, NY NEW DATE FILLED: 02/05/2019 DISCARD BY: 02/05/2020 (555) 555 -555"};

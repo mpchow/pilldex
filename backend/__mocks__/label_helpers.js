@@ -1,4 +1,4 @@
-const label-helper = jest.createMockFromModule('fs');
+const label_helper = jest.createMockFromModule('fs');
 
 const formattedLabel = [
   'local',         'pharmacy', 'rx#',
@@ -56,12 +56,12 @@ export default function getFreq(splitLabel, i, pillData) {
 	return 1;
 }
 
-label-helper.formatLabel = formattedLabel;
-label-helper.getName = getName;
-label-helper.getQuantity = getQuantity;
-label-helper.getFreqUnit = getFreqUnit;
-label-helper.getConditions = getConditions;
-label-helper.getDosage = getDosage;
-label-helper.getFreq = getFreq;
+label_helper.formatLabel = formattedLabel;
+label_helper.getName = getName;
+label_helper.getQuantity = getQuantity;
+label_helper.getFreqUnit = getFreqUnit;
+label_helper.getConditions = getConditions;
+label_helper.getDosage = getDosage;
+label_helper.getFreq = getFreq;
 
-module.exports = label-helper;
+module.exports = label_helper;

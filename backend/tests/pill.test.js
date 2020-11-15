@@ -6,10 +6,6 @@ const app = require('../app') // Link to your server file
 const supertest = require('supertest')
 const request = supertest(app)
 
-const time = require('../util/time');
-const sinon = require('sinon');
-sinon.stub(time, 'setTimeout');
-
 const testPillInvalidUser = {"userId":"invalidUserId", "name":"invalidUserPill", "totalQuantity":10, "frequency":2, "frequencyUnit":"daily", "dosage":1,
 				  "withFood":true, "withSleep":false, "remaining":5};
 
@@ -117,6 +113,14 @@ describe("Update Pill Integrated Test", () => {
 		expect(res.status).toBe(200);
 		expect(res.body.status).toBe(404);
 		expect(res.body.msg).toBe('User Not Found');
+		done();
+	})
+	it('Tests PUT endpoint with invalid pill', async done => {
+		// Sends DELETE Request to /pills endpoint
+		const res = await request.put('/pills').send(testPillInvalidName);
+		expect(res.status).toBe(200);
+		expect(res.body.status).toBe(404);
+		expect(res.body.msg).toBe('Pill Not Found');
 		done();
 	})
 	it('Tests PUT endpoint with valid userId', async done => {

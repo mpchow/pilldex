@@ -40,21 +40,15 @@ const update = async (pillParams) => {
 	try {
 		// Update fields, and create new schedule based on updated info
 		let pill = await Pill.findOne({name: pillParams.name, userId: pillParams.userId});
-		if (pill === null)
-			throw 'Pill Not Found';
 
 		await Pill.replaceOne({name: pillParams.name, userId: pillParams.userId}, pillParams);
 
 		let user = await User.findOne({ userId: pillParams.userId });
-		if (user === null)
-			throw "User Not Found";
 
 		let newSchedule = await scheduler.deleteSchedule(user, pillParams.query.name);
 		await User.findOneAndUpdate({userId: pillParams.userId}, {schedule: newSchedule});
 
 		user = await User.findOne({ userId: pillParams.userId });
-		if (user === null)
-			throw "User Not Found";
 
 		newSchedule = await scheduler.createSchedule(pillParams, user);
 		await User.findOneAndUpdate({userId: pillParams.userId}, {schedule: newSchedule});
