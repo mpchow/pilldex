@@ -1,10 +1,10 @@
 const { uuid } = require('uuidv4');
 
-class reminder {
-   constructor(pillParams, user, userTime) {
+class Reminder {
+   constructor(pillParams, user, userTimes) {
       this.pillParams = pillParams;
       this.user = user;
-      this.userTime = userTime;
+      this.userTimes = userTimes;
    }
 
    getDefaultDate = (mode, hr, min, spacing) => {
@@ -75,4 +75,4 @@ class reminder {
 }
 
 
-module.exports = reminder;
+module.exports = Reminder;
