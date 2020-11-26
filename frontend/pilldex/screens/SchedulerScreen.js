@@ -161,7 +161,7 @@ function SchedulerScreen({ navigation, route }) {
       /* check that time input is okay */
       const timeCheck = elem.time.split(":");
       if (timeCheck.length != 2) {
-        Alert.alert("Please enter a valid time for " + elem.title);
+        Alert.alert("Please enter a time in HH:MM format for " + elem.title);
         return;
       }
 
@@ -239,7 +239,7 @@ function SchedulerScreen({ navigation, route }) {
         <View style={{alignItems: 'center', justifyContent: 'center'}}>
           <TextInput
             testID="Wakeup"
-            placeholder = { routine[0]["time"] }
+            placeholder = { routine[0]["time"] ? routine[0]["time"] : "HH:MM"}
             style= {styles.input}
             autoCapitalize='none'
             autoCorrect={false}
@@ -271,7 +271,7 @@ function SchedulerScreen({ navigation, route }) {
         <View style={{marginLeft: 18, alignItems: 'center', justifyContent: 'center'}}>
           <TextInput
             testID="Bedtime"
-            placeholder = { routine[1]["time"] }
+            placeholder = { routine[1]["time"] ? routine[1]["time"] : "HH:MM" }
             style= {styles.input}
             autoCapitalize='none'
             autoCorrect={false}
@@ -308,7 +308,7 @@ function SchedulerScreen({ navigation, route }) {
         <View style={{alignItems: 'center', justifyContent: 'center'}}>
           <TextInput
             testID="Breakfast"
-            placeholder = { routine[2]["time"] }
+            placeholder = { routine[2]["time"] ? routine[2]["time"] : "HH:MM" }
             style= {styles.input}
             autoCapitalize='none'
             autoCorrect={false}
@@ -341,7 +341,7 @@ function SchedulerScreen({ navigation, route }) {
         <View style={{alignItems: 'center', justifyContent: 'center'}}>
           <TextInput
             testID="Lunch"
-            placeholder = { routine[3]["time"] }
+            placeholder = { routine[3]["time"] ? routine[3]["time"] : "HH:MM" }
             style= {styles.input}
             autoCapitalize='none'
             autoCorrect={false}
@@ -375,7 +375,7 @@ function SchedulerScreen({ navigation, route }) {
         <View style={{alignItems: 'center', justifyContent: 'center'}}>
           <TextInput
             testID="Dinner"
-            placeholder = { routine[4]["time"] }
+            placeholder = { routine[4]["time"] ? routine[4]["time"] : "HH:MM" }
             style= {styles.input}
             autoCapitalize='none'
             autoCorrect={false}
