@@ -24,7 +24,7 @@ var totalQuantitySignals = new Set(["qty", "quantity", "#", "qty:", "quantity:",
 function formatLabel(label) {
 	var label_lc = label.body.toLowerCase();
 	var splitLabel = label_lc.replace( /\n/g, " " ).split(" ");
-	console.log(splitLabel);
+//	console.log(splitLabel);
 	return splitLabel;
 }
 

@@ -1,10 +1,6 @@
-const db = require('../db/db');
-const Pills = db.Pill;
-const Users = db.User;
 const NormalDistribution = require('normal-distribution');
-const pill = require('../modules/pill');
 const dist = new NormalDistribution.default();
-const reminder = require('./reminder');
+const Reminder = require('./reminder');
 
 
 const freqMap = [
@@ -21,31 +17,31 @@ const getContext = (pillParams) => {
    return (pillParams.withFood && pillParams.withSleep) ? "FoodSleep" : pillParams.withSleep ? "Sleep" : pillParams.withFood ? "Food" : "Spaced";
 }
  
-const updateSchedule = async (reqBody, user) => {
+const updateSchedule = (reqBody, user) => {
    let schedule = user.schedule;
 
    let timeTaken = reqBody.timeTaken;
    let reminderId = reqBody.reminderId;
 
-   let pillReminder = schedule[timeTaken.getDay()].find(reminders => reminders.reminderId === reminderId);
+   let pillReminder = schedule[timeTaken.day].find(reminders => reminders.reminderId === reminderId);
 
-   let timeTakenConverted = timeTaken.getHours() * 60 + timeTaken.getMinutes();
-   let reminderTimeConverted = pillReminder.time.reminderTime.getHours() * 60 + pillReminder.time.reminderTime.getMinutes();
+   let timeTakenConverted = timeTaken.hour * 60 + timeTaken.minute;
+   let reminderTimeConverted = pillReminder.time.reminderTime.hour * 60 + pillReminder.time.reminderTime.minute;
 
    let timeDiff = Math.abs(timeTakenConverted - reminderTimeConverted);
 
    if (timeDiff > 30) {
       pillReminder.timesLate++;
-      if(pillReminder.timesLate === 2) {
+      if(pillReminder.timesLate === 3) {
          pillReminder.timesLate = 0;
          pillReminder.takenEarly = false;
 
          let newTime = 0;
-         for(let time in  pillReminder.adjustedTimes) {
+         for(let time in pillReminder.adjustedTimes) {
             newTime += time;
          }
          newTime /= pillReminder.adjustedTimes.length;
-         pillReminder.time.reminderTime = new Date(2020, 10, Math.floor(newTime/60) + 7 > 24 ? timeTaken.getDay() + 2 : timeTaken.getDay() + 1, newTime % 60);
+         pillReminder.time.reminderTime = {hour: Math.floor(newTime/60) + 7 > 24 ? timeTaken.day + 2 : timeTaken.day + 1, minute: newTime % 60};
          pillReminder.adjustedTimes = [];
       }
       else {
@@ -70,19 +66,19 @@ const updateSchedule = async (reqBody, user) => {
    return schedule;
 }
 
-const deleteSchedule = async (user, pill) => {
+const deleteSchedule = (user, pillName) => {
    let schedule = user.schedule;
 
    schedule = schedule.map(day => {
       return day.filter(reminder => {
-         reminder.pillName !== pill.name;
+         reminder.pillName !== pillName;
       })
    });
 
    return schedule;
 };
 
-const createSchedule = async (pillParams, user) => {
+const createSchedule = (pillParams, user) => {
    let schedule = user.schedule;
    let context = getContext(pillParams);
    
@@ -99,7 +95,7 @@ const createSchedule = async (pillParams, user) => {
       dinnerTime: (user.dinnerAM ? user.dinnerHr: user.dinnerHr + 12) * 60 + user.dinnerMin
    }
    
-   let reminder = new reminder(pillParams, user, userTimes);
+   let reminder = new Reminder(pillParams, user, userTimes);
 
    if(pillParams.frequencyUnit === 'daily') {
       if(context === "FoodSleep" || context === "Sleep") {
