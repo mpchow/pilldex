@@ -65,9 +65,9 @@ function PillboxScreen( {navigation } ) {
     })
     .then((response) => response.json())
     .then((responseJson) => {
-
-      console.log("Response from server is", responseJson['pill']);
-      setPills(responseJson['pill']);
+      console.log(responseJson);
+      console.log("Response from server is", responseJson['pills']);
+      setPills(responseJson['pills']);
 
     })
     .catch((error) => {
