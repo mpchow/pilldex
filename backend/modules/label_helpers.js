@@ -106,6 +106,8 @@ function getFreq(splitLabel, i, pillData) {
 			pillData.frequency = numDict[splitLabel[i]];
 			return 1;
 		}
+		else
+			return 0;
 	}
 	return 0;
 }

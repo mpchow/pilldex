@@ -93,6 +93,12 @@ describe("User Dismisses Notification Integration Test", () => {
 		expect(res.body.msg).toBe('User Not Found');
 		done();
 	})
+	it('Tests Pill Taken with invalid pillName', async done => {
+		// Sends POST Request to /pills/taken endpoint
+		const res = await request.post('/pills/taken').send(Constants.takenPillInvalidName);
+		expect(res.body.msg).toBe('Pill Not Found');
+		done();
+	})
 });
 
 describe("Update Pill Integrated Test", () => {
@@ -171,6 +177,30 @@ describe("Delete Pill Integrated Test", () => {
 describe("Parse Label Integration Test", () => {
 	it('Tests Parsing of a label ', async done => {
 		// Sends POST Request to /pills/label endpoint
+		const res = await request.post('/pills/label').send(null)
+		expect(res.status).toBe(200);
+		expect(res.body.msg).toBe('Success');
+		expect(res.body.pillData).toStrictEqual(Constants.parsedLabelNull);
+		done();
+	})
+	it('Tests Parsing of a label ', async done => {
+		// Sends POST Request to /pills/label endpoint
+		const res = await request.post('/pills/label').send({"body":""})
+		expect(res.status).toBe(200);
+		expect(res.body.msg).toBe('Success');
+		expect(res.body.pillData).toStrictEqual(Constants.parsedLabelNull);
+		done();
+	})
+	it('Tests Parsing of a label ', async done => {
+		// Sends POST Request to /pills/label endpoint
+		const res = await request.post('/pills/label').send({"body":null})
+		expect(res.status).toBe(200);
+		expect(res.body.msg).toBe('Success');
+		expect(res.body.pillData).toStrictEqual(Constants.parsedLabelNull);
+		done();
+	})
+	it('Tests Parsing of a label ', async done => {
+		// Sends POST Request to /pills/label endpoint
 		const res = await request.post('/pills/label').send(Constants.testLabel);
 		expect(res.status).toBe(200);
 		expect(res.body.msg).toBe('Success');
@@ -199,6 +229,22 @@ describe("Parse Label Integration Test", () => {
 		expect(res.status).toBe(200);
 		expect(res.body.msg).toBe('Success');
 		expect(res.body.pillData).toStrictEqual(Constants.parsedLabel4);
+		done();
+	})
+	it('Tests Parsing of a label with additional conditions ', async done => {
+		// Sends POST Request to /pills/label endpoint
+		const res = await request.post('/pills/label').send(Constants.testLabel5);
+		expect(res.status).toBe(200);
+		expect(res.body.msg).toBe('Success');
+		expect(res.body.pillData).toStrictEqual(Constants.parsedLabel4);
+		done();
+	})
+	it('Tests Parsing of a label with additional conditions ', async done => {
+		// Sends POST Request to /pills/label endpoint
+		const res = await request.post('/pills/label').send(Constants.testLabel6);
+		expect(res.status).toBe(200);
+		expect(res.body.msg).toBe('Success');
+		expect(res.body.pillData).toStrictEqual(Constants.parsedLabel3);
 		done();
 	})
 });
