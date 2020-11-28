@@ -1,5 +1,5 @@
 // jest.mock('../pushNotification/reminder');
-const scheduler = require('../pushNotification/manageSchedule');
+const scheduler = require('../modules/manageSchedule');
 // const reminder = require('../pushNotification/reminder');
 
 
