@@ -38,12 +38,12 @@ function getName(splitLabel, i, pillData) {
 
 function getQuantity(splitLabel, i , pillData) {
 	if (totalQuantitySignals.has(splitLabel[i])) {
-		if (i != splitLabel.length - 1 && splitLabel[i + 1] in numDict) {
+		if (i !== splitLabel.length - 1 && splitLabel[i + 1] in numDict) {
 			pillData.totalQuantity = numDict[splitLabel[i+1]];
 			return 1;
 		}
-		else if (i != splitLabel.length - 1 && Number.isInteger(parseInt(splitLabel[i+1]))) {
-			pillData.totalQuantity = parseInt(splitLabel[i+1]);
+		else if (i !== splitLabel.length - 1 && Number.isInteger(parseInt(splitLabel[i+1], 10))) {
+			pillData.totalQuantity = parseInt(splitLabel[i+1], 10);
 			return 1;
 		}
 	}
@@ -80,12 +80,12 @@ function getConditions(splitLabel, i, pillData) {
 
 function getDosage(splitLabel, i, pillData) {
 	if (dosageSignals.has(splitLabel[i])) {
-		if (i != splitLabel.length - 1 && splitLabel[i+1] in numDict) {
+		if (i !== splitLabel.length - 1 && splitLabel[i+1] in numDict) {
 			pillData.dosage = numDict[splitLabel[i+1]];
 			return 1;
 		}
-		else if (i != splitLabel.length - 1 && Number.isInteger(parseInt(splitLabel[i+1]))){
-			pillData.dosage = parseInt(splitLabel[i+1]);
+		else if (i !== splitLabel.length - 1 && Number.isInteger(parseInt(splitLabel[i+1], 10))){
+			pillData.dosage = parseInt(splitLabel[i+1], 10);
 			return 1;
 		}
 	}
@@ -94,12 +94,12 @@ function getDosage(splitLabel, i, pillData) {
 
 function getFreq(splitLabel, i, pillData) {
 	if (frequencySignals.has(splitLabel[i])){
-		if (i != 0 && splitLabel[i-1] in numDict) {
+		if (i !== 0 && splitLabel[i-1] in numDict) {
 			pillData.frequency = numDict[splitLabel[i-1]];
 			return 1;
 		}
-		else if (i != 0 && Number.isInteger(parseInt(splitLabel[i-1]))){
-			pillData.frequency = parseInt(splitLabel[i-1]);
+		else if (i !== 0 && Number.isInteger(parseInt(splitLabel[i-1], 10))){
+			pillData.frequency = parseInt(splitLabel[i-1], 10);
 			return 1;
 		}
 		else if (splitLabel[i] in numDict) {

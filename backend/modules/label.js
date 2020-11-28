@@ -17,11 +17,11 @@ const parseLabel = async (label) => {
 
 			if (helpers.getName(splitLabel, i, pillData)) {
 				// Total quantity often indicated before the pillName
-				if (i != 0 && (splitLabel[i-1] in numDict)){
+				if (i !== 0 && (splitLabel[i-1] in numDict)){
 					pillData.totalQuantity = numDict[splitLabel[i-1]];
 				}
-				else if (i != 0 && Number.isInteger(parseInt(splitLabel[i-1]))){
-					pillData.totalQuantity = parseInt(splitLabel[i-1]);
+				else if (i !== 0 && Number.isInteger(parseInt(splitLabel[i-1], 10))){
+					pillData.totalQuantity = parseInt(splitLabel[i-1], 10);
 				}
 				continue;
 			}
@@ -47,10 +47,10 @@ const parseLabel = async (label) => {
 			}
 
 		}
-		return{ pillData: pillData, msg: 'Success'};
+		return({ pillData: pillData, msg: 'Success'});
 	}
 	catch (error) {
-	   return {msg: 'The label could not be parsed'};
+	   return ({msg: 'The label could not be parsed'});
 	}
 }
 

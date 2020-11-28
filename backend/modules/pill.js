@@ -165,7 +165,7 @@ const updateRemaining = async (pillParams) => {
 		// Number of remaining pills increments by total quantity of 1 prescription
         newPill.remaining = newPill.remaining + newPill.totalQuantity;
         await Pill.replaceOne({name: pillParams.name, userId: pillParams.userId}, newPill);
-        return {status: 200, msg:"Success"};
+        return ({status: 200, msg:"Success"});
     }
     catch (error) {
 		return getErrorMessage(pillParams);
