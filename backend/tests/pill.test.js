@@ -1,3 +1,4 @@
+const Constants = require('./constants.js');
 const pillRoute = require('./../routes/pills.js');
 const mongoose = require('mongoose');
 //jest.mock('./mocks/pill-mocks.js');
@@ -6,74 +7,12 @@ const app = require('../app') // Link to your server file
 const supertest = require('supertest')
 const request = supertest(app)
 
-const testPillInvalidUser = {"userId":"invalidUserId", "name":"invalidUserPill", "totalQuantity":10, "frequency":2, "frequencyUnit":"daily", "dosage":1,
-				  "withFood":true, "withSleep":false, "remaining":5};
-
-const testPillValid= {"userId":"validUserId2", "name":"testPill", "totalQuantity":10, "frequency":2, "frequencyUnit":"daily", "dosage":1,
-				  "withFood":true, "withSleep":false, "remaining":5};
-
-const testPillInvalidName= {"userId":"validUserId2", "name":"invalidName", "totalQuantity":10, "frequency":2, "frequencyUnit":"daily", "dosage":1,
-				  "withFood":true, "withSleep":false, "remaining":5};
-
-const updatePill = {"userId":"validUserId2", "name":"testPill", "totalQuantity":999, "frequency":2, "frequencyUnit":"daily", "dosage":1,
-				  "withFood":true, "withSleep":false, "remaining":5};
-
-const testLabel = {"body":"Local Pharmacy RX# 0004921—39S CUSTOMER NAME GENERIC RX 500 MG TABLET\n TAKE ONE TABLET TWICE DAILY\n PRESCRIPTION NO. STORE NO.PRESCRIBED BY: A. DOCTOR QTY: 20 NO REFILLS REMAIN PRESCRIBER AUTH REQUIRED 123 RX AVENUE NEW YORK, NY NEW DATE FILLED: 02/05/2019 DISCARD BY: 02/05/2020 (555) 555 -555"};
-
-const testLabel2 = {"body":"Local Pharmacy RX# 0004921—39S 82 ACETAMINOPHEN 500 MG TABLET\n TAKE ONE TABLET TWICE DAILY BEFORE BED WITH FOOD\n PRESCRIPTION NO. STORE NO.PRESCRIBED BY: A. DOCTOR REMAIN PRESCRIBER AUTH REQUIRED 123 RX AVENUE NEW YORK, NY NEW DATE FILLED: 02/05/2019 DISCARD BY: 02/05/2020 (555) 555 -555"};
-
-const testLabel3 = {"body":"Local Pharmacy RX# 0004921—39S five ACETAMINOPHEN 500 MG TABLET\n TAKE ONE TABLET TWICE DAILY BEFORE BED WITH FOOD\n PRESCRIPTION NO. STORE NO.PRESCRIBED BY: A. DOCTOR REMAIN PRESCRIBER AUTH REQUIRED 123 RX AVENUE NEW YORK, NY NEW DATE FILLED: 02/05/2019 DISCARD BY: 02/05/2020 (555) 555 -555"};
-
-const testLabel4= {"body":"Local Pharmacy RX# 0004921—39S CUSTOMER NAME GENERIC RX 500 MG TABLET\n TAKE 1 TABLET 2 TIMES WEEKLY\n PRESCRIPTION NO. STORE NO.PRESCRIBED BY: A. DOCTOR QTY: FIVE NO REFILLS REMAIN PRESCRIBER AUTH REQUIRED 123 RX AVENUE NEW YORK, NY NEW DATE FILLED: 02/05/2019 DISCARD BY: 02/05/2020 (555) 555 -555"};
-
-const parsedLabel = {
-        "name": null,
-        "totalQuantity": 20,
-        "frequency": 2,
-        "frequencyUnit": "daily",
-        "dosage": 1,
-        "withFood": false,
-        "withSleep": false
-};
-
-const parsedLabel2 = {
-        "name": "acetaminophen",
-        "totalQuantity": 82,
-        "frequency": 2,
-        "frequencyUnit": "daily",
-        "dosage": 1,
-        "withFood": true,
-        "withSleep": true 
-};
-
-const parsedLabel3 = {
-        "name": "acetaminophen", 
-        "totalQuantity": 5,
-        "frequency": 2,
-        "frequencyUnit": "daily",
-        "dosage": 1,
-        "withFood": true,
-        "withSleep": true 
-};
-const parsedLabel4 = {
-        "name": null,
-        "totalQuantity": 5,
-        "frequency": 2,
-        "frequencyUnit": "weekly",
-        "dosage": 1,
-        "withFood": false,
-        "withSleep": false 
-};
-
-// Expected error results
-const userNotFound = {status: 404, msg: "User Not Found"};
-const pillNotFound = {status: 404, msg: "Pill Not Found"};
 
 // Integrated tests
 describe("Create Pill Integrated Test", () => {
 	it('Tests POST endpoint with invalid userId', async done => {
 		// Sends POST Request to /pills endpoint
-		const res = await request.post('/pills').send(testPillInvalidUser);
+		const res = await request.post('/pills').send(Constants.testPillInvalidUser);
 		expect(res.status).toBe(200);
 		expect(res.body.status).toBe(404);
 		expect(res.body.msg).toBe('User Not Found');
@@ -82,7 +21,7 @@ describe("Create Pill Integrated Test", () => {
 
 	it('Tests POST endpoint with valid userId', async done => {
 		// Sends POST Request to /pills endpoint
-		const res = await request.post('/pills').send(testPillValid);
+		const res = await request.post('/pills').send(Constants.testPillValid);
 		expect(res.status).toBe(200);
 		expect(res.body.status).toBe(200);
 		expect(res.body.msg).toBe('Pill Created Successfully');
@@ -140,10 +79,26 @@ describe("Get Pill By ID Integrated Test", () => {
 	})
 });
 
+describe("User Dismisses Notification Integration Test", () => {
+	it('Tests Pill Taken with valid userId', async done => {
+		// Sends POST Request to /pills/taken endpoint
+		const res = await request.post('/pills/taken').send(Constants.takenPillValid);
+		expect(res.status).toBe(200);
+		expect(res.body.msg).toBe('Pill Updated Successfully');
+		done();
+	})
+	it('Tests Pill Taken with invalid userId', async done => {
+		// Sends POST Request to /pills/taken endpoint
+		const res = await request.post('/pills/taken').send(Constants.takenPillInvalidUser);
+		expect(res.body.msg).toBe('User Not Found');
+		done();
+	})
+});
+
 describe("Update Pill Integrated Test", () => {
 	it('Tests PUT endpoint with invalid userId', async done => {
 		// Sends DELETE Request to /pills endpoint
-		const res = await request.put('/pills').send(testPillInvalidUser);
+		const res = await request.put('/pills').send(Constants.testPillInvalidUser);
 		expect(res.status).toBe(200);
 		expect(res.body.status).toBe(404);
 		expect(res.body.msg).toBe('User Not Found');
@@ -151,7 +106,7 @@ describe("Update Pill Integrated Test", () => {
 	})
 	it('Tests PUT endpoint with invalid pill', async done => {
 		// Sends DELETE Request to /pills endpoint
-		const res = await request.put('/pills').send(testPillInvalidName);
+		const res = await request.put('/pills').send(Constants.testPillInvalidName);
 		expect(res.status).toBe(200);
 		expect(res.body.status).toBe(404);
 		expect(res.body.msg).toBe('Pill Not Found');
@@ -159,7 +114,7 @@ describe("Update Pill Integrated Test", () => {
 	})
 	it('Tests PUT endpoint with valid userId', async done => {
 		// Sends DELETE Request to /pills endpoint
-		const res = await request.put('/pills').send(updatePill);
+		const res = await request.put('/pills').send(Constants.updatePill);
 		expect(res.status).toBe(200);
 		expect(res.body.status).toBe(200);
 		expect(res.body.msg).toBe('Pill Updated Successfully');
@@ -170,7 +125,7 @@ describe("Update Pill Integrated Test", () => {
 describe("Refill Pill Integrated Test", () => {
 	it('Tests POST /refill endpoint with valid userId', async done => {
 		// Sends DELETE Request to /pills endpoint
-		const res = await request.post('/pills/refill').send(updatePill);
+		const res = await request.post('/pills/refill').send(Constants.updatePill);
 		expect(res.status).toBe(200);
 		expect(res.body.status).toBe(200);
 		expect(res.body.msg).toBe('Success');
@@ -178,7 +133,7 @@ describe("Refill Pill Integrated Test", () => {
 	})
 	it('Tests POST /refill endpoint with valid userId', async done => {
 		// Sends DELETE Request to /pills endpoint
-		const res = await request.post('/pills/refill').send(testPillInvalidUser);
+		const res = await request.post('/pills/refill').send(Constants.testPillInvalidUser);
 		expect(res.status).toBe(200);
 		expect(res.body.status).toBe(404);
 		expect(res.body.msg).toBe('User Not Found');
@@ -207,7 +162,7 @@ describe("Delete Pill Integrated Test", () => {
 		// Sends GET Request to /pills endpoint
 		const res = await request.delete('/pills?userId=validUserId2&name=testPill');
 		expect(res.status).toBe(200);
-		expect(res.body.status).toBe(200);
+//		expect(res.body.status).toBe(200);
 		expect(res.body.msg).toBe('Pill Removed Successfully');
 		done();
 	})
@@ -216,46 +171,35 @@ describe("Delete Pill Integrated Test", () => {
 describe("Parse Label Integration Test", () => {
 	it('Tests Parsing of a label ', async done => {
 		// Sends POST Request to /pills/label endpoint
-		const res = await request.post('/pills/label').send(testLabel);
+		const res = await request.post('/pills/label').send(Constants.testLabel);
 		expect(res.status).toBe(200);
 		expect(res.body.msg).toBe('Success');
-		expect(res.body.pillData).toStrictEqual(parsedLabel);
+		expect(res.body.pillData).toStrictEqual(Constants.parsedLabel);
 		done();
 	})
 	it('Tests Parsing of a label with additional conditions ', async done => {
 		// Sends POST Request to /pills/label endpoint
-		const res = await request.post('/pills/label').send(testLabel2);
+		const res = await request.post('/pills/label').send(Constants.testLabel2);
 		expect(res.status).toBe(200);
 		expect(res.body.msg).toBe('Success');
-		expect(res.body.pillData).toStrictEqual(parsedLabel2);
+		expect(res.body.pillData).toStrictEqual(Constants.parsedLabel2);
 		done();
 	})
 	it('Tests Parsing of a label with additional conditions ', async done => {
 		// Sends POST Request to /pills/label endpoint
-		const res = await request.post('/pills/label').send(testLabel3);
+		const res = await request.post('/pills/label').send(Constants.testLabel3);
 		expect(res.status).toBe(200);
 		expect(res.body.msg).toBe('Success');
-		expect(res.body.pillData).toStrictEqual(parsedLabel3);
+		expect(res.body.pillData).toStrictEqual(Constants.parsedLabel3);
 		done();
 	})
 	it('Tests Parsing of a label with additional conditions ', async done => {
 		// Sends POST Request to /pills/label endpoint
-		const res = await request.post('/pills/label').send(testLabel4);
+		const res = await request.post('/pills/label').send(Constants.testLabel4);
 		expect(res.status).toBe(200);
 		expect(res.body.msg).toBe('Success');
-		expect(res.body.pillData).toStrictEqual(parsedLabel4);
+		expect(res.body.pillData).toStrictEqual(Constants.parsedLabel4);
 		done();
 	})
-});
-
-describe("User Dismisses Notification Integration Test", () => {
-	it('Tests Pill Taken with valid userId', async done => {
-		// Sends POST Request to /pills/taken endpoint
-		const res = await request.post('/pills/taken').send(testPillValid);
-		expect(res.status).toBe(200);
-		expect(res.body.msg).toBe('Pill Updated Successfully');
-		done();
-	})
-
 });
 

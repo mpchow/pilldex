@@ -20,7 +20,7 @@ module.exports = router;
 function pillTaken(req, res, next) {
 //	console.log("In PILLTAKEN route");
 	pillService.updateTaken(req.body)
-		.then((success) => req.json(success))
+		.then((success) => res.json(success))
 }
 
 /* Increment the number of capsules remaining 

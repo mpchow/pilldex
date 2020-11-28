@@ -6,13 +6,12 @@ const request = supertest(app)
 
 const newUser = {"token":"testToken", "userId":"validUserId", "wakeupHr":10, "wakeupMin":10, "wakeupAM":true, "wakeupPM":false, "sleepHr":10, "sleepMin":10, "sleepAM":false, "sleepPM":true,
 				 "breakfastHr":10, "breakfastMin":30, "breakfastAM":true, "breakfastPM":false, "lunchHr":12, "lunchMin":0, "lunchAM":false, "lunchPM":true, "dinnerHr":7, "dinnerMin":15,
-				 "dinnerAM":false, "dinnerPM":true, 
-				 "schedule":[null, null, null, null, null, null, null]};
+				 "dinnerAM":false, "dinnerPM":true}; 
 
 const updateUserValid = {"token":"testToken", "userId":"validUserId", "wakeupHr":8, "wakeupMin":50, "wakeupAM":true, "wakeupPM":false, "sleepHr":10, "sleepMin":10, "sleepAM":false, "sleepPM":true,
 				 "breakfastHr":10, "breakfastMin":30, "breakfastAM":true, "breakfastPM":false, "lunchHr":12, "lunchMin":0, "lunchAM":false, "lunchPM":true, "dinnerHr":7, "dinnerMin":15,
 				 "dinnerAM":false, "dinnerPM":true, 
-				 "schedule":[null, null, null, null, null, null, null]};
+				 };
 
 const updateUserInvalid = {"token":"testToken", "userId":"invalidUserId", "wakeupHr":8, "wakeupMin":50, "wakeupAM":true, "wakeupPM":false, "sleepHr":10, "sleepMin":10, "sleepAM":false };
 
