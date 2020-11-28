@@ -101,7 +101,7 @@ const retrieve = async (pillParams) => {
 		let pill = await Pill.findOne({name: pillParams.query.name, userId: pillParams.query.userId})
 		if (pill === null)
 			throw "Could not find pill";
-		return {pill: pill, status: 200, msg: 'Retrieved Pill Successfully'};
+		return ({pill: pill, status: 200, msg: 'Retrieved Pill Successfully'});
     }
     catch (error) {
 		const newParams = {userId: pillParams.query.userId, name: pillParams.query.name};
@@ -120,7 +120,7 @@ const retrieveAll = async (pillParams) => {
 			throw "Could not find user";
 		
 		let pills = await Pill.find({userId: pillParams.query.userId});
-		return {pills: pills, status: 200, msg: 'Retrieved Pills Successfully'};
+		return ({pills: pills, status: 200, msg: 'Retrieved Pills Successfully'});
 
 	}
 	catch (error) {
