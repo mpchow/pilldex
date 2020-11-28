@@ -1,6 +1,6 @@
 /* Pill Module - contains all related pill functions */
 
-const scheduler = require('../pushNotification/manageSchedule');
+const scheduler = require('./manageSchedule.js');
 const db = require('./../db/db.js');
 const Pill = db.Pill;
 const User = db.User;
