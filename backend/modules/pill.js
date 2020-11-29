@@ -1,6 +1,6 @@
 /* Pill Module - contains all related pill functions */
 
-const scheduler = require('../pushNotification/manageSchedule');
+const scheduler = require('./manageSchedule.js');
 const db = require('./../db/db.js');
 const Pill = db.Pill;
 const User = db.User;
@@ -38,14 +38,19 @@ const create = async (pillParams) => {
  */
 const update = async (pillParams) => {
 	try {
+		let user = await User.findOne({ userId: pillParams.userId });
+		if (user === null)
+			throw "User Not Found";
+
 		// Update fields, and create new schedule based on updated info
 		let pill = await Pill.findOne({name: pillParams.name, userId: pillParams.userId});
+		if (pill === null)
+			throw "Pill Not Found";
 
 		await Pill.replaceOne({name: pillParams.name, userId: pillParams.userId}, pillParams);
 
-		let user = await User.findOne({ userId: pillParams.userId });
 
-		let newSchedule = scheduler.deleteSchedule(user, pillParams.query.name);
+		let newSchedule = scheduler.deleteSchedule(user, pillParams.name);
 		await User.findOneAndUpdate({userId: pillParams.userId}, {schedule: newSchedule});
 
 		user = await User.findOne({ userId: pillParams.userId });
@@ -67,19 +72,19 @@ const update = async (pillParams) => {
  */
 const remove = async (pillParams) => {
 	try {
+		let user = await User.findOne({ userId: pillParams.query.userId });
+		if (user === null){
+			throw "User Not Found";
+		}
+
 		// Check if pill is in the db, and remove
 		let pill = await Pill.findOne({name: pillParams.query.name, userId: pillParams.query.userId});
 		if (pill === null)
 			throw "Pill Not Found";
 
 		await Pill.deleteOne({name: pillParams.query.name, userId: pillParams.query.userId});
-		// Delete the pill's corresponding schedule so outdated notifications are not sent
-		let user = await User.findOne({ userId: pillParams.userId });
-		console.log("DELETING PILL");
-		console.log(user);
-		if (user === null)
-			throw "User Not Found";
 
+		// Delete the pill's corresponding schedule so outdated notifications are not sent
 		let newSchedule = scheduler.deleteSchedule(user, pillParams.query.name);
 		await User.findOneAndUpdate({userId: pillParams.userId}, {schedule: newSchedule});
 
@@ -101,7 +106,7 @@ const retrieve = async (pillParams) => {
 		let pill = await Pill.findOne({name: pillParams.query.name, userId: pillParams.query.userId})
 		if (pill === null)
 			throw "Could not find pill";
-		return {pill: pill, status: 200, msg: 'Retrieved Pill Successfully'};
+		return ({pill: pill, status: 200, msg: 'Retrieved Pill Successfully'});
     }
     catch (error) {
 		const newParams = {userId: pillParams.query.userId, name: pillParams.query.name};
@@ -120,7 +125,7 @@ const retrieveAll = async (pillParams) => {
 			throw "Could not find user";
 		
 		let pills = await Pill.find({userId: pillParams.query.userId});
-		return {pills: pills, status: 200, msg: 'Retrieved Pills Successfully'};
+		return ({pills: pills, status: 200, msg: 'Retrieved Pills Successfully'});
 
 	}
 	catch (error) {
@@ -134,17 +139,25 @@ const retrieveAll = async (pillParams) => {
  * pillParams.query.userId = userId of the user
  */
 const updateTaken = async (pillParams) => {
-	let user = await User.findOne({userId: pillParams.userId});
-	if(user === null)
-		throw "User Not Found";
-	else {
-		const newSchedule = scheduler.updateSchedule(pillParams, user);
-		await User.findOneAndUpdate({userId: user.userId}, {schedule: newSchedule});
+	try{
+		let user = await User.findOne({userId: pillParams.userId});
+		if(user === null)
+			throw "User Not Found";
 
-		const pill = await Pill.findOne({name: pillParams.pillName});
-		await Pill.findOneAndUpdate({name: reqBody.pillName}, {remaining: pill.remaining - pill.dosage});
-		
-		return({status: 200, msg: 'Pill Updated Successfully'});
+		let pill = await Pill.findOne({name: pillParams.name});
+		if (pill === null)
+			throw "Pill Not Found";
+
+		else {
+			const newSchedule = scheduler.updateSchedule(pillParams, user);
+			await User.findOneAndUpdate({userId: user.userId}, {schedule: newSchedule});
+			await Pill.findOneAndUpdate({name: pillParams.name}, {remaining: pill.remaining - pill.dosage});
+			
+			return({status: 200, msg: 'Pill Updated Successfully'});
+		}
+	}
+	catch (error) {
+		return getErrorMessage(pillParams);
 	}
 }
 
@@ -165,7 +178,7 @@ const updateRemaining = async (pillParams) => {
 		// Number of remaining pills increments by total quantity of 1 prescription
         newPill.remaining = newPill.remaining + newPill.totalQuantity;
         await Pill.replaceOne({name: pillParams.name, userId: pillParams.userId}, newPill);
-        return {status: 200, msg:"Success"};
+        return ({status: 200, msg:"Success"});
     }
     catch (error) {
 		return getErrorMessage(pillParams);
@@ -174,20 +187,14 @@ const updateRemaining = async (pillParams) => {
 
 const getErrorMessage = async (pillParams) => {
 	let user = await User.findOne({ userId: pillParams.userId })
+
 	if (user === null) {
 		return({status: 404, msg: "User Not Found"})
 	}
-
-	//if (pillParams.hasAttribute(name)) {
-	let pill = await Pill.findOne({ userId: pillParams.userId, name: pillParams.name })
-	if (pill === null) {
+	else {
 		return({status: 404, msg: "Pill Not Found"})
 	}
-//	}
-	return({status: 500, msg: "Request Failed"})
 }
 
 module.exports = {create, update, remove, retrieve, retrieveAll, updateRemaining, updateTaken};
 
-// {name, userId, totalQuantity, frequency, 
-//    frequencyUnit, dosage, withFood, withSleep

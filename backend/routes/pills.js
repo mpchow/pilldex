@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const pillService = require('./../modules/pill.js');
 const labelService = require('./../modules/label.js');
-const scheduler = require('./../pushNotification/manageSchedule');
+const scheduler = require('./../modules/manageSchedule.js');
 
 router.post('/', newPill);
 router.get('/', getPills);
@@ -20,7 +20,7 @@ module.exports = router;
 function pillTaken(req, res, next) {
 //	console.log("In PILLTAKEN route");
 	pillService.updateTaken(req.body)
-		.then((success) => req.json(success))
+		.then((success) => res.json(success))
 }
 
 /* Increment the number of capsules remaining 

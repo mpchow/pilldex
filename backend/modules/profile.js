@@ -13,12 +13,12 @@ const retrieve = async (profileParams) => {
 		let user = await Profile.findOne({userId: profileParams.query.userId});	
 		if (user === null)
 			throw 'User Not Found';
-      	return {user: user, msg: 'Success'};
+      	return ({user: user, msg: 'Success'});
    }
    catch (error) {
-		return {msg: "User Not Found"};
+		return ({msg: "User Not Found"});
   }
-}
+};
 
 /* 
  * Create a new profile
@@ -34,9 +34,9 @@ const create = async (profileParams) => {
 		return({msg: 'Success'});
    }
    catch (error) {
-		return {msg: "User Already Exists"};
+		return ({msg: "User Already Exists"});
    }
-}
+};
 
 /* 
  * Update a user's profile
@@ -52,9 +52,9 @@ const update = async (profileParams) => {
       	return ({msg: 'Success'});
    }
    catch (error) {
-		return {msg: "User Not Found"};
+		return ({msg: "User Not Found"});
    }
-}
+};
 
 /* 
  * Remove a user's profile 
@@ -73,9 +73,9 @@ const remove = async (profileParams) => {
 			
 	}	
 	catch (error) {
-		return {msg: "User Not Found"};
+		return ({msg: "User Not Found"});
 	}
 
-}
+};
 
 module.exports = {create, update, remove, retrieve};

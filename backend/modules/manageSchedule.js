@@ -22,8 +22,11 @@ const updateSchedule = (reqBody, user) => {
 
    let timeTaken = reqBody.timeTaken;
    let reminderId = reqBody.reminderId;
+   let dayReminders = schedule[timeTaken.day];
 
-   let pillReminder = schedule[timeTaken.day].find(reminders => reminders.reminderId === reminderId);
+   let pillReminder = dayReminders.find(reminders => reminders !== null && reminders.reminderId === reminderId);
+   if (pillReminder == null)
+      return schedule;
 
    let timeTakenConverted = timeTaken.hour * 60 + timeTaken.minute;
    let reminderTimeConverted = pillReminder.time.reminderTime.hour * 60 + pillReminder.time.reminderTime.minute;
@@ -71,9 +74,10 @@ const deleteSchedule = (user, pillName) => {
 
    schedule = schedule.map(day => {
       return day.filter(reminder => {
-         reminder.pillName !== pillName;
+         reminder !== null && reminder.pillName !== pillName;
       })
    });
+   console.log("IN DELETE SCHEDULE, ", schedule);
 
    return schedule;
 };
