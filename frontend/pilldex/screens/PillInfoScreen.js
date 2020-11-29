@@ -13,7 +13,7 @@ function PillInfoScreen({ navigation, route }) {
   
   const { pillInfo } = route.params;
 
-  const [pillsLeft, setPillsLeft] = useState(pillInfo.pillsLeft);
+  const [pillsLeft, setPillsLeft] = useState(pillInfo.remaining);
 
   function instructions(){
     return pillInfo.withFood && pillInfo.withSleep ? <View>
@@ -27,6 +27,9 @@ function PillInfoScreen({ navigation, route }) {
   
   //TODO: FIX THIS FUNCTION
   function refillPill() {
+    
+    setPillsLeft(pillsLeft => pillsLeft + pillInfo.totalQuantity);
+    console.log(`pills left are ${pillsLeft}`);
     fetch('http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/pills', {
       method: 'PUT',
       headers: {
@@ -37,7 +40,7 @@ function PillInfoScreen({ navigation, route }) {
         name: pillInfo.name,
         userId: firebase.auth().currentUser.uid,
         totalQuantity: pillInfo.totalQuantity,
-        remaining: pillInfo.remaining + pillInfo.totalQuantity,
+        remaining: pillsLeft,
         frequency: pillInfo.frequency,
         frequencyUnit: pillInfo.frequencyUnit,
         withFood: pillInfo.withFood,
@@ -47,8 +50,7 @@ function PillInfoScreen({ navigation, route }) {
     })
     .catch((error) => {
       console.error(error);
-    });
-    setPillsLeft(pillsLeft => pillsLeft + pillInfo.totalQuantity);
+    }) 
   }
 
   return (
