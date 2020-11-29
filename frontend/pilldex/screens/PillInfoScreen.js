@@ -27,8 +27,8 @@ function PillInfoScreen({ navigation, route }) {
   
   //TODO: FIX THIS FUNCTION
   function refillPill() {
-    
-    setPillsLeft(pillsLeft => pillsLeft + pillInfo.totalQuantity);
+    var new_pillsleft = pillsLeft + pillInfo.totalQuantity;
+    setPillsLeft(new_pillsleft);
     console.log(`pills left are ${pillsLeft}`);
     fetch('http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/pills', {
       method: 'PUT',
@@ -40,7 +40,7 @@ function PillInfoScreen({ navigation, route }) {
         name: pillInfo.name,
         userId: firebase.auth().currentUser.uid,
         totalQuantity: pillInfo.totalQuantity,
-        remaining: pillsLeft,
+        remaining: new_pillsleft,
         frequency: pillInfo.frequency,
         frequencyUnit: pillInfo.frequencyUnit,
         withFood: pillInfo.withFood,
