@@ -51,7 +51,7 @@ function PillboxScreen( {navigation } ) {
           .catch((error) => {
             console.error(error);
           });
-          getPills();
+          getPills(); //call get pills to refresh the screen
           }
         }
       ]
@@ -89,7 +89,7 @@ function PillboxScreen( {navigation } ) {
     })
     .then((response) => response.json())
     .then((responseJson) => {
-      console.log("Response from server is", responseJson['pill']);
+      console.log("Response from server is (and going to pillinfo)", responseJson['pill']);
       navigation.navigate("PillInfo", {pillInfo: responseJson['pill']});
     })
     .catch((error) => {
@@ -121,7 +121,7 @@ function PillboxScreen( {navigation } ) {
                     </TouchableOpacity>
                   </View>
                   <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-                    <Text style={{color: item.totalQuantity <= needRefill ? 'red' : 'black'}}>{item.totalQuantity} Capsules Left</Text>
+                    <Text style={{color: item.remaining <= needRefill ? 'red' : 'black'}}>{item.remaining} Capsules Left</Text>
                   </View>
                   <TouchableOpacity style={{flexDirection: 'row'}}
                                     onPress={() => showInfo(item.name)}>
