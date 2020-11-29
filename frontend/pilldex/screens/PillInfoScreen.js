@@ -24,9 +24,30 @@ function PillInfoScreen({ navigation, route }) {
           : pillInfo.withSleep ? <Text style={styles.text}>This medication will make you drowsy.</Text>
           : null;
   }
+  
   //TODO: FIX THIS FUNCTION
   function refillPill() {
-    console.log("TESTING")
+    fetch('http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/pills', {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: pillInfo.name,
+        userId: firebase.auth().currentUser.uid,
+        totalQuantity: pillInfo.totalQuantity,
+        remaining: pillInfo.remaining + pillInfo.totalQuantity,
+        frequency: pillInfo.frequency,
+        frequencyUnit: pillInfo.frequencyUnit,
+        withFood: pillInfo.withFood,
+        withSleep: pillInfo.withSleep,
+        dosage: pillInfo.dosage,
+      })
+    })
+    .catch((error) => {
+      console.error(error);
+    });
     setPillsLeft(pillsLeft => pillsLeft + pillInfo.totalQuantity);
   }
 
