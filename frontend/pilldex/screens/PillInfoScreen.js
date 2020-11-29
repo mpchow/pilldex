@@ -79,10 +79,7 @@ function PillInfoScreen({ navigation, route }) {
           </View>
         </View>
 
-        <View style={styles.instruction}>
-          <Text style={styles.subHeading}>Last Refill: </Text>
-          <Text style={styles.text}>{pillInfo.lastRefill || "GET FROM SERVER"}</Text>
-        </View>
+        
       </View>
 
       <View style={{flexDirection: 'row', padding: 10, justifyContent:'space-between'}}>
