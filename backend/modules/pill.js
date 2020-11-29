@@ -49,9 +49,9 @@ const update = async (pillParams) => {
 
 		await Pill.replaceOne({name: pillParams.name, userId: pillParams.userId}, pillParams);
 
-
 		let newSchedule = scheduler.deleteSchedule(user, pillParams.name);
 		await User.findOneAndUpdate({userId: pillParams.userId}, {schedule: newSchedule});
+
 
 		user = await User.findOne({ userId: pillParams.userId });
 
@@ -72,27 +72,26 @@ const update = async (pillParams) => {
  */
 const remove = async (pillParams) => {
 	try {
-		let user = await User.findOne({ userId: pillParams.query.userId });
+		let user = await User.findOne({ userId: pillParams.userId });
 		if (user === null){
 			throw "User Not Found";
 		}
 
 		// Check if pill is in the db, and remove
-		let pill = await Pill.findOne({name: pillParams.query.name, userId: pillParams.query.userId});
+		let pill = await Pill.findOne({name: pillParams.name, userId: pillParams.userId});
 		if (pill === null)
 			throw "Pill Not Found";
 
-		await Pill.deleteOne({name: pillParams.query.name, userId: pillParams.query.userId});
+		await Pill.deleteOne({name: pillParams.name, userId: pillParams.userId});
 
 		// Delete the pill's corresponding schedule so outdated notifications are not sent
-		let newSchedule = scheduler.deleteSchedule(user, pillParams.query.name);
+		let newSchedule = scheduler.deleteSchedule(user, pillParams.name);
 		await User.findOneAndUpdate({userId: pillParams.userId}, {schedule: newSchedule});
 
 		return({status: 200, msg: 'Pill Removed Successfully'});
 	}
 	catch (error) {
-		const newParams = {userId: pillParams.query.userId, name: pillParams.query.name};
-		return getErrorMessage(newParams);
+		return getErrorMessage(pillParams);
 	}  
 }
 
@@ -135,8 +134,8 @@ const retrieveAll = async (pillParams) => {
 }
 
 /* 
- * Get all pills of the target user
- * pillParams.query.userId = userId of the user
+ * Decrement number of pills remaining and update schedule 
+ * pillParams.userId = userId of the user
  */
 const updateTaken = async (pillParams) => {
 	try{
