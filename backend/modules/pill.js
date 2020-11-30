@@ -10,10 +10,11 @@ const User = db.User;
  * pillParams.userId = userId of the target user
  */
 const create = async (pillParams) => {
-   try {
+   try { 
 		let user = await User.findOne({ userId: pillParams.userId })
-		if (user === null)
+		if (user === null) {
 			throw "User Not Found";
+		}
 
 		else {
 	      const pill = new Pill(pillParams);
@@ -27,7 +28,7 @@ const create = async (pillParams) => {
 		}
    }
    catch (error) {
-		return({status: 404, msg: "User Not Found"})
+		return({status: 404, msg: "User Not Found"});
    }
 };
 

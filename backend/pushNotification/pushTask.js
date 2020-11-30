@@ -20,7 +20,7 @@ const pushTask = async () => {
                      body: `You have run out of ${pill.pillName}`,
                      priority: 'high',
                   }
-               }
+               };
             }
             else {
                payload = {
