@@ -15,7 +15,6 @@ const create = async (pillParams) => {
 		if (user === null) {
 			throw "User Not Found";
 		}
-
 		else {
 	      const pill = new Pill(pillParams);
     	  	pill.save();
@@ -33,7 +32,7 @@ const create = async (pillParams) => {
 };
 
 /*
- * Updates the pill object 
+ * Updates the pill object  
  * pillParams.name = name of target pill
  * pillParams.userId = userId of the target user
  */
