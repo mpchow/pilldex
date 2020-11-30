@@ -29,7 +29,7 @@ const create = async (pillParams) => {
    catch (error) {
 		return({status: 404, msg: "User Not Found"})
    }
-}
+};
 
 /*
  * Updates the pill object 
@@ -63,7 +63,7 @@ const update = async (pillParams) => {
 	catch (error) {
 		return getErrorMessage(pillParams);
 	}
-}
+};
 
 /* 
  * Remove a pill from the db
@@ -93,7 +93,7 @@ const remove = async (pillParams) => {
 	catch (error) {
 		return getErrorMessage(pillParams);
 	}  
-}
+};
 
 /* 
  * Get a single pill based on the provided parameters
@@ -111,7 +111,7 @@ const retrieve = async (pillParams) => {
 		const newParams = {userId: pillParams.query.userId, name: pillParams.query.name};
 		return getErrorMessage(newParams);
     }
-}
+};
 
 /* 
  * Get all pills of the target user
@@ -131,7 +131,7 @@ const retrieveAll = async (pillParams) => {
 		const newParams = {userId: pillParams.query.userId};
 		return getErrorMessage(newParams);
 	}
-}
+};
 
 /* 
  * Decrement number of pills remaining and update schedule 
@@ -158,7 +158,7 @@ const updateTaken = async (pillParams) => {
 	catch (error) {
 		return getErrorMessage(pillParams);
 	}
-}
+};
 
 
 /* 
@@ -182,7 +182,7 @@ const updateRemaining = async (pillParams) => {
     catch (error) {
 		return getErrorMessage(pillParams);
     }
-}
+};
 
 const getErrorMessage = async (pillParams) => {
 	let user = await User.findOne({ userId: pillParams.userId })
@@ -193,7 +193,7 @@ const getErrorMessage = async (pillParams) => {
 	else {
 		return({status: 404, msg: "Pill Not Found"})
 	}
-}
+};
 
 module.exports = {create, update, remove, retrieve, retrieveAll, updateRemaining, updateTaken};
 
