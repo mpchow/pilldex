@@ -1,4 +1,3 @@
-
 // List of common prescription drugs to look for in the label
 var pillNames = new Set(["acetaminophen", "adderall", "amitriptyline", "amlodipine", "amoxicillin", "ativan", "atorvastatin", "azithromycin", 
 					 "benzonatate", "cephalexin", "ciprofloxacin", "citalopram", "hydrochlorothiazide", "ibuprofen", "hydrocodone", "lexapro", 
@@ -111,3 +110,4 @@ function getFreq(splitLabel, i, pillData) {
 }
 
 module.exports = {formatLabel, getName, getQuantity, getFreqUnit, getConditions, getDosage, getFreq };
+

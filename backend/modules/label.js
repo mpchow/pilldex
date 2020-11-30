@@ -1,6 +1,6 @@
 /* Contains logic to parse through a label image's text and return the pill object fields */
 
-let helpers = require('./label_helpers');
+const helpers = require('./label_helpers');
 
 var numDict = {"one" : 1, "two" : 2, "three" : 3, "four" : 4, "five" : 5, "six" : 6, "seven" : 7, "eight" : 8, "nine" : 9, "ten" : 10,
 				"once" : 1, "twice" : 2};
