@@ -7,7 +7,7 @@ import {
   Dimensions,
   FlatList
 } from 'react-native';
-import { useIsFocused } from "@react-navigation/native";
+import { useIsFocused } from '@react-navigation/native';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import messaging from '@react-native-firebase/messaging';
@@ -17,7 +17,7 @@ import PNController, { displayNotification } from '../components/PNController.js
 
 const width = Dimensions.get('window').width;
 /* Notification: userID, time closed, notification ID
- * 'http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/pills/label
+ * 'http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/pills/taken
  * takenEarly: true
 */
 function HomeScreen({ navigation }) {
@@ -46,7 +46,6 @@ function HomeScreen({ navigation }) {
   useEffect(() => {
     fetchSchedule();
   }, [refresh, isFocused]);
-  //fetchSchedule();
 
   console.log(date);
 
@@ -64,7 +63,7 @@ function HomeScreen({ navigation }) {
       formatNotifs(responseJson["user"]["schedule"]);
     })
     .catch((error) => {
-      console.error(error);
+      console.warn(error);
       setSchedule([]);
     });
   }
@@ -82,6 +81,7 @@ function HomeScreen({ navigation }) {
       var dateString = "";
 
       var mins = e["time"]["reminderTime"]["minute"];
+      var minutes = mins;
       var hours = parseInt(e["time"]["reminderTime"]["hour"], 10);
       if (mins < 10)
         mins = "0" + mins;
@@ -91,8 +91,37 @@ function HomeScreen({ navigation }) {
       else
         dateString = hours + ":" + mins + " AM";
 
-      ret.push({id: e['_id'], name: e['pillName'], food: true,
-               drowsy: true, done: e['takenEarly'], dateString: dateString});
+      console.log("Pill taken early is " + e['takenEarly']);
+
+      ret.push({id: e['reminderId'], name: e['pillName'], food: true,
+               drowsy: true, done: e['takenEarly'], dateString: dateString,
+               hour: hours, mins: minutes});
+    });
+
+    // sort by time HERE
+    ret.sort((a, b) => {
+      if (a.done || b.done) {
+        return -1;
+      }
+
+      if ( a.hour < b.hour ) {
+        return -1;
+      } else if ( a.hour > b.hour ) {
+        return 1;
+      } else {
+        if (a.mins == b.mins) {
+          return 0;
+        } else {
+          return a.mins > b.mins ? 1 : -1;
+        }
+      }
+    });
+
+    var retCopy = [...ret];
+    // move closed reminders to the back of the list
+    retCopy.forEach(elem => {
+      if (elem.done)
+        ret.push(ret.splice(ret.indexOf(elem), 1)[0]);
     });
 
     setNotifs(ret);
@@ -113,19 +142,54 @@ function HomeScreen({ navigation }) {
 
   // set item.done to true and move notif to end of array
   // ids of existing notifs also need to change?? idksksjsjj
-  function closeNotification(index) {
-    var item = notifs[index];
-    if (!item.done) {
-      item.done = true;
-      setNotifs(prevItems => {
-        return prevItems.filter(item => item.id != index);
-      });
+  function closeNotification(id) {
+    var item = notifs.filter(obj => {
+      return obj.id === id;
+    });
 
-      item.id = notifs.length;
-      setNotifs(prevItems => {
-        return [...prevItems, item];
-      });
+    item = item[0];
+    console.log(item);
+
+    if (!item.done) {
+      var copy = [...notifs];
+      var i = copy.indexOf(item);
+      copy[i].done = true;
+      copy.push(copy.splice(i, 1)[0]);
+      setNotifs(copy);
+
+      var taken = new Date();
+      var early = false;
+      var h = taken.getHours();
+      console.log(h);
+      if (taken.getHours() < item.hour) {
+        early = true;
+      } else if (taken.getHours() > item.hour) {
+        early = false;
+      } else {
+        if (taken.getMinutes() < item.hour)
+          early = true;
+        else
+          early = false;
+      }
+
+
+      fetch(`http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/pills/taken`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          userId: firebase.auth().currentUser.uid,
+          timeTaken: taken,
+          reminderId: item.reminderId,
+          name: item.name,
+          takenEarly: early
+        })
+      })
+      .catch(err => console.error(err));
     }
+
   }
 
   return (
@@ -161,7 +225,7 @@ function HomeScreen({ navigation }) {
         extradata={notifs}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <View style={styles.notifBox}>
+          <View style={item.done ? styles.doneBox : styles.notifBox}>
             <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
               <TouchableOpacity style={item.done ? styles.checkDone : styles.checkBox}
                                 onPress={() => closeNotification(item.id)}/>
@@ -183,7 +247,12 @@ function HomeScreen({ navigation }) {
                         onPress={() => navigation.navigate('NewPill')}>
         <Text style={styles.btnText}>NEW PILL</Text>
       </TouchableOpacity>
-      <View style={{height:30}} />
+      <View style={{height:10}} />
+              <TouchableOpacity style={styles.button}
+                                onPress={() => displayNotification("Test Notification")}>
+                <Text style={styles.btnText}>TEST</Text>
+              </TouchableOpacity>
+      <View style={{height:10}} />
     </View>
   );
 }
@@ -261,6 +330,14 @@ const styles = StyleSheet.create({
     borderColor: '#84C0C6',
     marginTop: 10
   },
+  doneBox: {
+    width: width - 60,
+    height: 100,
+    borderRadius: 30,
+    borderWidth: 1.5,
+    borderColor: '#C9C9C9',
+    marginTop: 10
+  },
   checkBox: {
     width: 30,
     height: 30,
@@ -273,8 +350,8 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: 15,
-    backgroundColor: '#84C0C6',
-    borderColor: '#84C0C6',
+    backgroundColor: '#C9C9C9',
+    borderColor: '#C9C9C9',
     borderWidth: 1.5,
     marginLeft: 15
   },

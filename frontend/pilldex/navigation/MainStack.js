@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -6,6 +6,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import messaging from '@react-native-firebase/messaging';
 import firebase from '@react-native-firebase/app';
+import { NotifProvider } from '../components/notifContext.js';
 
 /* components */
 import HomeStack from './HomeStack.js';
@@ -17,7 +18,7 @@ const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 function MainStack() {
-  const [notifs, setNotifs] = useState([]);
+  const { allNotifs, setAllNotifs } = useContext(NotifProvider);
 
   useEffect(() => {
     // foreground notification
@@ -25,25 +26,11 @@ function MainStack() {
       //setNotif(JSON.stringify(remoteMessage));
       console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
       displayNotification(remoteMessage.notification.body);
-      var copyNotifs = [...notifs];
-      copyNotifs.push(remoteMessage);
-      setNotifs(copyNotifs);
-      /*Alert.alert('Notification',
-        remoteMessage.notification.body,
-        [
-          {
-            text: 'OK',
-            onPress: () => console.log('Notification closed')
-          },
-          {
-            text: 'Cancel',
-            onPress: () => console.log('Cancel Pressed'),
-            style: 'cancel'
-          },
-        ],
-        { cancelable: false }
-      );*/
-
+      var copyNotifs = [...allNotifs];
+      copyNotifs.push(remoteMessage.notification.body);
+      console.log(copyNotifs);
+      //global.allNotifs.push(remoteMessage.notification.body);
+      setAllNotifs(copyNotifs);
     });
 
     // notification while app is in background mode
@@ -53,9 +40,10 @@ function MainStack() {
         remoteMessage.notification,
       );
       displayNotification(remoteMessage.notification.body);
-      var copyNotifs = [...notifs];
-      copyNotifs.push(remoteMessage);
-      setNotifs(copyNotifs);
+      var copyNotifs = [...allNotifs];
+      copyNotifs.push(remoteMessage.notification.body);
+      //global.allNotifs.push(remoteMessage.notification.body);
+      setAllNotifs(copyNotifs);
     });
 
     // notification while app is in quit mode
@@ -68,9 +56,10 @@ function MainStack() {
             remoteMessage.notification,
           );
           displayNotification(remoteMessage.notification.body);
-          var copyNotifs = [...notifs];
-          copyNotifs.push(remoteMessage);
-          setNotifs(copyNotifs);
+          var copyNotifs = [...allNotifs];
+          copyNotifs.push(remoteMessage.notification.body);
+          //global.allNotifs.push(remoteMessage.notification.body);
+          setAllNotifs(copyNotifs);
         }
       });
 
