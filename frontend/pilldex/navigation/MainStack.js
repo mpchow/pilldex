@@ -6,7 +6,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import messaging from '@react-native-firebase/messaging';
 import firebase from '@react-native-firebase/app';
-import { NotifProvider } from '../components/notifContext.js';
+import { NotifProvider, NotifContext } from '../components/NotifContext.js';
 
 /* components */
 import HomeStack from './HomeStack.js';
@@ -67,7 +67,7 @@ function MainStack() {
   }, []);
 
   return (
-      <>
+    <NotifContext>
       <PNController />
       <Tab.Navigator
          initialRouteName = 'Home'
@@ -113,7 +113,7 @@ function MainStack() {
                     }}
                    />
      </Tab.Navigator>
-   </>
+   </NotifContext>
   );
 }
 

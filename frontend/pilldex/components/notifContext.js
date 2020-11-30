@@ -2,14 +2,14 @@ import React, { createContext, useState } from 'react';
 
 export const NotifProvider = createContext({});
 
-export const notifContext = ({ children }) => {
+export const NotifContext = ({ children }) => {
   const [allNotifs, setAllNotifs] = useState([]);
 
   return (
-    <AuthContext.Provider
+    <NotifProvider.Provider
       value={{ allNotifs, setAllNotifs }}
     >
       {children}
-    </AuthContext.Provider>
+    </NotifProvider.Provider>
   );
 };

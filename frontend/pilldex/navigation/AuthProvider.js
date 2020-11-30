@@ -115,12 +115,13 @@ export const AuthProvider = ({ children }) => {
           }
         },
         logout: async () => {
-          try {
-            await auth().signOut();
-          } catch (e) {
+          //try {
+            await auth().signOut()
+            .catch(err => console.error(e));
+          /*} catch (e) {
             console.error(e);
             console.log('Sign out Failed');
-          }
+          }*/
         }
       }}
     >
