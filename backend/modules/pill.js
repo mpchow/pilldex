@@ -186,14 +186,12 @@ const updateRemaining = async (pillParams) => {
 };
 
 const getErrorMessage = async (pillParams) => {
-	let user = await User.findOne({ userId: pillParams.userId })
+	let user = await User.findOne({ userId: pillParams.userId });
 
 	if (user === null) {
-		return({status: 404, msg: "User Not Found"})
+		return({status: 404, msg: "User Not Found"});
 	}
-	else {
-		return({status: 404, msg: "Pill Not Found"})
-	}
+	return({status: 404, msg: "Pill Not Found"});
 };
 
 module.exports = {create, update, remove, retrieve, retrieveAll, updateRemaining, updateTaken};
