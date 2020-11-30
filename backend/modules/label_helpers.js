@@ -1,6 +1,5 @@
 
 // List of common prescription drugs to look for in the label
-// TODO: add this to the db instead 
 var pillNames = new Set(["acetaminophen", "adderall", "amitriptyline", "amlodipine", "amoxicillin", "ativan", "atorvastatin", "azithromycin", 
 					 "benzonatate", "cephalexin", "ciprofloxacin", "citalopram", "hydrochlorothiazide", "ibuprofen", "hydrocodone", "lexapro", 
 					 "levothyroxine", "lisinopril", "lipitor", "melatonin", "metaformin", "methadone", "metaprolol", "naproxen", 
@@ -24,7 +23,6 @@ var totalQuantitySignals = new Set(["qty", "quantity", "#", "qty:", "quantity:",
 function formatLabel(label) {
 	var label_lc = label.body.toLowerCase();
 	var splitLabel = label_lc.replace( /\n/g, " " ).split(" ");
-//	console.log(splitLabel);
 	return splitLabel;
 }
 
