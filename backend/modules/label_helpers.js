@@ -1,5 +1,4 @@
-const label_helper = jest.createMockFromModule('./label_helpers');
-
+// List of common prescription drugs to look for in the label
 var pillNames = new Set(["acetaminophen", "adderall", "amitriptyline", "amlodipine", "amoxicillin", "ativan", "atorvastatin", "azithromycin", 
 					 "benzonatate", "cephalexin", "ciprofloxacin", "citalopram", "hydrochlorothiazide", "ibuprofen", "hydrocodone", "lexapro", 
 					 "levothyroxine", "lisinopril", "lipitor", "melatonin", "metaformin", "methadone", "metaprolol", "naproxen", 
@@ -18,6 +17,8 @@ var dosageSignals = new Set(["take", "dosage", "dosage:", "take:"]);
 var frequencySignals = new Set(["times", "once", "twice"]);
 var totalQuantitySignals = new Set(["qty", "quantity", "#", "qty:", "quantity:", "#:"]);
 
+
+// Convert all the text to lower case and split by spaces and new lines 
 function formatLabel(label) {
 	var label_lc = label.body.toLowerCase();
 	var splitLabel = label_lc.replace( /\n/g, " " ).split(" ");
@@ -25,24 +26,33 @@ function formatLabel(label) {
 }
 
 function getName(splitLabel, i, pillData) {
-	if (splitLabel[i] == "acetaminophen") {
-		pillData.name = "acetaminophen";	
+	if (pillNames.has(splitLabel[i])) {
+		pillData.name = splitLabel[i];	
 		return 1;
 	}
 	return 0;
 }
 
-function getQuantity(splitLabel, i, pillData) {
-	console.log(splitLabel[i]);
-	if (splitLabel[i] == "30") {
-		pillData.totalQuantity = 30;
-		return 1;
+function getQuantity(splitLabel, i , pillData) {
+	if (totalQuantitySignals.has(splitLabel[i])) {
+		if (i !== splitLabel.length - 1 && splitLabel[i + 1] in numDict) {
+			pillData.totalQuantity = numDict[splitLabel[i+1]];
+			return 1;
+		}
+		else if (i !== splitLabel.length - 1 && Number.isInteger(parseInt(splitLabel[i+1], 10))) {
+			pillData.totalQuantity = parseInt(splitLabel[i+1], 10);
+			return 1;
+		}
 	}
 	return 0;
 }
 
 function getFreqUnit(splitLabel, i, pillData) {
-	if (splitLabel[i] == "daily") {
+	if (weekly.has(splitLabel[i])){
+		pillData.frequencyUnit = "weekly";
+		return 1;
+	}
+	else if (daily.has(splitLabel[i])){
 		pillData.frequencyUnit = "daily";
 		return 1;
 	}
@@ -50,39 +60,54 @@ function getFreqUnit(splitLabel, i, pillData) {
 }
 
 function getConditions(splitLabel, i, pillData) {
-	if (splitLabel[i] == "sleep") {
-		pillData.withSleep = false;
+	// Check if the pill should be taken with food
+	if (withFood.has(splitLabel[i])) {
+		pillData.withFood = true;
 		return 1;
 	}
-	if (splitLabel[i] == "food") {
-		pillData.withFood = false;
+
+	// Check if the pill should be taken at night
+	else if (withSleep.has(splitLabel[i])) {
+		pillData.withSleep = true;
 		return 1;
 	}
 	return 0;
+	
 }
 
 function getDosage(splitLabel, i, pillData) {
-	if (splitLabel[i] == "once") {
-		pillData.dosage = 1;
-		return 1;
+	if (dosageSignals.has(splitLabel[i])) {
+		if (i !== splitLabel.length - 1 && splitLabel[i+1] in numDict) {
+			pillData.dosage = numDict[splitLabel[i+1]];
+			return 1;
+		}
+		else if (i !== splitLabel.length - 1 && Number.isInteger(parseInt(splitLabel[i+1], 10))){
+			pillData.dosage = parseInt(splitLabel[i+1], 10);
+			return 1;
+		}
 	}
 	return 0;
 }
 
 function getFreq(splitLabel, i, pillData) {
-	if (splitLabel[i] == "2") {
-		pillData.frequency= 2;
-		return 1;
+	if (frequencySignals.has(splitLabel[i])){
+		if (i !== 0 && splitLabel[i-1] in numDict) {
+			pillData.frequency = numDict[splitLabel[i-1]];
+			return 1;
+		}
+		else if (i !== 0 && Number.isInteger(parseInt(splitLabel[i-1], 10))){
+			pillData.frequency = parseInt(splitLabel[i-1], 10);
+			return 1;
+		}
+		else if (splitLabel[i] in numDict) {
+			pillData.frequency = numDict[splitLabel[i]];
+			return 1;
+		}
+		else
+			return 0;
 	}
 	return 0;
 }
 
-label_helper.formatLabel = formatLabel;
-label_helper.getName = getName;
-label_helper.getQuantity = getQuantity;
-label_helper.getFreqUnit = getFreqUnit;
-label_helper.getConditions = getConditions;
-label_helper.getDosage = getDosage;
-label_helper.getFreq = getFreq;
+module.exports = {formatLabel, getName, getQuantity, getFreqUnit, getConditions, getDosage, getFreq };
 
-module.exports = label_helper;

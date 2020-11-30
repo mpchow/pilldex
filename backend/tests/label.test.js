@@ -1,14 +1,6 @@
-const pillRoute = require('./../routes/pills.js');
-const mongoose = require('mongoose');
-
-const app = require('../app') // Link to your server file
-const supertest = require('supertest')
-const request = supertest(app)
-
 jest.mock('../modules/label_helpers');
 const parser = require('../modules/label');
 const Constants = require('./constants.js');
-
 
 describe("Parse Label Unit Testing", () => {
 	test('Test Parsing Name', async done => {
