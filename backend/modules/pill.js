@@ -5,12 +5,12 @@ const db = require('./../db/db.js');
 const Pill = db.Pill;
 const User = db.User;
 
-/* Create a new pill object 
+/* Create a new pill object
  * pillParams.name = name of target pill
  * pillParams.userId = userId of the target user
  */
 const create = async (pillParams) => {
-   try { 
+   try {
 		let user = await User.findOne({ userId: pillParams.userId });
 		if (user === null) {
 			throw "User Not Found";
@@ -18,7 +18,7 @@ const create = async (pillParams) => {
 		else {
 	      const pill = new Pill(pillParams);
     	  	pill.save();
-    	 
+
     	 	// Create a schedule based on the provided parameters
 			const newSchedule = scheduler.createSchedule(pillParams, user);
 			await User.findOneAndUpdate({userId: pillParams.userId}, {schedule: newSchedule});
@@ -32,7 +32,7 @@ const create = async (pillParams) => {
 };
 
 /*
- * Updates the pill object  
+ * Updates the pill object
  * pillParams.name = name of target pill
  * pillParams.userId = userId of the target user
  */
@@ -65,7 +65,7 @@ const update = async (pillParams) => {
 	}
 };
 
-/* 
+/*
  * Remove a pill from the db
  * pillParams.name = name of target pill
  * pillParams.userId = userId of the target user
@@ -92,10 +92,10 @@ const remove = async (pillParams) => {
 	}
 	catch (error) {
 		return getErrorMessage(pillParams);
-	}  
+	}
 };
 
-/* 
+/*
  * Get a single pill based on the provided parameters
  * pillParams.query.name = name of pill to retrieve
  * pillParams.query.userId = userId of the user
@@ -113,7 +113,7 @@ const retrieve = async (pillParams) => {
     }
 };
 
-/* 
+/*
  * Get all pills of the target user
  * pillParams.query.userId = userId of the user
  */
@@ -122,7 +122,7 @@ const retrieveAll = async (pillParams) => {
 		let user = await User.findOne({ userId: pillParams.query.userId })
 		if (user === null)
 			throw "Could not find user";
-		
+
 		let pills = await Pill.find({userId: pillParams.query.userId});
 		return ({pills: pills, status: 200, msg: 'Retrieved Pills Successfully'});
 
@@ -133,8 +133,8 @@ const retrieveAll = async (pillParams) => {
 	}
 };
 
-/* 
- * Decrement number of pills remaining and update schedule 
+/*
+ * Decrement number of pills remaining and update schedule
  * pillParams.userId = userId of the user
  */
 const updateTaken = async (pillParams) => {
@@ -151,7 +151,7 @@ const updateTaken = async (pillParams) => {
 			const newSchedule = scheduler.updateSchedule(pillParams, user);
 			await User.findOneAndUpdate({userId: user.userId}, {schedule: newSchedule});
 			await Pill.findOneAndUpdate({name: pillParams.name}, {remaining: pill.remaining - pill.dosage});
-			
+
 			return({status: 200, msg: 'Pill Updated Successfully'});
 		}
 	}
@@ -161,9 +161,9 @@ const updateTaken = async (pillParams) => {
 };
 
 
-/* 
- * Update the number of remaining capsules 
- * This function is called after the user refills their prescription 
+/*
+ * Update the number of remaining capsules
+ * This function is called after the user refills their prescription
  * pillParams.name = name of the target pill
  * pillParams.userId = userId of the user
  */
@@ -194,4 +194,3 @@ const getErrorMessage = async (pillParams) => {
 };
 
 module.exports = {create, update, remove, retrieve, retrieveAll, updateRemaining, updateTaken};
-

@@ -174,23 +174,23 @@ function SchedulerScreen({ navigation, route }) {
       }
     }
 
+    /* PUT REQUEST HERE TO UPDATE USER'S SCHEDULE */
+    const token = await firebase.messaging().getToken();
+    const wake = wakeup.split(":");
+    const sleep = bedtime.split(":");
+    const brfast = bfast.split(":");
+    const lnch = lunch.split(":");
+    const din = dinner.split(":");
+
+    const wakeHr = (parseInt(wake[0]) === 12 && routine[0]["AM"]) ? 0 : parseInt(wake[0]);
+    const sleepHr = (parseInt(sleep[0]) === 12 && routine[1]["AM"]) ? 0 : parseInt(sleep[0]);
+    const bfastHr = (parseInt(brfast[0]) === 12 && routine[2]["AM"]) ? 0 : parseInt(brfast[0]);
+    const lunchHr = (parseInt(lnch[0]) === 12 && routine[3]["AM"]) ? 0 : parseInt(lnch[0]);
+    const dinHr = (parseInt(din[0]) === 12 && routine[4]["AM"]) ? 0 : parseInt(din[0]);
+
     if (!user)
       register(email, password, routine);
     else {
-      /* PUT REQUEST HERE TO UPDATE USER'S SCHEDULE */
-      const token = await firebase.messaging().getToken();
-      const wake = wakeup.split(":");
-      const sleep = bedtime.split(":");
-      const brfast = bfast.split(":");
-      const lnch = lunch.split(":");
-      const din = dinner.split(":");
-
-      const wakeHr = (parseInt(wake[0]) === 12 && routine[0]["AM"]) ? 0 : parseInt(wake[0]);
-      const sleepHr = (parseInt(sleep[0]) === 12 && routine[1]["AM"]) ? 0 : parseInt(sleep[0]);
-      const bfastHr = (parseInt(brfast[0]) === 12 && routine[2]["AM"]) ? 0 : parseInt(brfast[0]);
-      const lunchHr = (parseInt(lnch[0]) === 12 && routine[3]["AM"]) ? 0 : parseInt(lnch[0]);
-      const dinHr = (parseInt(din[0]) === 12 && routine[4]["AM"]) ? 0 : parseInt(din[0]);
-
       fetch('http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/users', {
         method: 'PUT',
         headers: {
@@ -221,6 +221,7 @@ function SchedulerScreen({ navigation, route }) {
       navigation.navigate('Profile');
     }
   }
+
 
   return (
     <View style={styles.container}>
