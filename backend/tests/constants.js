@@ -1,17 +1,14 @@
 let constants = {
-	initialPill : {"userId":"validUserId2", "name":"testPill", "totalQuantity":10, "frequency":2, "frequencyUnit":"daily", "dosage":1,
-	   			  "withFood":true, "withSleep":false, "remaining":5},
-
 	// Test Pill with Invalid UserId and Invalid Name
 	testPillInvalidUser : {"userId":"invalidUserId", "name":"invalidUserPill", "totalQuantity":10, "frequency":2, "frequencyUnit":"daily", "dosage":1,
 	   			  "withFood":true, "withSleep":false, "remaining":5},
 	
-	// Test Pill with Valid UserId and Valid name
-	testPillValid: {"userId":"validUserId2", "name":"testPill", "totalQuantity":10, "frequency":2, "frequencyUnit":"daily", "dosage":1,
-	   			  "withFood":true, "withSleep":false, "remaining":5},
-	
 	// Test Pill with Invalid name but Valid UserId
 	testPillInvalidName: {"userId":"validUserId2", "name":"invalidName", "totalQuantity":10, "frequency":2, "frequencyUnit":"daily", "dosage":1,
+	   			  "withFood":true, "withSleep":false, "remaining":5},
+
+	// Test Pill with Valid UserId and Valid name
+	testPillValid: {"userId":"validUserId2", "name":"testPill", "totalQuantity":10, "frequency":2, "frequencyUnit":"daily", "dosage":1,
 	   			  "withFood":true, "withSleep":false, "remaining":5},
 	
 	updatePill : {"userId":"validUserId2", "name":"testPill", "totalQuantity":999, "frequency":2, "frequencyUnit":"daily", "dosage":1,
@@ -21,12 +18,13 @@ let constants = {
 	takenPillInvalidUser: {"userId":"invalidUserId", "name":"invalidUserPill", "totalQuantity":10, "frequency":2, "frequencyUnit":"daily", "dosage":1,
 	   			  "withFood":true, "withSleep":false, "remaining":5, "timeTaken" : {"day":0, "hour":1, "min":10}},
 
-	takenPillValid : {"userId":"validUserId2", "name":"testPill", "timeTaken" : {"day":0, "hour":1, "min":10}, "reminderId":"214e5249-a89e-473a-a554-609942a01b5f"},
-
 	takenPillInvalidName : {"userId":"validUserId2", "name":"invalidName", "timeTaken" : {"day":0, "hour":1, "min":10}, "reminderId":"214e5249-a89e-473a-a554-609942a01b5f"},
 
+	takenPillValid : {"userId":"validUserId2", "name":"testPill", "timeTaken" : {"day":0, "hour":1, "min":10}, "reminderId":"214e5249-a89e-473a-a554-609942a01b5f"},
+
+
 	// Test Labels for integration testing
-	testLabel : {"body":"1 Local Pharmacy RX# 0004921—39S CUSTOMER NAME GENERIC RX 500 MG TABLET\n TAKE ONE TABLET TWICE DAILY\n PRESCRIPTION NO. STORE NO.PRESCRIBED BY: A. DOCTOR QTY: 20 NO REFILLS REMAIN PRESCRIBER AUTH REQUIRED 123 RX AVENUE NEW YORK, NY NEW DATE FILLED: 02/05/2019 DISCARD BY: 02/05/2020 (555) 555 -555 five"},
+	testLabel : {"body":"1 Local Pharmacy 0004921—39S RX 500 MG TABLET\n TAKE ONE TABLET TWICE DAILY\n QTY: 20 NO REFILLS REMAIN 123 RX AVENUE NEW YORK DISCARD BY: 02/05/2020 (555) 555 -555 five"},
 	testLabel2 : {"body":"82 ACETAMINOPHEN 500 MG TABLET\n TAKE ONE TABLET TWICE DAILY BEFORE BED WITH FOOD\n 123 RX AVENUE NEW YORK, NY 555"},
 	testLabel3 : {"body":"1 0004921—39S five ACETAMINOPHEN 500 MG TABLET\n TAKE ONE TABLET TWICE DAILY BEFORE BED WITH FOOD\n "},
 	testLabel4: {"body":"ONE RX 500 MG TABLET\n TAKE 1 TABLET 2 TIMES WEEKLY\n QTY: FIVE BY: TIMES"},
