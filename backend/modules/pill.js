@@ -11,7 +11,7 @@ const User = db.User;
  */
 const create = async (pillParams) => {
    try { 
-		let user = await User.findOne({ userId: pillParams.userId })
+		let user = await User.findOne({ userId: pillParams.userId });
 		if (user === null) {
 			throw "User Not Found";
 		}
