@@ -31,6 +31,15 @@ describe("Create User Integrated Test", () => {
 		expect(res.body.msg).toBe('User Already Exists');
 		done();
 	})
+/*
+	it('Tests POST endpoint with empty user', async done => {
+		// Sends POST Request to /users endpoint
+		const res = await request.post('/users').send({});
+		expect(res.status).toBe(200);
+		expect(res.body.msg).toBe('User Already Exists');
+		done();
+	})
+*/
 });
 
 describe("Get User Integrated Test", () => {
@@ -44,6 +53,13 @@ describe("Get User Integrated Test", () => {
 	it('Tests GET endpoint with invalid userId', async done => {
 		// Sends GET Request to /users endpoint
 		const res = await request.get('/users?userId=invalidUserId');
+		expect(res.status).toBe(200);
+		expect(res.body.msg).toBe('User Not Found');
+		done();
+	})
+	it('Tests GET endpoint with no userId', async done => {
+		// Sends GET Request to /users endpoint
+		const res = await request.get('/users');
 		expect(res.status).toBe(200);
 		expect(res.body.msg).toBe('User Not Found');
 		done();
@@ -71,14 +87,14 @@ describe("Update User Integrated Test", () => {
 describe("Delete User Integrated Test", () => {
 	it('Tests DELETE endpoint with valid userId', async done => {
 		// Sends DELETE Request to /users endpoint
-		const res = await request.delete('/users?userId=validUserId');
+		const res = await request.delete('/users').send(newUser);
 		expect(res.status).toBe(200);
 		expect(res.body.msg).toBe('Success');
 		done();
 	})
 	it('Tests DELETE endpoint with invalid userId', async done => {
 		// Sends DELETE Request to /users endpoint
-		const res = await request.delete('/users?userId=invalidUserId');
+		const res = await request.delete('/users').send(updateUserInvalid);
 		expect(res.status).toBe(200);
 		expect(res.body.msg).toBe('User Not Found');
 		done();

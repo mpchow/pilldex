@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const profileService = require('./../modules/profile.js');
+const profileService = require('./../modules/user.js');
 const notifService = require('./../pushNotification/notifications.js');
 
 // Routes
@@ -27,7 +27,7 @@ function updateUser(req, res, next) {
 
 function deleteUser(req, res, next) {
 	console.log("DELETING USER");
-	profileService.remove(req) 
+	profileService.remove(req.body) 
 		.then((success) => res.json(success))
 }
 
