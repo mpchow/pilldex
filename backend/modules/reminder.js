@@ -11,8 +11,8 @@ class Reminder {
       let hour, minute, leftBound, rightBound;
    
       if (mode === "FoodSleep") {
-         hour = this.userTimes.dinnerHr + (this.userTimes.dinnerHr - this.userTimes.sleepHr) / 2;
-         minute = this.user.dinnerMin;
+         hour = (this.userTimes.dinnerHr + this.userTimes.sleepHr) / 2;
+         minute = 0;
          leftBound = this.userTimes.dinnerHr - this.userTimes.lunchHr < 4 ? (this.userTimes.dinnerHr - this.userTimes.lunchHr) : 4;
          rightBound = this.userTimes.sleepHr - this.userTimes.dinnerHr < 4 ? (this.userTimes.sleepHr - this.userTimes.dinnerHr) : 4;
       }

@@ -35,34 +35,34 @@ const updateSchedule = (reqBody, user) => {
 
    if (timeDiff > 30) {
       pillReminder.timesLate++;
+
+      let percentageLate;
+      let timeAdjust;
+
+      if(timeTakenConverted < reminderTimeConverted) {
+         percentageLate = timeDiff / (pillReminder.time.leftBound * 60);
+         timeAdjust = Math.floor(dist.cdf(3 * percentageLate) * 60);
+
+         pillReminder.adjustedTimes.push(reminderTimeConverted - timeAdjust);
+      }  
+      else {
+         percentageLate = timeDiff / (pillReminder.time.rightBound * 60);
+         timeAdjust = Math.floor(dist.cdf(3 * percentageLate) * 60);
+
+         pillReminder.adjustedTimes.push(reminderTimeConverted + timeAdjust);
+      }
+
       if(pillReminder.timesLate === 3) {
          pillReminder.timesLate = 0;
          pillReminder.takenEarly = false;
 
          let newTime = 0;
-         for(let time in pillReminder.adjustedTimes) {
-            newTime += time;
+         for(let i = 0; i < pillReminder.adjustedTimes.length; i++) {
+            newTime += pillReminder.adjustedTimes[i];
          }
          newTime /= pillReminder.adjustedTimes.length;
-         pillReminder.time.reminderTime = {hour: Math.floor(newTime/60) + 7 > 24 ? timeTaken.day + 2 : timeTaken.day + 1, minute: newTime % 60};
+         pillReminder.time.reminderTime = {hour: Math.floor(newTime/60), minute: Math.floor(newTime % 60)};
          pillReminder.adjustedTimes = [];
-      }
-      else {
-         pillReminder.timesLate++;
-         let percentageLate;
-         let timeAdjust
-         if(timeTakenConverted < reminderTimeConverted) {
-            percentageLate = timeDiff / (pillReminder.time.leftBound * 60);
-            timeAdjust = dist.cdf(3 * percentageLate) * 0.1;
-
-            pillReminder.time.adjustedTimes.push(timeTakenConverted - timeAdjust);
-         }  
-         else {
-            percentageLate = timeDiff / (pillReminder.time.rightBound * 60);
-            timeAdjust = dist.cdf(3 * percentageLate);
-
-            pillReminder.time.adjustedTimes.push(timeTakenConverted + timeAdjust);
-         }
       }
    } 
 
@@ -71,13 +71,14 @@ const updateSchedule = (reqBody, user) => {
 
 const deleteSchedule = (user, pillName) => {
    let schedule = user.schedule;
-
-   schedule = schedule.map(day => {
-      return day.filter(reminder => {
-         reminder !== null && reminder.pillName !== pillName;
+   
+   for(let i = 0; i < schedule.length; i++) {
+      schedule[i] = schedule[i].filter(reminder => {
+         if(reminder.pillName !== pillName) {
+            return reminder;
+         }
       })
-   });
-   console.log("IN DELETE SCHEDULE, ", schedule);
+   }
 
    return schedule;
 };
@@ -95,7 +96,7 @@ const createSchedule = (pillParams, user) => {
       breakfastTime: (user.breakfastAM ? user.breakfastHr : user.breakfastHr + 12) * 60 + user.breakfastMin,
       lunchHr: user.lunchAM ? user.lunchHr : user.lunchHr + 12,
       lunchTime: (user.lunchAM ? user.lunchHr : user.lunchHr + 12) * 60 + user.lunchMin,
-      dinnerHr: user.dinnerAM ? user.dinnerHr: user.dinnerHr + 12,
+      dinnerHr: user.dinnerAM ? user.dinnerHr : user.dinnerHr + 12,
       dinnerTime: (user.dinnerAM ? user.dinnerHr: user.dinnerHr + 12) * 60 + user.dinnerMin
    }
    
@@ -117,20 +118,32 @@ const createSchedule = (pillParams, user) => {
          }
       }
       else {
-         const timeSpacing = (userTimes.sleepTime - userTimes.wakeTime) / pillParams.frequency;
+         const timeSpacing = (userTimes.sleepTime - userTimes.wakeupTime) / pillParams.frequency;
    
          for (let i = 0; i < 7; i++) {
             for (let j = 0; j < pillParams.frequency; j++) {
                hour = Math.floor((userTimes.wakeupTime + timeSpacing * (j + 1))/60);
                minute = (userTimes.wakeupTime + timeSpacing * (j + 1)) % 60;
+
                schedule[i].push(reminder.createReminder(context, hour, minute, Math.floor(timeSpacing / 60)));
             }
          }
       }
    }
    else {
-      for (let day in freqMap[pillParams.frequency - 1]) {
-         schedule[day].push(reminder.createReminder(context));
+      if(context === "Food") {
+         for (let day in freqMap[pillParams.frequency - 1]) {
+            let mode;
+            for (let j = 0; j < pillParams.frequency; j++) {
+               mode = j === 0 ? "Breakfast" : j === 1 ? "Lunch" : "Dinner";
+               schedule[day].push(reminder.createReminder(mode));
+            }
+         }
+      }
+      else {
+         for (let day in freqMap[pillParams.frequency - 1]) {
+            schedule[day].push(reminder.createReminder(context));
+         }
       }
    }
 
