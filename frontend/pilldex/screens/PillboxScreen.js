@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 
 import firebase, { utils } from '@react-native-firebase/app';
+import { useIsFocused } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -20,6 +21,7 @@ const width = Dimensions.get('window').width;
 function PillboxScreen( {navigation } ) {
 
   const needRefill = 5; //below this amount, the text is red
+  const isFocused = useIsFocused();
 
   const [pills, setPills] = useState([]);
   console.log("Pill is", pills);
@@ -80,7 +82,7 @@ function PillboxScreen( {navigation } ) {
     getPills();
 
 
-  }, []);
+  }, [isFocused]);
 
   function showInfo(pillName) {
     fetch(`http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/pills/single?userId=${firebase.auth().currentUser.uid}&name=${pillName}`, {
