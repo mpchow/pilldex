@@ -15,26 +15,25 @@ export const AuthProvider = ({ children }) => {
         user,
         setUser,
         login: async (email, password) => {
-          try {
-            if (email == "" || email == null)
-              Alert.alert("Please enter a valid email");
-            else if (password == "" || password == null)
-              Alert.alert("Please enter a password");
-            else
-              await auth().signInWithEmailAndPassword(email, password);
-          } catch (e) {
-            if (e.code == 'auth/invalid-email')
-              Alert.alert("Invalid Email Address");
-            if (e.code == 'auth/user-disabled')
-              Alert.alert("This user has been disabled");
-            if (e.code == 'auth/user-not-found')
-              Alert.alert("User not found, please try again");
-            if (e.code == 'auth/wrong-password')
-              Alert.alert("Incorrect Password");
+          if (email == "" || email == null)
+            Alert.alert("Please enter a valid email");
+          else if (password == "" || password == null)
+            Alert.alert("Please enter a password");
+          else {
+            await auth().signInWithEmailAndPassword(email, password)
+                  .catch(e => {
+                    if (e.code == 'auth/invalid-email')
+                      Alert.alert("Invalid Email Address");
+                    if (e.code == 'auth/user-disabled')
+                      Alert.alert("This user has been disabled");
+                    if (e.code == 'auth/user-not-found')
+                      Alert.alert("User not found, please try again");
+                    if (e.code == 'auth/wrong-password')
+                      Alert.alert("Incorrect Password");
 
-            console.log(e);
-            console.log('Sign in Failed');
-          }
+                    console.log(e);
+                    console.log('Sign in Failed');
+          })}
         },
         register: async (email, password, routine) => {
           try {
