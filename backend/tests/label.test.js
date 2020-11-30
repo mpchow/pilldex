@@ -7,30 +7,20 @@ const request = supertest(app)
 
 jest.mock('../modules/label_helpers');
 const parser = require('../modules/label');
-
-const testLabel = {"body":"Local Pharmacy RX# 0004921—39S CUSTOMER NAME GENERIC RX 500 MG TABLET\n TAKE ONE TABLET TWICE DAILY\n PRESCRIPTION NO. STORE NO.PRESCRIBED BY: A. DOCTOR QTY: 20 NO REFILLS REMAIN PRESCRIBER AUTH REQUIRED 123 RX AVENUE NEW YORK, NY NEW DATE FILLED: 02/05/2019 DISCARD BY: 02/05/2020 (555) 555 -555"};
-
-const parsedLabel = {
-        "name": null,
-        "totalQuantity": 20,
-        "frequency": 2,
-        "frequencyUnit": "daily",
-        "dosage": 1,
-        "withFood": false,
-        "withSleep": false
-    };
+const Constants = require('./constants.js');
 
 
 describe("Parse Label Unit Testing", () => {
-/*
-	beforeEach(() => {
-        jest.mock("../modules/label_helpers")
-    })
-*/
-	test('Unit Test Parsing of label', async done => {
-		res = parser.parseLabel(testLabel);
-		console.log("PARSING A LABEL !!!!", res);
-		expect(res.pillData).toStrictEqual(parsedLabel);
+	test('Test Parsing Name', async done => {
+		res = await parser.parseLabel(Constants.testLabelName);
+		console.log(res);
+		expect(res.pillData).toStrictEqual(Constants.parsedLabelName);
+		done();
+	})
+	test('Test Parsing Quantity', async done => {
+		res = await parser.parseLabel(Constants.testLabelQty);
+		console.log(res);
+		expect(res.pillData).toStrictEqual(Constants.parsedLabelQty);
 		done();
 	})
 });

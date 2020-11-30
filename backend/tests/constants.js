@@ -18,6 +18,10 @@ let constants = {
 	takenPillValid : {"userId":"validUserId2", "name":"testPill", "timeTaken" : {"day":0, "hour":1, "min":10}, "reminderId":"214e5249-a89e-473a-a554-609942a01b5f"},
 
 	takenPillInvalidName : {"userId":"validUserId2", "name":"invalidName", "timeTaken" : {"day":0, "hour":1, "min":10}, "reminderId":"214e5249-a89e-473a-a554-609942a01b5f"},
+
+	testLabelName : {"body":"ACETAMINOPHEN"},
+	testLabelQty : {"body":"QTY: 30"},
+
 	
 	testLabel : {"body":"1 Local Pharmacy RX# 0004921—39S CUSTOMER NAME GENERIC RX 500 MG TABLET\n TAKE ONE TABLET TWICE DAILY\n PRESCRIPTION NO. STORE NO.PRESCRIBED BY: A. DOCTOR QTY: 20 NO REFILLS REMAIN PRESCRIBER AUTH REQUIRED 123 RX AVENUE NEW YORK, NY NEW DATE FILLED: 02/05/2019 DISCARD BY: 02/05/2020 (555) 555 -555 five"},
 	
@@ -86,8 +90,18 @@ let constants = {
 	        "frequency": null,
 	        "frequencyUnit": null,
 	        "dosage": null, 
-	        "withFood": null,
-	        "withSleep": null 
+	        "withFood": false,
+	        "withSleep": false 
+	},
+
+	parsedLabelQty : {
+	        "name": null,
+	        "totalQuantity": 30,
+	        "frequency": null,
+	        "frequencyUnit": null,
+	        "dosage": null, 
+	        "withFood": false,
+	        "withSleep": false 
 	},
 
 	// Expected error results
