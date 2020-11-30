@@ -24,19 +24,14 @@ function PillboxScreen( {navigation } ) {
   const [pills, setPills] = useState([]);
   console.log("Pill is", pills);
 
-  function deletePills(pillName)
-  {
-    Alert.alert(
-      `Delete ${pillName}`,
-      `Are you sure you want to delete ${pillName}?`,
-      [
-        {
-          text: 'Cancel',
-          onPress: () => console.log('Cancel Pressed'),
-          style: 'cancel',
-        },
-        {
-          text: 'OK', onPress: () => {
+  function deletePills(pillName) {
+    var arr = [{
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {
+        text: 'OK', onPress: () => {
           fetch('http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/pills', {
             method: 'DELETE',
             headers: {
@@ -52,9 +47,13 @@ function PillboxScreen( {navigation } ) {
             console.error(error);
           });
           getPills(); //call get pills to refresh the screen
-          }
         }
-      ]
+    }];
+
+    Alert.alert(
+      `Delete ${pillName}`,
+      `Are you sure you want to delete ${pillName}?`,
+      arr
     );
   }
 

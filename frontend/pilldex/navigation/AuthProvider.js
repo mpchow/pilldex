@@ -15,29 +15,27 @@ export const AuthProvider = ({ children }) => {
         user,
         setUser,
         login: async (email, password) => {
-          try {
-            if (email == "" || email == null)
-              Alert.alert("Please enter a valid email");
-            else if (password == "" || password == null)
-              Alert.alert("Please enter a password");
-            else
-              await auth().signInWithEmailAndPassword(email, password);
-          } catch (e) {
-            if (e.code == 'auth/invalid-email')
-              Alert.alert("Invalid Email Address");
-            if (e.code == 'auth/user-disabled')
-              Alert.alert("This user has been disabled");
-            if (e.code == 'auth/user-not-found')
-              Alert.alert("User not found, please try again");
-            if (e.code == 'auth/wrong-password')
-              Alert.alert("Incorrect Password");
+          if (email == "" || email == null)
+            Alert.alert("Please enter a valid email");
+          else if (password == "" || password == null)
+            Alert.alert("Please enter a password");
+          else {
+            await auth().signInWithEmailAndPassword(email, password)
+                  .catch(e => {
+                    if (e.code == 'auth/invalid-email')
+                      Alert.alert("Invalid Email Address");
+                    if (e.code == 'auth/user-disabled')
+                      Alert.alert("This user has been disabled");
+                    if (e.code == 'auth/user-not-found')
+                      Alert.alert("User not found, please try again");
+                    if (e.code == 'auth/wrong-password')
+                      Alert.alert("Incorrect Password");
 
-            console.log(e);
-            console.log('Sign in Failed');
-          }
+                    console.log(e);
+                    console.log('Sign in Failed');
+          })}
         },
         register: async (email, password, routine) => {
-          try {
             if (email == "" || email == null)
               Alert.alert("Please enter a valid email");
             else if (password == "" || password == null)
@@ -100,27 +98,27 @@ export const AuthProvider = ({ children }) => {
                           schedule: [[], [], [], [], [], [], []]
                         })
                       )
-                    });
-            }
-          } catch (e) {
-            if (e.code === 'auth/email-already-in-use')
-              Alert.alert("An account already exists with this email");
-            if (e.code === 'auth/invalid-email')
-              Alert.alert("Invalid Email Address");
-            if (e.code === 'auth/weak-password')
-              Alert.alert("This password is too weak, please enter a new one");
+                    }).catch(e => {
+                      if (e.code === 'auth/email-already-in-use')
+                        Alert.alert("An account already exists with this email");
+                      if (e.code === 'auth/invalid-email')
+                        Alert.alert("Invalid Email Address");
+                      if (e.code === 'auth/weak-password')
+                        Alert.alert("This password is too weak, please enter a new one");
 
-            console.log(e);
-            console.log('Create User Failed');
-          }
+                      console.log(e);
+                      console.log('Create User Failed');
+                  });
+                }
         },
         logout: async () => {
-          try {
-            await auth().signOut();
-          } catch (e) {
+          //try {
+            await auth().signOut()
+            .catch(err => console.error(e));
+          /*} catch (e) {
             console.error(e);
             console.log('Sign out Failed');
-          }
+          }*/
         }
       }}
     >

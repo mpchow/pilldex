@@ -10,7 +10,7 @@ import {
 import { useIsFocused } from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
 import firebase from '@react-native-firebase/app';
-import { NotifProvider } from '../components/notifContext.js';
+import { NotifProvider } from '../components/NotifContext.js';
 
 const width = Dimensions.get('window').width;
 

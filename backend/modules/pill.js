@@ -10,11 +10,11 @@ const User = db.User;
  * pillParams.userId = userId of the target user
  */
 const create = async (pillParams) => {
-   try {
-		let user = await User.findOne({ userId: pillParams.userId })
-		if (user === null)
+   try { 
+		let user = await User.findOne({ userId: pillParams.userId });
+		if (user === null) {
 			throw "User Not Found";
-
+		}
 		else {
 	      const pill = new Pill(pillParams);
     	  	pill.save();
@@ -27,12 +27,12 @@ const create = async (pillParams) => {
 		}
    }
    catch (error) {
-		return({status: 404, msg: "User Not Found"})
+		return({status: 404, msg: "User Not Found"});
    }
 };
 
 /*
- * Updates the pill object 
+ * Updates the pill object  
  * pillParams.name = name of target pill
  * pillParams.userId = userId of the target user
  */
@@ -185,14 +185,12 @@ const updateRemaining = async (pillParams) => {
 };
 
 const getErrorMessage = async (pillParams) => {
-	let user = await User.findOne({ userId: pillParams.userId })
+	let user = await User.findOne({ userId: pillParams.userId });
 
 	if (user === null) {
-		return({status: 404, msg: "User Not Found"})
+		return({status: 404, msg: "User Not Found"});
 	}
-	else {
-		return({status: 404, msg: "Pill Not Found"})
-	}
+	return({status: 404, msg: "Pill Not Found"});
 };
 
 module.exports = {create, update, remove, retrieve, retrieveAll, updateRemaining, updateTaken};

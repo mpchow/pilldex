@@ -13,11 +13,11 @@ const retrieve = async (profileParams) => {
 		let user = await Profile.findOne({userId: profileParams.query.userId});	
 		if (user === null)
 			throw 'User Not Found';
-      	return ({user: user, msg: 'Success'});
+      return ({user: user, msg: 'Success'});
    }
    catch (error) {
 		return ({msg: "User Not Found"});
-  }
+   }
 };
 
 /* 
