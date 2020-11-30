@@ -49,17 +49,13 @@ const update = async (pillParams) => {
 
 		await Pill.replaceOne({name: pillParams.name, userId: pillParams.userId}, pillParams);
 
-		console.log("REPLACED OK");
 		let newSchedule = scheduler.deleteSchedule(user, pillParams.name);
 		await User.findOneAndUpdate({userId: pillParams.userId}, {schedule: newSchedule});
-
-		console.log("DELETED SCHEDULE OK");
 
 		user = await User.findOne({ userId: pillParams.userId });
 
 		newSchedule = scheduler.createSchedule(pillParams, user);
 		await User.findOneAndUpdate({userId: pillParams.userId}, {schedule: newSchedule});
-		console.log("CREATED SCHEDULE OK");
 
 		return({status: 200, msg: 'Pill Updated Successfully'});
 	}
