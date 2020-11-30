@@ -130,7 +130,6 @@ describe("Update Pill Integrated Test", () => {
 	})
 });
 
-/*
 describe("Refill Pill Integrated Test", () => {
 	it('Tests POST /refill endpoint with valid userId', async done => {
 		// Sends DELETE Request to /pills endpoint
@@ -259,5 +258,4 @@ describe("Parse Label Integration Test", () => {
 		done();
 	})
 });
-*/
 

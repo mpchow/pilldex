@@ -15,7 +15,6 @@ function getName(splitLabel, i, pillData) {
 }
 
 function getQuantity(splitLabel, i, pillData) {
-	console.log(splitLabel[i]);
 	if (splitLabel[i] == "10" || splitLabel[i] == "ten") {
 		pillData.totalQuantity = 10;
 		return 1;
