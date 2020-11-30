@@ -1,7 +1,6 @@
 const scheduler = require('../modules/manageSchedule');
 
-// const reminder = require('../pushNotification/reminder');
-// jest.mock('../modules/reminder');
+jest.mock('../modules/reminder');
 
 describe("Creating Schedule Tests", () => {
    beforeEach(() => jest.resetModules());
@@ -684,8 +683,6 @@ describe("Remove Schedule Tests", () => {
 
       for (let i = 0; i < 7; i++) {
          expect(newSchedule[i][0]).toStrictEqual(reminderToNotDelete);
-
-         // expect(newSchedule[i][0].pillName).toStrictEqual("Tylenol");
       }
       done();
 

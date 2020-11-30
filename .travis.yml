@@ -13,4 +13,4 @@ addons:
 before_install:
   - npm i -g npm@6.14.8 && npm install --save-dev jest
 
-script: cd ./backend && npm test
+script: cd ./backend && npm test -- schedule.test.js label.test.js
