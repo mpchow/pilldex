@@ -104,16 +104,20 @@ const createSchedule = (pillParams, user) => {
 
    if(pillParams.frequencyUnit === 'daily') {
       if(context === "FoodSleep" || context === "Sleep") {
+         let reminderBody = reminder.createReminder(context);
          for(let i = 0; i < 7; i++) {
-            schedule[i].push(reminder.createReminder(context));
+            schedule[i].push(reminderBody);
          }
       }
       else if(context === "Food") {
+         let breakfastReminder = reminder.createReminder("Breakfast");
+         let lunchReminder = reminder.createReminder("Lunch");
+         let dinnerReminder = reminder.createReminder("Dinner");
+         let reminderBody;
          for (let i = 0; i < 7; i++) {
-            let mode;
             for (let j = 0; j < pillParams.frequency; j++) {
-               mode = j === 0 ? "Breakfast" : j === 1 ? "Lunch" : "Dinner";
-               schedule[i].push(reminder.createReminder(mode));
+               reminderBody = j === 0 ? breakfastReminder : j === 1 ? lunchReminder : dinnerReminder;
+               schedule[i].push(reminderBody);
             }
          }
       }
@@ -132,17 +136,21 @@ const createSchedule = (pillParams, user) => {
    }
    else {
       if(context === "Food") {
+         let breakfastReminder = reminder.createReminder("Breakfast");
+         let lunchReminder = reminder.createReminder("Lunch");
+         let dinnerReminder = reminder.createReminder("Dinner");
+         let reminderBody;
          for (let day in freqMap[pillParams.frequency - 1]) {
-            let mode;
             for (let j = 0; j < pillParams.frequency; j++) {
-               mode = j === 0 ? "Breakfast" : j === 1 ? "Lunch" : "Dinner";
-               schedule[day].push(reminder.createReminder(mode));
+               reminderBody = j === 0 ? breakfastReminder : j === 1 ? lunchReminder : dinnerReminder;
+               schedule[day].push(reminderBody);
             }
          }
       }
       else {
+         let reminderBody = reminder.createReminder(context)
          for (let day in freqMap[pillParams.frequency - 1]) {
-            schedule[day].push(reminder.createReminder(context));
+            schedule[day].push(reminderBody);
          }
       }
    }
