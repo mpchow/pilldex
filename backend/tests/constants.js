@@ -80,6 +80,16 @@ let constants = {
 	        "withSleep": false 
 	},
 
+	parsedLabelName : {
+	        "name": "acetaminophen",
+	        "totalQuantity": null,
+	        "frequency": null,
+	        "frequencyUnit": null,
+	        "dosage": null, 
+	        "withFood": null,
+	        "withSleep": null 
+	},
+
 	// Expected error results
 	userNotFound : {status: 404, msg: "User Not Found"},
 	pillNotFound : {status: 404, msg: "Pill Not Found"}

@@ -22,10 +22,15 @@ const parsedLabel = {
 
 
 describe("Parse Label Unit Testing", () => {
+/*
+	beforeEach(() => {
+        jest.mock("../modules/label_helpers")
+    })
+*/
 	test('Unit Test Parsing of label', async done => {
 		res = parser.parseLabel(testLabel);
 		console.log("PARSING A LABEL !!!!", res);
-		expect(res.body.pillData).toStrictEqual(parsedLabel);
+		expect(res.pillData).toStrictEqual(parsedLabel);
 		done();
 	})
 });

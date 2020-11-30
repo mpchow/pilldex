@@ -137,7 +137,7 @@ describe("Refill Pill Integrated Test", () => {
 		expect(res.body.msg).toBe('Success');
 		done();
 	})
-	it('Tests POST /refill endpoint with valid userId', async done => {
+	it('Tests POST /refill endpoint with invalid userId', async done => {
 		// Sends DELETE Request to /pills endpoint
 		const res = await request.post('/pills/refill').send(Constants.testPillInvalidUser);
 		expect(res.status).toBe(200);
@@ -145,12 +145,20 @@ describe("Refill Pill Integrated Test", () => {
 		expect(res.body.msg).toBe('User Not Found');
 		done();
 	})
+	it('Tests POST /refill endpoint with invalid name', async done => {
+		// Sends DELETE Request to /pills endpoint
+		const res = await request.post('/pills/refill').send(Constants.testPillInvalidName);
+		expect(res.status).toBe(200);
+		expect(res.body.status).toBe(404);
+		expect(res.body.msg).toBe('Pill Not Found');
+		done();
+	})
 });
 
 describe("Delete Pill Integrated Test", () => {
 	it('Tests DELETE endpoint with invalid userId', async done => {
 		// Sends DELETE Request to /pills endpoint
-		const res = await request.delete('/pills?userId=invalidUserId&name=testPill');
+		const res = await request.delete('/pills').send(Constants.testPillInvalidUser);
 		expect(res.status).toBe(200);
 		expect(res.body.status).toBe(404);
 		expect(res.body.msg).toBe('User Not Found');
@@ -158,7 +166,7 @@ describe("Delete Pill Integrated Test", () => {
 	})
 	it('Tests DELETE endpoint with invalid pillName', async done => {
 		// Sends GET Request to /pills endpoint
-		const res = await request.delete('/pills?userId=validUserId2&name=invalidName');
+		const res = await request.delete('/pills').send(Constants.testPillInvalidName);
 		expect(res.status).toBe(200);
 		expect(res.body.status).toBe(404);
 		expect(res.body.msg).toBe('Pill Not Found');
@@ -166,7 +174,7 @@ describe("Delete Pill Integrated Test", () => {
 	})
 	it('Tests DELETE endpoint with valid parameters', async done => {
 		// Sends GET Request to /pills endpoint
-		const res = await request.delete('/pills?userId=validUserId2&name=testPill');
+		const res = await request.delete('/pills').send(Constants.testPillValid);
 		expect(res.status).toBe(200);
 //		expect(res.body.status).toBe(200);
 		expect(res.body.msg).toBe('Pill Removed Successfully');
@@ -175,7 +183,7 @@ describe("Delete Pill Integrated Test", () => {
 });
 
 describe("Parse Label Integration Test", () => {
-	it('Tests Parsing of a label ', async done => {
+	it('Tests POST /label with null label', async done => {
 		// Sends POST Request to /pills/label endpoint
 		const res = await request.post('/pills/label').send(null)
 		expect(res.status).toBe(200);
@@ -183,7 +191,7 @@ describe("Parse Label Integration Test", () => {
 		expect(res.body.pillData).toStrictEqual(Constants.parsedLabelNull);
 		done();
 	})
-	it('Tests Parsing of a label ', async done => {
+	it('Tests POST /label with an empty label ', async done => {
 		// Sends POST Request to /pills/label endpoint
 		const res = await request.post('/pills/label').send({"body":""})
 		expect(res.status).toBe(200);
@@ -191,7 +199,7 @@ describe("Parse Label Integration Test", () => {
 		expect(res.body.pillData).toStrictEqual(Constants.parsedLabelNull);
 		done();
 	})
-	it('Tests Parsing of a label ', async done => {
+	it('Tests POST /label with a null body label ', async done => {
 		// Sends POST Request to /pills/label endpoint
 		const res = await request.post('/pills/label').send({"body":null})
 		expect(res.status).toBe(200);
@@ -199,7 +207,7 @@ describe("Parse Label Integration Test", () => {
 		expect(res.body.pillData).toStrictEqual(Constants.parsedLabelNull);
 		done();
 	})
-	it('Tests Parsing of a label ', async done => {
+	it('Tests POST /label with default sleep/eat', async done => {
 		// Sends POST Request to /pills/label endpoint
 		const res = await request.post('/pills/label').send(Constants.testLabel);
 		expect(res.status).toBe(200);
@@ -207,7 +215,7 @@ describe("Parse Label Integration Test", () => {
 		expect(res.body.pillData).toStrictEqual(Constants.parsedLabel);
 		done();
 	})
-	it('Tests Parsing of a label with additional conditions ', async done => {
+	it('Tests POST /label with non-default sleep/eat', async done => {
 		// Sends POST Request to /pills/label endpoint
 		const res = await request.post('/pills/label').send(Constants.testLabel2);
 		expect(res.status).toBe(200);
@@ -215,7 +223,7 @@ describe("Parse Label Integration Test", () => {
 		expect(res.body.pillData).toStrictEqual(Constants.parsedLabel2);
 		done();
 	})
-	it('Tests Parsing of a label with additional conditions ', async done => {
+	it('Tests POST /label with digits', async done => {
 		// Sends POST Request to /pills/label endpoint
 		const res = await request.post('/pills/label').send(Constants.testLabel3);
 		expect(res.status).toBe(200);
@@ -223,7 +231,7 @@ describe("Parse Label Integration Test", () => {
 		expect(res.body.pillData).toStrictEqual(Constants.parsedLabel3);
 		done();
 	})
-	it('Tests Parsing of a label with additional conditions ', async done => {
+	it('Tests POST /label with word numbers', async done => {
 		// Sends POST Request to /pills/label endpoint
 		const res = await request.post('/pills/label').send(Constants.testLabel4);
 		expect(res.status).toBe(200);
@@ -231,7 +239,7 @@ describe("Parse Label Integration Test", () => {
 		expect(res.body.pillData).toStrictEqual(Constants.parsedLabel4);
 		done();
 	})
-	it('Tests Parsing of a label with additional conditions ', async done => {
+	it('Tests POST /label with signal words at bound index', async done => {
 		// Sends POST Request to /pills/label endpoint
 		const res = await request.post('/pills/label').send(Constants.testLabel5);
 		expect(res.status).toBe(200);
@@ -239,7 +247,7 @@ describe("Parse Label Integration Test", () => {
 		expect(res.body.pillData).toStrictEqual(Constants.parsedLabel4);
 		done();
 	})
-	it('Tests Parsing of a label with additional conditions ', async done => {
+	it('Tests POST /label with signal words at bound index', async done => {
 		// Sends POST Request to /pills/label endpoint
 		const res = await request.post('/pills/label').send(Constants.testLabel6);
 		expect(res.status).toBe(200);
