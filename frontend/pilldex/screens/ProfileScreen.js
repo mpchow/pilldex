@@ -56,15 +56,6 @@ function ProfileScreen({ navigation }) {
         </TouchableOpacity>
         <View style={styles.line} />
       </View>
-      <View style={styles.profileOption}>
-        <TouchableOpacity style={{flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'center'}}>
-          <Text style={styles.optionText}>Translation + Language</Text>
-          <SimpleLineIcons style={{marginLeft: 40, marginBottom: 3}}
-                           name="arrow-right" color='#538083' size={23}
-          />
-        </TouchableOpacity>
-        <View style={styles.line} />
-      </View>
       <TouchableOpacity style={styles.button}
                         onPress={() => signOut()}>
         <Text style={styles.btnText}>LOG OUT</Text>
