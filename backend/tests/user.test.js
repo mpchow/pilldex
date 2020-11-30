@@ -3,43 +3,25 @@ const userRoute = require('./../routes/users.js');
 const app = require('../app') // Link to your server file
 const supertest = require('supertest')
 const request = supertest(app)
+const Constants = require('./constants.js');
 
-const newUser = {"token":"testToken", "userId":"validUserId", "wakeupHr":10, "wakeupMin":10, "wakeupAM":true, "wakeupPM":false, "sleepHr":10, "sleepMin":10, "sleepAM":false, "sleepPM":true,
-				 "breakfastHr":10, "breakfastMin":30, "breakfastAM":true, "breakfastPM":false, "lunchHr":12, "lunchMin":0, "lunchAM":false, "lunchPM":true, "dinnerHr":7, "dinnerMin":15,
-				 "dinnerAM":false, "dinnerPM":true, "schedule":[null, null, null, null, null, null, null]}; 
 
-const updateUserValid = {"token":"testToken", "userId":"validUserId", "wakeupHr":8, "wakeupMin":50, "wakeupAM":true, "wakeupPM":false, "sleepHr":10, "sleepMin":10, "sleepAM":false, "sleepPM":true,
-				 "breakfastHr":10, "breakfastMin":30, "breakfastAM":true, "breakfastPM":false, "lunchHr":12, "lunchMin":0, "lunchAM":false, "lunchPM":true, "dinnerHr":7, "dinnerMin":15,
-				 "dinnerAM":false, "dinnerPM":true, "schedule":[null, null, null, null, null, null, null] 
-				 };
-
-const updateUserInvalid = {"token":"testToken", "userId":"invalidUserId", "wakeupHr":8, "wakeupMin":50, "wakeupAM":true, "wakeupPM":false, "sleepHr":10, "sleepMin":10, "sleepAM":false };
-
-// Integrated tests
+// Integrated User tests
 describe("Create User Integrated Test", () => {
 	it('Tests POST endpoint with new user', async done => {
 		// Sends POST Request to /users endpoint
-		const res = await request.post('/users').send(newUser);
+		const res = await request.post('/users').send(Constants.newUser);
 		expect(res.status).toBe(200);
 		expect(res.body.msg).toBe('Success');
 		done();
 	})
 	it('Tests POST endpoint with user that already exists', async done => {
 		// Sends POST Request to /users endpoint
-		const res = await request.post('/users').send(newUser);
+		const res = await request.post('/users').send(Constants.newUser);
 		expect(res.status).toBe(200);
 		expect(res.body.msg).toBe('User Already Exists');
 		done();
 	})
-/*
-	it('Tests POST endpoint with empty user', async done => {
-		// Sends POST Request to /users endpoint
-		const res = await request.post('/users').send({});
-		expect(res.status).toBe(200);
-		expect(res.body.msg).toBe('User Already Exists');
-		done();
-	})
-*/
 });
 
 describe("Get User Integrated Test", () => {
@@ -69,7 +51,7 @@ describe("Get User Integrated Test", () => {
 describe("Update User Integrated Test", () => {
 	it('Tests PUT endpoint with invalid userId', async done => {
 		// Sends PUT Request to /users endpoint with invalid userId
-		const res = await request.put('/users').send(updateUserInvalid);
+		const res = await request.put('/users').send(Constants.updateUserInvalid);
 		expect(res.status).toBe(200);
 		expect(res.body.msg).toBe('User Not Found');
 		done();
@@ -77,7 +59,7 @@ describe("Update User Integrated Test", () => {
 	
 	it('Tests PUT endpoint with valid userId', async done => {
 		// Sends PUT Request to /users endpoint
-		const res = await request.put('/users').send(updateUserValid);
+		const res = await request.put('/users').send(Constants.updateUserValid);
 		expect(res.status).toBe(200);
 		expect(res.body.msg).toBe('Success');
 		done();
@@ -87,14 +69,14 @@ describe("Update User Integrated Test", () => {
 describe("Delete User Integrated Test", () => {
 	it('Tests DELETE endpoint with valid userId', async done => {
 		// Sends DELETE Request to /users endpoint
-		const res = await request.delete('/users').send(newUser);
+		const res = await request.delete('/users').send(Constants.newUser);
 		expect(res.status).toBe(200);
 		expect(res.body.msg).toBe('Success');
 		done();
 	})
 	it('Tests DELETE endpoint with invalid userId', async done => {
 		// Sends DELETE Request to /users endpoint
-		const res = await request.delete('/users').send(updateUserInvalid);
+		const res = await request.delete('/users').send(Constants.updateUserInvalid);
 		expect(res.status).toBe(200);
 		expect(res.body.msg).toBe('User Not Found');
 		done();

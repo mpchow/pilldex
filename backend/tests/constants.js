@@ -1,4 +1,7 @@
 let constants = {
+	initialPill : {"userId":"validUserId2", "name":"testPill", "totalQuantity":10, "frequency":2, "frequencyUnit":"daily", "dosage":1,
+	   			  "withFood":true, "withSleep":false, "remaining":5},
+
 	// Test Pill with Invalid UserId and Invalid Name
 	testPillInvalidUser : {"userId":"invalidUserId", "name":"invalidUserPill", "totalQuantity":10, "frequency":2, "frequencyUnit":"daily", "dosage":1,
 	   			  "withFood":true, "withSleep":false, "remaining":5},
@@ -211,10 +214,26 @@ let constants = {
 	        "withSleep": false 
 	},
 
-
 	// Expected error results
 	userNotFound : {status: 404, msg: "User Not Found"},
-	pillNotFound : {status: 404, msg: "Pill Not Found"}
+	pillNotFound : {status: 404, msg: "Pill Not Found"},
+
+	// Test Users for User Integration Tests:
+	initialUser : {"token":"testToken", "userId":"validUserId2", "wakeupHr":10, "wakeupMin":10, "wakeupAM":true, "wakeupPM":false, "sleepHr":10, "sleepMin":10, "sleepAM":false, "sleepPM":true,
+					 "breakfastHr":10, "breakfastMin":30, "breakfastAM":true, "breakfastPM":false, "lunchHr":12, "lunchMin":0, "lunchAM":false, "lunchPM":true, "dinnerHr":7, "dinnerMin":15,
+					 "dinnerAM":false, "dinnerPM":true, "schedule":[null, null, null, null, null, null, null]}, 
+
+	newUser : {"token":"testToken", "userId":"validUserId", "wakeupHr":10, "wakeupMin":10, "wakeupAM":true, "wakeupPM":false, "sleepHr":10, "sleepMin":10, "sleepAM":false, "sleepPM":true,
+					 "breakfastHr":10, "breakfastMin":30, "breakfastAM":true, "breakfastPM":false, "lunchHr":12, "lunchMin":0, "lunchAM":false, "lunchPM":true, "dinnerHr":7, "dinnerMin":15,
+					 "dinnerAM":false, "dinnerPM":true, "schedule":[null, null, null, null, null, null, null]}, 
+	
+	updateUserValid : {"token":"testToken", "userId":"validUserId", "wakeupHr":8, "wakeupMin":50, "wakeupAM":true, "wakeupPM":false, "sleepHr":10, "sleepMin":10, "sleepAM":false, "sleepPM":true,
+					 "breakfastHr":10, "breakfastMin":30, "breakfastAM":true, "breakfastPM":false, "lunchHr":12, "lunchMin":0, "lunchAM":false, "lunchPM":true, "dinnerHr":7, "dinnerMin":15,
+					 "dinnerAM":false, "dinnerPM":true, "schedule":[null, null, null, null, null, null, null] 
+					 },
+	
+	updateUserInvalid : {"token":"testToken", "userId":"invalidUserId", "wakeupHr":8, "wakeupMin":50, "wakeupAM":true, "wakeupPM":false, "sleepHr":10, "sleepMin":10, "sleepAM":false }
+
 }
 
 module.exports = Object.freeze(constants);
