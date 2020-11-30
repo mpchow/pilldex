@@ -15,7 +15,6 @@ const create = async (pillParams) => {
 		if (user === null) {
 			throw "User Not Found";
 		}
-
 		else {
 	      const pill = new Pill(pillParams);
     	  	pill.save();
