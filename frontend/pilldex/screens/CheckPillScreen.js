@@ -55,7 +55,8 @@ function CheckPillScreen({ navigation, route }) {
     if (freqUnits == "weekly" && (frq > 6)) { // eg. can't have 8 pills weekly
       Alert.alert("Invalid number of pills for weekly frequency");
       return;
-    } else if (foodButton && (frq > 3)) {
+    } else if (foodButton && (frq > 3) && (freqUnits == "daily")) {
+      // can't have a food pill more than 3 times a day
       Alert.alert("Invalid frequency for a pill taken with food");
       return;
     } else if (drowsyButton && (frq != 1)) {
@@ -292,7 +293,7 @@ const styles = StyleSheet.create({
   },
   radioText: {
     fontFamily: 'Quicksand',
-    fontSize: 18, 
+    fontSize: 18,
     color: '#000000',
   },
 });

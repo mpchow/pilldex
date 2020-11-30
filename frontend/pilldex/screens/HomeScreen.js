@@ -7,6 +7,7 @@ import {
   Dimensions,
   FlatList
 } from 'react-native';
+import { useIsFocused } from "@react-navigation/native";
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import messaging from '@react-native-firebase/messaging';
@@ -40,10 +41,12 @@ function HomeScreen({ navigation }) {
   const [schedule,setSchedule] = useState([]);
   const [notifs, setNotifs] = useState([]);
   const [refresh, setRefresh] = useState(false);
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     fetchSchedule();
-  }, [refresh]);
+  }, [refresh, isFocused]);
+  //fetchSchedule();
 
   console.log(date);
 
@@ -54,7 +57,8 @@ function HomeScreen({ navigation }) {
     .then((response) => response.json())
     .then((responseJson) => {
       if(responseJson["user"] == null || responseJson["user"] == undefined)
-        return;
+        throw new Error("Response from server does not exist");
+
       console.log("Response from server is", responseJson["user"]["schedule"]);
       setSchedule(responseJson["user"]["schedule"]);
       formatNotifs(responseJson["user"]["schedule"]);
@@ -155,7 +159,7 @@ function HomeScreen({ navigation }) {
       <FlatList
         data={notifs}
         extradata={notifs}
-        keyExtractor={(item) => item.name}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={styles.notifBox}>
             <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
@@ -179,15 +183,17 @@ function HomeScreen({ navigation }) {
                         onPress={() => navigation.navigate('NewPill')}>
         <Text style={styles.btnText}>NEW PILL</Text>
       </TouchableOpacity>
-      <View style={{height:10}} />
+      <View style={{height:30}} />
+    </View>
+  );
+}
+
+/*      <View style={{height:10}} />
         <TouchableOpacity style={styles.button}
                           onPress={() => displayNotification("Test Notification")}>
           <Text style={styles.btnText}>TEST</Text>
         </TouchableOpacity>
-        <View style={{height:10}} />
-    </View>
-  );
-}
+*/
 
 const styles = StyleSheet.create({
   container: {

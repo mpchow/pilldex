@@ -124,7 +124,7 @@ export const AuthProvider = ({ children }) => {
         }
       }}
     >
-      {children}
+      {(children)}
     </AuthContext.Provider>
   );
 };

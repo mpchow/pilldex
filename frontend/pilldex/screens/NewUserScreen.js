@@ -16,7 +16,7 @@ function NewUserScreen({ navigation }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [language, setLanguage] = useState("");
+  const [pw, confirmPW] = useState("");
 
   const { register } = useContext(AuthContext);
 
@@ -27,7 +27,11 @@ function NewUserScreen({ navigation }) {
     } else if (email.split('@').length != 2) {
       Alert.alert("Invalid Email Address");
       return;
+    } else if (pw != password) {
+      Alert.alert("Passwords do not match!");
+      return;
     }
+
     navigation.navigate('Scheduler', {email: email, password: password});
   }
 
@@ -61,11 +65,12 @@ function NewUserScreen({ navigation }) {
           onChangeText = {(text) => setPassword(text)}
       />
       <TextInput
-          placeholder = "Preferred Language"
+          placeholder = "Confirm Password"
+          secureTextEntry={true}
           style= {styles.input}
           autoCapitalize='none'
           autoCorrect={false}
-          onChangeText = {(text) => setLanguage(text)}
+          onChangeText = {(text) => confirmPW(text)}
       />
 
 

@@ -462,7 +462,7 @@ const styles = StyleSheet.create({
   },
   input: {
     width: 60,
-    fontSize: 19,
+    fontSize: 15,
     textAlign: 'center',
     fontFamily: 'Inter-Light',
     fontStyle: 'italic'
