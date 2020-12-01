@@ -5,22 +5,6 @@ const Profile = db.User;
 const Pill = db.Pill;
 
 /* 
- * Get user's profile
- * profileParams.query.userId = userId of target user
- */
-const retrieve = async (profileParams) => {
-	try {
-		let user = await Profile.findOne({userId: profileParams.query.userId});	
-		if (user === null)
-			throw 'User Not Found';
-      return ({user: user, msg: 'Success'});
-   }
-   catch (error) {
-		return ({msg: "User Not Found"});
-   }
-};
-
-/* 
  * Create a new profile
  */
 const create = async (profileParams) => {
@@ -35,6 +19,22 @@ const create = async (profileParams) => {
    }
    catch (error) {
 		return ({msg: "User Already Exists"});
+   }
+};
+
+/* 
+ * Get user's profile
+ * profileParams.query.userId = userId of target user
+ */
+const retrieve = async (profileParams) => {
+	try {
+		let user = await Profile.findOne({userId: profileParams.query.userId});	
+		if (user === null)
+			throw 'User Not Found';
+      return ({user: user, msg: 'Success'});
+   }
+   catch (error) {
+		return ({msg: "User Not Found"});
    }
 };
 

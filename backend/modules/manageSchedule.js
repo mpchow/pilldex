@@ -16,6 +16,72 @@ const freqMap = [
 const getContext = (pillParams) => {
    return (pillParams.withFood && pillParams.withSleep) ? "FoodSleep" : pillParams.withSleep ? "Sleep" : pillParams.withFood ? "Food" : "Spaced";
 }
+
+const createSchedule = (pillParams, user) => {
+   let schedule = user.schedule;
+   let context = getContext(pillParams);
+   
+   const userTimes = {
+      wakeupHr: user.wakeupAM ? (user.wakeupHr === 12 ? 0 : user.wakeupHr) : user.wakeupHr + 12,
+      wakeupTime: (user.wakeupAM ? user.wakeupHr : user.wakeupHr + 12) * 60 + user.wakeupMin,
+      sleepHr: user.sleepAM ? user.sleepHr : user.sleepHr + 12,
+      sleepTime: (user.sleepAM ? user.sleepHr : user.sleepHr + 12) * 60 + user.sleepMin,
+      breakfastHr: user.breakfastAM ? user.breakfastHr : user.breakfastHr + 12,
+      breakfastTime: (user.breakfastAM ? user.breakfastHr : user.breakfastHr + 12) * 60 + user.breakfastMin,
+      lunchHr: user.lunchAM ? user.lunchHr : user.lunchHr + 12,
+      lunchTime: (user.lunchAM ? user.lunchHr : user.lunchHr + 12) * 60 + user.lunchMin,
+      dinnerHr: user.dinnerAM ? user.dinnerHr : user.dinnerHr + 12,
+      dinnerTime: (user.dinnerAM ? user.dinnerHr: user.dinnerHr + 12) * 60 + user.dinnerMin
+   }
+   
+   let reminder = new Reminder(pillParams, user, userTimes);
+
+   if(pillParams.frequencyUnit === 'daily') {
+      if(context === "FoodSleep" || context === "Sleep") {
+         let reminderBody = reminder.createReminder(context);
+         for(let i = 0; i < 7; i++) {
+            schedule[i].push(reminderBody);
+         }
+      }
+      else if(context === "Food") {
+         let breakfastReminder = reminder.createReminder("Breakfast");
+         let lunchReminder = reminder.createReminder("Lunch");
+         let dinnerReminder = reminder.createReminder("Dinner");
+         let reminderBody;
+         for (let i = 0; i < 7; i++) {
+            for (let j = 0; j < pillParams.frequency; j++) {
+               reminderBody = j === 0 ? breakfastReminder : j === 1 ? lunchReminder : dinnerReminder;
+               schedule[i].push(reminderBody);
+            }
+         }
+      }
+      else {
+         const timeSpacing = (userTimes.sleepTime - userTimes.wakeupTime) / pillParams.frequency;
+   
+         for (let i = 0; i < 7; i++) {
+            for (let j = 0; j < pillParams.frequency; j++) {
+               hour = Math.floor((userTimes.wakeupTime + timeSpacing * (j + 1))/60);
+               minute = (userTimes.wakeupTime + timeSpacing * (j + 1)) % 60;
+
+               schedule[i].push(reminder.createReminder(context, hour, minute, Math.floor(timeSpacing / 60)));
+            }
+         }
+      }
+   }
+   else {
+      if(context === "Food") {
+         context = "Breakfast";
+      } 
+      let reminderBody = reminder.createReminder(context)
+      let spacing = freqMap[pillParams.frequency - 1];
+      for (let i = 0; i < spacing.length; i++) {
+         schedule[0].push(reminderBody);
+         schedule[4].push(reminderBody);
+      }
+   }
+
+   return schedule;
+} 
  
 const updateSchedule = (reqBody, user) => {
    let schedule = user.schedule;
@@ -83,70 +149,5 @@ const deleteSchedule = (user, pillName) => {
    return schedule;
 };
 
-const createSchedule = (pillParams, user) => {
-   let schedule = user.schedule;
-   let context = getContext(pillParams);
-   
-   const userTimes = {
-      wakeupHr: user.wakeupAM ? (user.wakeupHr === 12 ? 0 : user.wakeupHr) : user.wakeupHr + 12,
-      wakeupTime: (user.wakeupAM ? user.wakeupHr : user.wakeupHr + 12) * 60 + user.wakeupMin,
-      sleepHr: user.sleepAM ? user.sleepHr : user.sleepHr + 12,
-      sleepTime: (user.sleepAM ? user.sleepHr : user.sleepHr + 12) * 60 + user.sleepMin,
-      breakfastHr: user.breakfastAM ? user.breakfastHr : user.breakfastHr + 12,
-      breakfastTime: (user.breakfastAM ? user.breakfastHr : user.breakfastHr + 12) * 60 + user.breakfastMin,
-      lunchHr: user.lunchAM ? user.lunchHr : user.lunchHr + 12,
-      lunchTime: (user.lunchAM ? user.lunchHr : user.lunchHr + 12) * 60 + user.lunchMin,
-      dinnerHr: user.dinnerAM ? user.dinnerHr : user.dinnerHr + 12,
-      dinnerTime: (user.dinnerAM ? user.dinnerHr: user.dinnerHr + 12) * 60 + user.dinnerMin
-   }
-   
-   let reminder = new Reminder(pillParams, user, userTimes);
-
-   if(pillParams.frequencyUnit === 'daily') {
-      if(context === "FoodSleep" || context === "Sleep") {
-         let reminderBody = reminder.createReminder(context);
-         for(let i = 0; i < 7; i++) {
-            schedule[i].push(reminderBody);
-         }
-      }
-      else if(context === "Food") {
-         let breakfastReminder = reminder.createReminder("Breakfast");
-         let lunchReminder = reminder.createReminder("Lunch");
-         let dinnerReminder = reminder.createReminder("Dinner");
-         let reminderBody;
-         for (let i = 0; i < 7; i++) {
-            for (let j = 0; j < pillParams.frequency; j++) {
-               reminderBody = j === 0 ? breakfastReminder : j === 1 ? lunchReminder : dinnerReminder;
-               schedule[i].push(reminderBody);
-            }
-         }
-      }
-      else {
-         const timeSpacing = (userTimes.sleepTime - userTimes.wakeupTime) / pillParams.frequency;
-   
-         for (let i = 0; i < 7; i++) {
-            for (let j = 0; j < pillParams.frequency; j++) {
-               hour = Math.floor((userTimes.wakeupTime + timeSpacing * (j + 1))/60);
-               minute = (userTimes.wakeupTime + timeSpacing * (j + 1)) % 60;
-
-               schedule[i].push(reminder.createReminder(context, hour, minute, Math.floor(timeSpacing / 60)));
-            }
-         }
-      }
-   }
-   else {
-      if(context === "Food") {
-         context = "Breakfast";
-      } 
-      let reminderBody = reminder.createReminder(context)
-      let spacing = freqMap[pillParams.frequency - 1];
-      for (let i = 0; i < spacing.length; i++) {
-         schedule[0].push(reminderBody);
-         schedule[4].push(reminderBody);
-      }
-   }
-
-   return schedule;
-} 
 
 module.exports = {createSchedule, updateSchedule, deleteSchedule};
