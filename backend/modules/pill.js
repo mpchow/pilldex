@@ -52,7 +52,6 @@ const update = async (pillParams) => {
 		let newSchedule = scheduler.deleteSchedule(user, pillParams.name);
 		await User.findOneAndUpdate({userId: pillParams.userId}, {schedule: newSchedule});
 
-
 		user = await User.findOne({ userId: pillParams.userId });
 
 		newSchedule = scheduler.createSchedule(pillParams, user);

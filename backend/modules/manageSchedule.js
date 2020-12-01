@@ -74,7 +74,7 @@ const deleteSchedule = (user, pillName) => {
    
    for(let i = 0; i < schedule.length; i++) {
       schedule[i] = schedule[i].filter(reminder => {
-         if(reminder.pillName !== pillName) {
+         if(reminder !== null && reminder.pillName !== pillName) {
             return reminder;
          }
       })

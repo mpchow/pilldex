@@ -62,13 +62,13 @@ const update = async (profileParams) => {
  */
 const remove = async (profileParams) => {
 	try {
-		console.log(profileParams.query.userId);
-		let user = await Profile.findOne({ userId: profileParams.query.userId });
+		console.log(profileParams.userId);
+		let user = await Profile.findOne({ userId: profileParams.userId });
 		if (user === null)
 			throw 'User Not Found';
       	
-		await Profile.deleteOne({userId: profileParams.query.userId});
-		await Pill.deleteMany({userId: profileParams.query.userId});
+		await Profile.deleteOne({userId: profileParams.userId});
+		await Pill.deleteMany({userId: profileParams.userId});
 		return ({msg: 'Success'});
 			
 	}	

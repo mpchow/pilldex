@@ -1,36 +1,111 @@
-const pillRoute = require('./../routes/pills.js');
-const mongoose = require('mongoose');
-
-const app = require('../app') // Link to your server file
-const supertest = require('supertest')
-const request = supertest(app)
-
 jest.mock('../modules/label_helpers');
 const parser = require('../modules/label');
-
-const testLabel = {"body":"Local Pharmacy RX# 0004921—39S CUSTOMER NAME GENERIC RX 500 MG TABLET\n TAKE ONE TABLET TWICE DAILY\n PRESCRIPTION NO. STORE NO.PRESCRIBED BY: A. DOCTOR QTY: 20 NO REFILLS REMAIN PRESCRIBER AUTH REQUIRED 123 RX AVENUE NEW YORK, NY NEW DATE FILLED: 02/05/2019 DISCARD BY: 02/05/2020 (555) 555 -555"};
-
-const parsedLabel = {
-        "name": null,
-        "totalQuantity": 20,
-        "frequency": 2,
-        "frequencyUnit": "daily",
-        "dosage": 1,
-        "withFood": false,
-        "withSleep": false
-    };
-
+const Constants = require('./constants.js');
 
 describe("Parse Label Unit Testing", () => {
-/*
-	beforeEach(() => {
-        jest.mock("../modules/label_helpers")
-    })
-*/
-	test('Unit Test Parsing of label', async done => {
-		res = parser.parseLabel(testLabel);
-		console.log("PARSING A LABEL !!!!", res);
-		expect(res.pillData).toStrictEqual(parsedLabel);
+	test('Test Parsing Name', async done => {
+		res = await parser.parseLabel(Constants.testLabelName);
+		expect(res.pillData).toStrictEqual(Constants.parsedLabelName);
+		done();
+	})
+	test('Test Parsing Quantity', async done => {
+		res = await parser.parseLabel(Constants.testLabelQty);
+		expect(res.pillData).toStrictEqual(Constants.parsedLabelQty);
+		done();
+	})
+	test('Test Parsing FreqUnit', async done => {
+		res = await parser.parseLabel(Constants.testLabelFreqUnit);
+		expect(res.pillData).toStrictEqual(Constants.parsedLabelFreqUnit);
+		done();
+	})
+	test('Test Parsing Sleep and Eat conditions', async done => {
+		res = await parser.parseLabel(Constants.testLabelConditions);
+		expect(res.pillData).toStrictEqual(Constants.parsedLabelConditions);
+		done();
+	})
+	test('Test Parsing Sleep and NOT Eat conditions', async done => {
+		res = await parser.parseLabel(Constants.testLabelSleep);
+		expect(res.pillData).toStrictEqual(Constants.parsedLabelSleep);
+		done();
+	})
+	test('Test Parsing Eat and NOT Sleep conditions', async done => {
+		res = await parser.parseLabel(Constants.testLabelEat);
+		expect(res.pillData).toStrictEqual(Constants.parsedLabelEat);
+		done();
+	})
+	test('Test Parsing Dosage', async done => {
+		res = await parser.parseLabel(Constants.testLabelDosage);
+		expect(res.pillData).toStrictEqual(Constants.parsedLabelDosage);
+		done();
+	})
+	test('Test Parsing Frequency', async done => {
+		res = await parser.parseLabel(Constants.testLabelFreq);
+		expect(res.pillData).toStrictEqual(Constants.parsedLabelFreq);
+		done();
+	})
+	test('Test Parsing empty', async done => {
+		res = await parser.parseLabel("");
+		expect(res.pillData).toStrictEqual(Constants.parsedLabelNull);
+		done();
+	})
+	test('Test Parsing qty before name with digit', async done => {
+		res = await parser.parseLabel(Constants.testLabelNQ1);
+		expect(res.pillData).toStrictEqual(Constants.parsedLabelNQ1);
+		done();
+	})
+	test('Test Parsing qty before name with word number', async done => {
+		res = await parser.parseLabel(Constants.testLabelNQ2);
+		expect(res.pillData).toStrictEqual(Constants.parsedLabelNQ2);
+		done();
+	})
+	test('Test Parsing all fields with digits', async done => {
+		res = await parser.parseLabel(Constants.testLabelAll1);
+		expect(res.pillData).toStrictEqual(Constants.parsedLabelAll);
+		done();
+	})
+	test('Test Parsing all fields with word numbers', async done => {
+		res = await parser.parseLabel(Constants.testLabelAll2);
+		expect(res.pillData).toStrictEqual(Constants.parsedLabelAll);
+		done();
+	})
+	test('Test Parsing with Invalid index bounds for name', async done => {
+		res = await parser.parseLabel(Constants.testLabelName);
+		expect(res.pillData).toStrictEqual(Constants.parsedLabelName);
+		done();
+	})
+	test('Test Parsing with Invalid index bounds for dosage', async done => {
+		res = await parser.parseLabel(Constants.testLabelBounds);
+		expect(res.pillData).toStrictEqual(Constants.parsedLabelAll);
+		done();
+	})
+	test('Test Parsing with non-useful label', async done => {
+		res = await parser.parseLabel(Constants.testLabelNone);
+		expect(res.pillData).toStrictEqual(Constants.parsedLabelNull);
+		done();
+	})
+	test('Test Parsing with mix-cased name', async done => {
+		res = await parser.parseLabel(Constants.testLabelMixName);
+		expect(res.pillData).toStrictEqual(Constants.parsedLabelName);
+		done();
+	})
+	test('Test Parsing with mix-cased conditions', async done => {
+		res = await parser.parseLabel(Constants.testLabelMixConditions);
+		expect(res.pillData).toStrictEqual(Constants.parsedLabelConditions);
+		done();
+	})
+	test('Test Parsing with mix-cased frequency unit', async done => {
+		res = await parser.parseLabel(Constants.testLabelMixFreq);
+		expect(res.pillData).toStrictEqual(Constants.parsedLabelFreqUnit);
+		done();
+	})
+	test('Test Parsing with new lines', async done => {
+		res = await parser.parseLabel(Constants.testLabelNL);
+		expect(res.pillData).toStrictEqual(Constants.parsedLabelAll);
+		done();
+	})
+	test('Test Parsing with extra spacing', async done => {
+		res = await parser.parseLabel(Constants.testLabelNL);
+		expect(res.pillData).toStrictEqual(Constants.parsedLabelAll);
 		done();
 	})
 });
