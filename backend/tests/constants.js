@@ -31,6 +31,9 @@ let constants = {
 	testPillWeekly: {"userId":"validUserId2", "name":"weeklyPill", "totalQuantity":10, "frequency":2, "frequencyUnit":"weekly", "dosage":1,
 	   			  "withFood":false, "withSleep":false, "remaining":5},
 
+	testPillWeeklyFood: {"userId":"validUserId2", "name":"weeklyPillFood", "totalQuantity":10, "frequency":2, "frequencyUnit":"weekly", "dosage":1,
+	   			  "withFood":true, "withSleep":false, "remaining":5},
+
 	testPillFoodSleep2: {"userId":"greaterThanUser", "name":"foodSleepPill2", "totalQuantity":10, "frequency":2, "frequencyUnit":"daily", "dosage":1,
 	   			  "withFood":true, "withSleep":true, "remaining":5},
 

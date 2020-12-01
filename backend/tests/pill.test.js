@@ -392,17 +392,30 @@ describe("Test Creating Pill with Varying Conditions", () => {
 		expect(res.body.msg).toBe('Pill Removed Successfully');
 		done();
 	})
-
-/*
-	it('Tests POST endpoint with valid userId', async done => {
+	it('Tests POST endpoint with weekly and food', async done => {
 		// Sends POST Request to /pills endpoint
-		const res = await request.post('/pills').send(Constants.testPillValid);
+		const res = await request.post('/pills').send(Constants.testPillWeeklyFood);
 		expect(res.status).toBe(200);
 		expect(res.body.status).toBe(200);
 		expect(res.body.msg).toBe('Pill Created Successfully');
-		console.log("DONE");
 		done();
 	})
-*/
+	// Delete the pill so next time tests are run, pill already exists error will not occur
+	it('Tests DELETE endpoint with valid parameters', async done => {
+		// Sends GET Request to /pills endpoint
+		const res = await request.delete('/pills').send(Constants.testPillWeeklyFood);
+		expect(res.status).toBe(200);
+		expect(res.body.msg).toBe('Pill Removed Successfully');
+		done();
+	})
 
+});
+
+describe("Non-existant endpoint", () => {
+	it('Tests nonexistent endpoint with invalid userId', async done => {
+		// Sends POST Request to /pills endpoint
+		const res = await request.post('/bad').send(Constants.testPillInvalidUser);
+		expect(res.status).toBe(404);
+		done();
+	})
 });

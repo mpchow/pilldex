@@ -23,15 +23,15 @@ const createSchedule = (pillParams, user) => {
    
    const userTimes = {
       wakeupHr: user.wakeupAM ? (user.wakeupHr === 12 ? 0 : user.wakeupHr) : user.wakeupHr + 12,
-      wakeupTime: (user.wakeupAM ? user.wakeupHr : user.wakeupHr + 12) * 60 + user.wakeupMin,
-      sleepHr: user.sleepAM ? user.sleepHr : user.sleepHr + 12,
-      sleepTime: (user.sleepAM ? user.sleepHr : user.sleepHr + 12) * 60 + user.sleepMin,
-      breakfastHr: user.breakfastAM ? user.breakfastHr : user.breakfastHr + 12,
-      breakfastTime: (user.breakfastAM ? user.breakfastHr : user.breakfastHr + 12) * 60 + user.breakfastMin,
-      lunchHr: user.lunchAM ? user.lunchHr : user.lunchHr + 12,
-      lunchTime: (user.lunchAM ? user.lunchHr : user.lunchHr + 12) * 60 + user.lunchMin,
-      dinnerHr: user.dinnerAM ? user.dinnerHr : user.dinnerHr + 12,
-      dinnerTime: (user.dinnerAM ? user.dinnerHr: user.dinnerHr + 12) * 60 + user.dinnerMin
+      wakeupTime: ((user.wakeupAM || user.wakeupHr === 12) ? user.wakeupHr : user.wakeupHr + 12) * 60 + user.wakeupMin,
+      sleepHr: (user.sleepAM || user.sleepHr === 12) ? user.sleepHr : user.sleepHr + 12,
+      sleepTime: ((user.sleepAM || user.sleepHr === 12)? user.sleepHr : user.sleepHr + 12) * 60 + user.sleepMin,
+      breakfastHr: (user.breakfastAM || user.breakfastHr === 12) ? user.breakfastHr : user.breakfastHr + 12,
+      breakfastTime: ((user.breakfastAM || user.breakfastHr === 12)? user.breakfastHr : user.breakfastHr + 12) * 60 + user.breakfastMin,
+      lunchHr: (user.lunchAM || user.lunchHr === 12) ? user.lunchHr : user.lunchHr + 12,
+      lunchTime: ((user.lunchAM || user.lunchHr === 12)? user.lunchHr : user.lunchHr + 12) * 60 + user.lunchMin,
+      dinnerHr: (user.dinnerAM || user.dinnerHr === 12)? user.dinnerHr : user.dinnerHr + 12,
+      dinnerTime: ((user.dinnerAM || user.dinnerHr === 12)? user.dinnerHr: user.dinnerHr + 12) * 60 + user.dinnerMin
    }
    
    let reminder = new Reminder(pillParams, user, userTimes);

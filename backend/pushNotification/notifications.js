@@ -19,11 +19,8 @@ admin.initializeApp({
  * payload = message to be sent to the user
  */
 const sendNotification = async (userParams, payload) => {
-	console.log("About to Send Notification!");
 	try {
-		return admin.messaging().sendToDevice(userParams.token, payload).then(response =>{
-			console.log("The Notification Has been Sent !");
-		});
+		return admin.messaging().sendToDevice(userParams.token, payload).then(response =>{ console.log("The Notification Has been Sent !"); });
 	}
 	catch (error) {
 		throw `Could not send notification`;

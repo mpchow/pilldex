@@ -36,8 +36,6 @@ class Reminder {
    getDefaultDate = (mode, hr, min, spacing) => {
       let hour, minute, leftBound, rightBound;
 
-		console.log(this.userTimes);
-   
       if (mode === "FoodSleep") {
          hour = (this.userTimes.dinnerHr + this.userTimes.sleepHr) / 2;
          minute = 0;
@@ -61,15 +59,12 @@ class Reminder {
          minute = this.user.breakfastMin;
          leftBound = this.userTimes.breakfastHr - this.userTimes.wakeupHr < 4 ? (this.userTimes.breakfastHr - this.userTimes.wakeupHr) : 4;
          rightBound = this.userTimes.lunchHr - this.userTimes.breakfastHr < 4 ? (this.userTimes.lunchHr - this.userTimes.breakfastHr) : 4;
-		console.log("***********************IN BREAKFAST, rightBound = ", rightBound);
       }
       else if (mode === "Lunch") {
          hour = this.userTimes.lunchHr;
          minute = this.user.lunchMin;
          leftBound = this.userTimes.lunchHr - this.userTimes.breakfastHr < 4 ? (this.userTimes.lunchHr - this.userTimes.breakfastHr) : 4;
          rightBound = this.userTimes.dinnerHr - this.userTimes.lunchHr < 4 ? (this.userTimes.dinnerHr - this.userTimes.lunchHr) : 4;
-		console.log("***********************IN LUNCH, leftBound = ", leftBound);
-		console.log("***********************IN LUNCH, rightBound = ", rightBound);
       }
       else if (mode === "Dinner") {
          hour = this.userTimes.dinnerHr;
