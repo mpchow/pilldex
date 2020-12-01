@@ -286,7 +286,7 @@ describe("Creating Schedule Tests", () => {
          userId: "Z1KuReJrWHP72DZn66hMtBBaeL23",
          totalQuantity: 10,
          frequency: 3,
-         frequencyUnit: 'weekly',
+         frequencyUnit: 'daily',
          dosage: 1, 
          withFood: true,
          withSleep: false

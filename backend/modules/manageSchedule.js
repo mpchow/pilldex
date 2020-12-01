@@ -70,24 +70,13 @@ const createSchedule = (pillParams, user) => {
    }
    else {
       if(context === "Food") {
-         let breakfastReminder = reminder.createReminder("Breakfast");
-         let lunchReminder = reminder.createReminder("Lunch");
-         let dinnerReminder = reminder.createReminder("Dinner");
-         let reminderBody;
-         for (let day in freqMap[pillParams.frequency - 1]) {
-            for (let j = 0; j < pillParams.frequency; j++) {
-               reminderBody = j === 0 ? breakfastReminder : j === 1 ? lunchReminder : dinnerReminder;
-               schedule[day].push(reminderBody);
-            }
-         }
-      }
-      else {
-         let reminderBody = reminder.createReminder(context)
-         let spacing = freqMap[pillParams.frequency - 1];
-         for (let i = 0; i < spacing.length; i++) {
-            schedule[0].push(reminderBody);
-            schedule[4].push(reminderBody);
-         }
+         context = "Breakfast";
+      } 
+      let reminderBody = reminder.createReminder(context)
+      let spacing = freqMap[pillParams.frequency - 1];
+      for (let i = 0; i < spacing.length; i++) {
+         schedule[0].push(reminderBody);
+         schedule[4].push(reminderBody);
       }
    }
 
