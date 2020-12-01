@@ -131,7 +131,6 @@ describe("Creating Schedule Tests", () => {
       done();
    });
 
-   
    it("Test Daily Sleep Pill", (done) => {
       const testCreateUser = {
          "token":"dDjHv9gvQKC_1g2FkjZN1A:APA91bFXWSDCa-rzrVxUeUWS2ujBgN1ri0K0ihsSkIjBixi2UYAl8WeZQtfJngiKy7nh8HwklNA8dQ73Bknn_GY_AZeEM8m-GyzxqoxhuKQef7YbTM9osEgqE7tjZ6k9zTHJjYiRCCqA",
@@ -341,6 +340,46 @@ describe("Creating Schedule Tests", () => {
       done();
    })
 
+   it("Test 2 times a week Pill", (done) => {
+      const testCreateUser = {
+         "token":"dDjHv9gvQKC_1g2FkjZN1A:APA91bFXWSDCa-rzrVxUeUWS2ujBgN1ri0K0ihsSkIjBixi2UYAl8WeZQtfJngiKy7nh8HwklNA8dQ73Bknn_GY_AZeEM8m-GyzxqoxhuKQef7YbTM9osEgqE7tjZ6k9zTHJjYiRCCqA",
+         "userId":"Z1KuReJrWHP72DZn66hMtBBaeL23",
+         "wakeupHr":8,
+         "wakeupMin":0,
+         "wakeupAM":true,
+         "sleepHr":9,
+         "sleepMin":0,
+         "sleepAM":false,
+         "breakfastHr":8,
+         "breakfastMin":30,
+         "breakfastAM":true,
+         "lunchHr":1,
+         "lunchMin":0,
+         "lunchAM":false,
+         "dinnerHr":7,
+         "dinnerMin":0,
+         "dinnerAM":false,
+         "schedule":[[],[],[],[],[],[],[]]
+      }
+      const testPillParams = {
+         name: "Tylenol",
+         userId: "Z1KuReJrWHP72DZn66hMtBBaeL23",
+         totalQuantity: 10,
+         frequency: 2,
+         frequencyUnit: 'weekly',
+         dosage: 1, 
+         withFood: true,
+         withSleep: true
+      };
+
+      const newSchedule = scheduler.createSchedule(testPillParams, testCreateUser);
+
+      expect(newSchedule[0][0].time.reminderTime).toStrictEqual({hour: 20, minute: 0});
+      expect(newSchedule[4][0].time.reminderTime).toStrictEqual({hour: 20, minute: 0});
+      expect(newSchedule[0][0].pillName).toStrictEqual("Tylenol");
+      expect(newSchedule[4][0].pillName).toStrictEqual("Tylenol");
+      done();
+   })
 })
 
 
@@ -619,7 +658,7 @@ describe("Remove Schedule Tests", () => {
    })
 
 
-   it("Delete one Pill", async done => {
+   it("Delete 1 Daily Pill", async done => {
       const reminderToDelete = {
          time: {
             reminderTime: {
@@ -688,7 +727,121 @@ describe("Remove Schedule Tests", () => {
 
    })
 
+   it("Delete Weekly Pill", async done => {
+      const reminderToDelete = {
+         time: {
+            reminderTime: {
+               hour: 9,
+               minute: 30
+            },
+            leftBound: 4,
+            rightBound: 4
+         },
+         pillName: "Advil",
+         reminderId: "1234",
+         dosage: 1,
+         timesLate: 0,
+         adjustedTimes: [],
+         takenEarly: false,
+         withFood: true,
+         withSleep: false
+      }
 
+      const reminderToNotDelete = {
+         time: {
+            reminderTime: {
+               hour: 11,
+               minute: 30
+            },
+            leftBound: 4,
+            rightBound: 4
+         },
+         pillName: "Tylenol",
+         reminderId: "1235",
+         dosage: 1,
+         timesLate: 0,
+         adjustedTimes: [],
+         takenEarly: false,
+         withFood: true,
+         withSleep: false
+      }
+
+      const testRemoveUser = {
+         "token":"dDjHv9gvQKC_1g2FkjZN1A:APA91bFXWSDCa-rzrVxUeUWS2ujBgN1ri0K0ihsSkIjBixi2UYAl8WeZQtfJngiKy7nh8HwklNA8dQ73Bknn_GY_AZeEM8m-GyzxqoxhuKQef7YbTM9osEgqE7tjZ6k9zTHJjYiRCCqA",
+         "userId":"Z1KuReJrWHP72DZn66hMtBBaeL23",
+         "wakeupHr":8,
+         "wakeupMin":0,
+         "wakeupAM":true,
+         "sleepHr":9,
+         "sleepMin":0,
+         "sleepAM":false,
+         "breakfastHr":8,
+         "breakfastMin":30,
+         "breakfastAM":true,
+         "lunchHr":1,
+         "lunchMin":0,
+         "lunchAM":false,
+         "dinnerHr":7,
+         "dinnerMin":0,
+         "dinnerAM":false,
+         "schedule":[[reminderToNotDelete],[reminderToNotDelete],[reminderToNotDelete],[reminderToDelete,reminderToNotDelete],[reminderToNotDelete],[reminderToNotDelete],[reminderToNotDelete]]
+      }
+
+      const newSchedule = scheduler.deleteSchedule(testRemoveUser, "Advil");
+
+      for (let i = 0; i < 7; i++) {
+         expect(newSchedule[i][0]).toStrictEqual(reminderToNotDelete);
+      }
+      done();
+   })
    
+   it("Don't Delete Any Pill", async done => {
+      const reminderToNotDelete = {
+         time: {
+            reminderTime: {
+               hour: 11,
+               minute: 30
+            },
+            leftBound: 4,
+            rightBound: 4
+         },
+         pillName: "Tylenol",
+         reminderId: "1235",
+         dosage: 1,
+         timesLate: 0,
+         adjustedTimes: [],
+         takenEarly: false,
+         withFood: true,
+         withSleep: false
+      }
 
+      const testRemoveUser = {
+         "token":"dDjHv9gvQKC_1g2FkjZN1A:APA91bFXWSDCa-rzrVxUeUWS2ujBgN1ri0K0ihsSkIjBixi2UYAl8WeZQtfJngiKy7nh8HwklNA8dQ73Bknn_GY_AZeEM8m-GyzxqoxhuKQef7YbTM9osEgqE7tjZ6k9zTHJjYiRCCqA",
+         "userId":"Z1KuReJrWHP72DZn66hMtBBaeL23",
+         "wakeupHr":8,
+         "wakeupMin":0,
+         "wakeupAM":true,
+         "sleepHr":9,
+         "sleepMin":0,
+         "sleepAM":false,
+         "breakfastHr":8,
+         "breakfastMin":30,
+         "breakfastAM":true,
+         "lunchHr":1,
+         "lunchMin":0,
+         "lunchAM":false,
+         "dinnerHr":7,
+         "dinnerMin":0,
+         "dinnerAM":false,
+         "schedule":[[reminderToNotDelete],[reminderToNotDelete],[reminderToNotDelete],[reminderToNotDelete],[reminderToNotDelete],[reminderToNotDelete],[reminderToNotDelete]]
+      }
+
+      const newSchedule = scheduler.deleteSchedule(testRemoveUser, "Advil");
+
+      for (let i = 0; i < 7; i++) {
+         expect(newSchedule[i][0]).toStrictEqual(reminderToNotDelete);
+         expect(newSchedule[i].length).toStrictEqual(1);
+      }
+      done();
+   })
 })
