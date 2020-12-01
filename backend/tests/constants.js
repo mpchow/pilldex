@@ -22,6 +22,8 @@ let constants = {
 
 	takenPillValid : {"userId":"validUserId2", "name":"testPill", "timeTaken" : {"day":0, "hour":1, "min":10}, "reminderId":"214e5249-a89e-473a-a554-609942a01b5f"},
 
+
+	// Test Pills for testing ManageSchedule
 	testPillFoodSleep: {"userId":"validUserId2", "name":"foodSleepPill", "totalQuantity":10, "frequency":2, "frequencyUnit":"daily", "dosage":1,
 	   			  "withFood":true, "withSleep":true, "remaining":5},
 
@@ -48,6 +50,15 @@ let constants = {
 
 	testPillFood3Lt: {"userId":"validUserId2", "name":"food3lt", "totalQuantity":10, "frequency":3, "frequencyUnit":"daily", "dosage":1,
 	   			  "withFood":true, "withSleep":false, "remaining":5},
+
+	testPillDaily: {"userId":"validUserId2", "name":"dailyNoFoodSleep", "totalQuantity":10, "frequency":3, "frequencyUnit":"daily", "dosage":1,
+	   			  "withFood":false, "withSleep":false, "remaining":5},
+	testPillDaily2: {"userId":"greaterThanUser", "name":"dailyNoFoodSleep2", "totalQuantity":10, "frequency":3, "frequencyUnit":"daily", "dosage":1,
+	   			  "withFood":false, "withSleep":false, "remaining":5},
+	testPillEvening: {"userId":"eveningUser", "name":"eveningUserPill", "totalQuantity":10, "frequency":3, "frequencyUnit":"daily", "dosage":1,
+	   			  "withFood":false, "withSleep":false, "remaining":5},
+	testPill12AM: {"userId":"12AMUser", "name":"12AMUserPill", "totalQuantity":10, "frequency":3, "frequencyUnit":"daily", "dosage":1,
+	   			  "withFood":false, "withSleep":false, "remaining":5},
 
 	// Test Labels for integration testing
 	testLabel : {"body":"1 Local Pharmacy 0004921—39S RX 500 MG TABLET\n TAKE ONE TABLET TWICE DAILY\n QTY: 20 NO REFILLS REMAIN 123 RX AVENUE NEW YORK DISCARD BY: 02/05/2020 (555) 555 -555 five"},
@@ -251,11 +262,19 @@ let constants = {
 					 "breakfastHr":6, "breakfastMin":30, "breakfastAM":true, "breakfastPM":false, "lunchHr":11, "lunchMin":0, "lunchAM":true, "lunchPM":false, "dinnerHr":4, "dinnerMin":20,
 					 "dinnerAM":false, "dinnerPM":true, "schedule":[[], [], [], [], [], [], []]}, 
 
-	newUser : {"token":"testToken", "userId":"validUserId", "wakeupHr":10, "wakeupMin":10, "wakeupAM":true, "wakeupPM":false, "sleepHr":10, "sleepMin":10, "sleepAM":false, "sleepPM":true,
+	eveningUser : {"token":"testToken", "userId":"eveningUser", "wakeupHr":11, "wakeupMin":10, "wakeupAM":false , "wakeupPM":true, "sleepHr":11, "sleepMin":10, "sleepAM":false, "sleepPM":true,
+					 "breakfastHr":11, "breakfastMin":30, "breakfastAM":false, "breakfastPM":true, "lunchHr":11, "lunchMin":0, "lunchAM":false, "lunchPM":true, "dinnerHr":11, "dinnerMin":20,
+					 "dinnerAM":false, "dinnerPM":true, "schedule":[[], [], [], [], [], [], []]}, 
+
+	AMuser : {"token":"testToken", "userId":"12AMUser", "wakeupHr":12, "wakeupMin":10, "wakeupAM":true , "wakeupPM":false , "sleepHr":11, "sleepMin":10, "sleepAM":false, "sleepPM":true,
+					 "breakfastHr":11, "breakfastMin":30, "breakfastAM":false, "breakfastPM":true, "lunchHr":11, "lunchMin":0, "lunchAM":false, "lunchPM":true, "dinnerHr":11, "dinnerMin":20,
+					 "dinnerAM":false, "dinnerPM":true, "schedule":[[], [], [], [], [], [], []]}, 
+
+	newUser : {"token":"testToken", "userId":"validUserId", "wakeupHr":12, "wakeupMin":10, "wakeupAM":false, "wakeupPM":true, "sleepHr":10, "sleepMin":10, "sleepAM":false, "sleepPM":true,
 					 "breakfastHr":10, "breakfastMin":30, "breakfastAM":true, "breakfastPM":false, "lunchHr":12, "lunchMin":0, "lunchAM":false, "lunchPM":true, "dinnerHr":7, "dinnerMin":15,
 					 "dinnerAM":false, "dinnerPM":true, "schedule":[[], [], [], [], [], [], []]}, 
 	
-	updateUserValid : {"token":"testToken", "userId":"validUserId", "wakeupHr":8, "wakeupMin":50, "wakeupAM":true, "wakeupPM":false, "sleepHr":10, "sleepMin":10, "sleepAM":false, "sleepPM":true,
+	updateUserValid : {"token":"testToken", "userId":"validUserId", "wakeupHr":12, "wakeupMin":50, "wakeupAM":false, "wakeupPM":true, "sleepHr":10, "sleepMin":10, "sleepAM":false, "sleepPM":true,
 					 "breakfastHr":10, "breakfastMin":30, "breakfastAM":true, "breakfastPM":false, "lunchHr":12, "lunchMin":0, "lunchAM":false, "lunchPM":true, "dinnerHr":7, "dinnerMin":15,
 					 "dinnerAM":false, "dinnerPM":true, "schedule":[[], [], [], [], [], [], []] 
 					 },

@@ -20,7 +20,7 @@ const getContext = (pillParams) => {
 const createSchedule = (pillParams, user) => {
    let schedule = user.schedule;
    let context = getContext(pillParams);
-   
+
    const userTimes = {
       wakeupHr: user.wakeupAM ? (user.wakeupHr === 12 ? 0 : user.wakeupHr) : user.wakeupHr + 12,
       wakeupTime: ((user.wakeupAM || user.wakeupHr === 12) ? user.wakeupHr : user.wakeupHr + 12) * 60 + user.wakeupMin,

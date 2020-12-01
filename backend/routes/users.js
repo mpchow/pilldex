@@ -15,7 +15,6 @@ function getUser(req, res, next) {
 }
 
 function newUser(req, res, next) {
-	console.log("Creating a new user");
 	profileService.create(req.body) 
 		.then((success) => res.json(success))
 }
@@ -26,7 +25,6 @@ function updateUser(req, res, next) {
 }
 
 function deleteUser(req, res, next) {
-	console.log("DELETING USER");
 	profileService.remove(req.body) 
 		.then((success) => res.json(success))
 }

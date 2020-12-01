@@ -62,7 +62,6 @@ const update = async (profileParams) => {
  */
 const remove = async (profileParams) => {
 	try {
-		console.log(profileParams.userId);
 		let user = await Profile.findOne({ userId: profileParams.userId });
 		if (user === null)
 			throw 'User Not Found';
