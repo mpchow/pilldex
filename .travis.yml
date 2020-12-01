@@ -9,8 +9,8 @@ addons:
       - ubuntu-toolchain-r-test
     packages:
       - g++-4.8
-
+# npm install --save-dev jest
 before_install:
   - npm i -g npm@6.14.8
 
-script: npm install --save-dev jest && cd ./backend && npm test -- schedule.test.js label.test.js
+script: cd ./backend && npm install && npm test -- schedule.test.js label.test.js
