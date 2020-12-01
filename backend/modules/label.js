@@ -8,7 +8,9 @@ var numDict = {"one" : 1, "two" : 2, "three" : 3, "four" : 4, "five" : 5, "six" 
 /* Parses through the label text and returns a json object with populated pill fields */
 const parseLabel = async (label) => {
 	// JSON object mimicking the pill object
-	var pillData = {"name": null, "totalQuantity" : null, "frequency" : null, "frequencyUnit" : null, "dosage" : null, "withFood" : false, "withSleep" : false};
+	var pillData = {"name": null, "totalQuantity" : null, "frequency" : null, 
+					"frequencyUnit" : null, "dosage" : null, "withFood" : false, 
+					"withSleep" : false};
 	
 	if (label.body === "" || label.body == null)
 		return({ pillData: pillData, msg: 'Success'});
@@ -19,34 +21,29 @@ const parseLabel = async (label) => {
 	
 		if (helpers.getName(splitLabel, i, pillData)) {
 			// Total quantity often indicated before the pillName
-			if (i !== 0 && (splitLabel[i-1] in numDict)){
+			if (i !== 0 && (splitLabel[i-1] in numDict))
 				pillData.totalQuantity = numDict[splitLabel[i-1]];
-			}
-			else if (i !== 0 && Number.isInteger(parseInt(splitLabel[i-1], 10))){
+
+			else if (i !== 0 && Number.isInteger(parseInt(splitLabel[i-1], 10)))
 				pillData.totalQuantity = parseInt(splitLabel[i-1], 10);
-			}
+
 			continue;
 		}
 		
-		else if (helpers.getFreqUnit(splitLabel, i, pillData)){
+		else if (helpers.getFreqUnit(splitLabel, i, pillData))
 			continue;
-		}
 		
-		else if (helpers.getConditions(splitLabel, i, pillData)){
+		else if (helpers.getConditions(splitLabel, i, pillData))
 			continue;
-		}
 	
-		else if (helpers.getDosage(splitLabel, i, pillData)){
+		else if (helpers.getDosage(splitLabel, i, pillData))
 			continue;
-		}
 	
-		else if (helpers.getFreq(splitLabel, i, pillData)){
+		else if (helpers.getFreq(splitLabel, i, pillData))
 			continue;
-		}
 		
-		else {
+		else 
 			helpers.getQuantity(splitLabel, i, pillData);
-		}
 	
 	}
 	return({ pillData: pillData, msg: 'Success'});

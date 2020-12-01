@@ -32,6 +32,47 @@ const create = async (pillParams) => {
 };
 
 /*
+ * Get a single pill based on the provided parameters
+ * pillParams.query.name = name of pill to retrieve
+ * pillParams.query.userId = userId of the user
+ */
+const retrieve = async (pillParams) => {
+	try {
+		let pill = await Pill.findOne({name: pillParams.query.name, 
+									   userId: pillParams.query.userId})
+		if (pill === null)
+			throw "Could not find pill";
+
+		return ({pill: pill, status: 200, msg: 'Retrieved Pill Successfully'});
+    }
+    catch (error) {
+		const newParams = {userId: pillParams.query.userId, name: pillParams.query.name};
+		return getErrorMessage(newParams);
+    }
+};
+
+/*
+ * Get all pills of the target user
+ * pillParams.query.userId = userId of the user
+ */
+const retrieveAll = async (pillParams) => {
+	try {
+		let user = await User.findOne({ userId: pillParams.query.userId })
+		if (user === null)
+			throw "Could not find user";
+
+		let pills = await Pill.find({userId: pillParams.query.userId});
+		return ({pills: pills, status: 200, msg: 'Retrieved Pills Successfully'});
+
+	}
+	catch (error) {
+		const newParams = {userId: pillParams.query.userId};
+		return getErrorMessage(newParams);
+	}
+};
+
+
+/*
  * Updates the pill object
  * pillParams.name = name of target pill
  * pillParams.userId = userId of the target user
@@ -91,44 +132,6 @@ const remove = async (pillParams) => {
 	}
 	catch (error) {
 		return getErrorMessage(pillParams);
-	}
-};
-
-/*
- * Get a single pill based on the provided parameters
- * pillParams.query.name = name of pill to retrieve
- * pillParams.query.userId = userId of the user
- */
-const retrieve = async (pillParams) => {
-	try {
-		let pill = await Pill.findOne({name: pillParams.query.name, userId: pillParams.query.userId})
-		if (pill === null)
-			throw "Could not find pill";
-		return ({pill: pill, status: 200, msg: 'Retrieved Pill Successfully'});
-    }
-    catch (error) {
-		const newParams = {userId: pillParams.query.userId, name: pillParams.query.name};
-		return getErrorMessage(newParams);
-    }
-};
-
-/*
- * Get all pills of the target user
- * pillParams.query.userId = userId of the user
- */
-const retrieveAll = async (pillParams) => {
-	try {
-		let user = await User.findOne({ userId: pillParams.query.userId })
-		if (user === null)
-			throw "Could not find user";
-
-		let pills = await Pill.find({userId: pillParams.query.userId});
-		return ({pills: pills, status: 200, msg: 'Retrieved Pills Successfully'});
-
-	}
-	catch (error) {
-		const newParams = {userId: pillParams.query.userId};
-		return getErrorMessage(newParams);
 	}
 };
 

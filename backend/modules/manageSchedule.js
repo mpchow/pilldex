@@ -16,72 +16,6 @@ const freqMap = [
 const getContext = (pillParams) => {
    return (pillParams.withFood && pillParams.withSleep) ? "FoodSleep" : pillParams.withSleep ? "Sleep" : pillParams.withFood ? "Food" : "Spaced";
 }
- 
-const updateSchedule = (reqBody, user) => {
-   let schedule = user.schedule;
-
-   let timeTaken = reqBody.timeTaken;
-   let reminderId = reqBody.reminderId;
-   let dayReminders = schedule[timeTaken.day];
-
-   let pillReminder = dayReminders.find(reminders => reminders !== null && reminders.reminderId === reminderId);
-   if (pillReminder == null)
-      return schedule;
-
-   let timeTakenConverted = timeTaken.hour * 60 + timeTaken.minute;
-   let reminderTimeConverted = pillReminder.time.reminderTime.hour * 60 + pillReminder.time.reminderTime.minute;
-
-   let timeDiff = Math.abs(timeTakenConverted - reminderTimeConverted);
-
-   if (timeDiff > 30) {
-      pillReminder.timesLate++;
-
-      let percentageLate;
-      let timeAdjust;
-
-      if(timeTakenConverted < reminderTimeConverted) {
-         percentageLate = timeDiff / (pillReminder.time.leftBound * 60);
-         timeAdjust = Math.floor(dist.cdf(3 * percentageLate) * 60);
-
-         pillReminder.adjustedTimes.push(reminderTimeConverted - timeAdjust);
-      }  
-      else {
-         percentageLate = timeDiff / (pillReminder.time.rightBound * 60);
-         timeAdjust = Math.floor(dist.cdf(3 * percentageLate) * 60);
-
-         pillReminder.adjustedTimes.push(reminderTimeConverted + timeAdjust);
-      }
-
-      if(pillReminder.timesLate === 3) {
-         pillReminder.timesLate = 0;
-         pillReminder.takenEarly = false;
-
-         let newTime = 0;
-         for(let i = 0; i < pillReminder.adjustedTimes.length; i++) {
-            newTime += pillReminder.adjustedTimes[i];
-         }
-         newTime /= pillReminder.adjustedTimes.length;
-         pillReminder.time.reminderTime = {hour: Math.floor(newTime/60), minute: Math.floor(newTime % 60)};
-         pillReminder.adjustedTimes = [];
-      }
-   } 
-
-   return schedule;
-}
-
-const deleteSchedule = (user, pillName) => {
-   let schedule = user.schedule;
-   
-   for(let i = 0; i < schedule.length; i++) {
-      schedule[i] = schedule[i].filter(reminder => {
-         if(reminder !== null && reminder.pillName !== pillName) {
-            return reminder;
-         }
-      })
-   }
-
-   return schedule;
-};
 
 const createSchedule = (pillParams, user) => {
    let schedule = user.schedule;
@@ -157,5 +91,72 @@ const createSchedule = (pillParams, user) => {
 
    return schedule;
 } 
+ 
+const updateSchedule = (reqBody, user) => {
+   let schedule = user.schedule;
+
+   let timeTaken = reqBody.timeTaken;
+   let reminderId = reqBody.reminderId;
+   let dayReminders = schedule[timeTaken.day];
+
+   let pillReminder = dayReminders.find(reminders => reminders !== null && reminders.reminderId === reminderId);
+   if (pillReminder == null)
+      return schedule;
+
+   let timeTakenConverted = timeTaken.hour * 60 + timeTaken.minute;
+   let reminderTimeConverted = pillReminder.time.reminderTime.hour * 60 + pillReminder.time.reminderTime.minute;
+
+   let timeDiff = Math.abs(timeTakenConverted - reminderTimeConverted);
+
+   if (timeDiff > 30) {
+      pillReminder.timesLate++;
+
+      let percentageLate;
+      let timeAdjust;
+
+      if(timeTakenConverted < reminderTimeConverted) {
+         percentageLate = timeDiff / (pillReminder.time.leftBound * 60);
+         timeAdjust = Math.floor(dist.cdf(3 * percentageLate) * 60);
+
+         pillReminder.adjustedTimes.push(reminderTimeConverted - timeAdjust);
+      }  
+      else {
+         percentageLate = timeDiff / (pillReminder.time.rightBound * 60);
+         timeAdjust = Math.floor(dist.cdf(3 * percentageLate) * 60);
+
+         pillReminder.adjustedTimes.push(reminderTimeConverted + timeAdjust);
+      }
+
+      if(pillReminder.timesLate === 3) {
+         pillReminder.timesLate = 0;
+         pillReminder.takenEarly = false;
+
+         let newTime = 0;
+         for(let i = 0; i < pillReminder.adjustedTimes.length; i++) {
+            newTime += pillReminder.adjustedTimes[i];
+         }
+         newTime /= pillReminder.adjustedTimes.length;
+         pillReminder.time.reminderTime = {hour: Math.floor(newTime/60), minute: Math.floor(newTime % 60)};
+         pillReminder.adjustedTimes = [];
+      }
+   } 
+
+   return schedule;
+}
+
+const deleteSchedule = (user, pillName) => {
+   let schedule = user.schedule;
+   
+   for(let i = 0; i < schedule.length; i++) {
+      schedule[i] = schedule[i].filter(reminder => {
+         if(reminder !== null && reminder.pillName !== pillName) {
+            return reminder;
+         }
+      })
+   }
+
+   return schedule;
+};
+
 
 module.exports = {createSchedule, updateSchedule, deleteSchedule};
