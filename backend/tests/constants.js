@@ -259,7 +259,7 @@ let constants = {
 					 "dinnerAM":true, "dinnerPM":false, "schedule":[[], [], [], [], [], [], []]}, 
 
 	greaterThanUser : {"token":"testToken", "userId":"greaterThanUser", "wakeupHr":1, "wakeupMin":10, "wakeupAM":true, "wakeupPM":false, "sleepHr":11, "sleepMin":10, "sleepAM":false, "sleepPM":true,
-					 "breakfastHr":6, "breakfastMin":30, "breakfastAM":true, "breakfastPM":false, "lunchHr":10, "lunchMin":0, "lunchAM":true, "lunchPM":false, "dinnerHr":2, "dinnerMin":20,
+					 "breakfastHr":6, "breakfastMin":30, "breakfastAM":true, "breakfastPM":false, "lunchHr":10, "lunchMin":0, "lunchAM":true, "lunchPM":false, "dinnerHr":3, "dinnerMin":20,
 					 "dinnerAM":false, "dinnerPM":true, "schedule":[[], [], [], [], [], [], []]}, 
 
 	eveningUser : {"token":"testToken", "userId":"eveningUser", "wakeupHr":11, "wakeupMin":10, "wakeupAM":false , "wakeupPM":true, "sleepHr":11, "sleepMin":10, "sleepAM":false, "sleepPM":true,
