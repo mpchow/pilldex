@@ -369,13 +369,13 @@ describe("Creating Schedule Tests", () => {
          frequencyUnit: 'weekly',
          dosage: 1, 
          withFood: true,
-         withSleep: true
+         withSleep: false
       };
 
       const newSchedule = scheduler.createSchedule(testPillParams, testCreateUser);
 
-      expect(newSchedule[0][0].time.reminderTime).toStrictEqual({hour: 20, minute: 0});
-      expect(newSchedule[4][0].time.reminderTime).toStrictEqual({hour: 20, minute: 0});
+      expect(newSchedule[0][0].time.reminderTime).toStrictEqual({hour: 8, minute: 30});
+      expect(newSchedule[4][0].time.reminderTime).toStrictEqual({hour: 8, minute: 30});
       expect(newSchedule[0][0].pillName).toStrictEqual("Tylenol");
       expect(newSchedule[4][0].pillName).toStrictEqual("Tylenol");
       done();

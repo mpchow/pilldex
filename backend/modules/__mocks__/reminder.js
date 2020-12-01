@@ -604,8 +604,8 @@ const mockCreateReminder = jest
    return  {
          time: {
             reminderTime: {
-               hour: 20,
-               minute: 0
+               hour: 8,
+               minute: 30
             },
             leftBound: 4,
             rightBound: 4
