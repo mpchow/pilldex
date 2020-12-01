@@ -13,6 +13,10 @@ describe("Create Pill Integrated Test", () => {
 		await request.post('/users').send(Constants.initialUser);
     });	
 
+	beforeAll( async function() {
+		await request.post('/users').send(Constants.greaterThanUser);
+    });	
+
 	it('Tests POST endpoint with invalid userId', async done => {
 		// Sends POST Request to /pills endpoint
 		const res = await request.post('/pills').send(Constants.testPillInvalidUser);
@@ -259,3 +263,146 @@ describe("Parse Label Integration Test", () => {
 	})
 });
 
+describe("Test Creating Pill with Varying Conditions", () => {
+	it('Tests POST endpoint with pill requiring Food And Sleep', async done => {
+		// Sends POST Request to /pills endpoint
+		const res = await request.post('/pills').send(Constants.testPillFoodSleep);
+		expect(res.status).toBe(200);
+		expect(res.body.status).toBe(200);
+		expect(res.body.msg).toBe('Pill Created Successfully');
+		done();
+	})
+	// Delete the pill so next time tests are run, pill already exists error will not occur
+	it('Tests DELETE endpoint with valid parameters', async done => {
+		// Sends GET Request to /pills endpoint
+		const res = await request.delete('/pills').send(Constants.testPillFoodSleep);
+		expect(res.status).toBe(200);
+		expect(res.body.msg).toBe('Pill Removed Successfully');
+		done();
+	})
+	it('Tests POST endpoint with pill requiring Only Sleep', async done => {
+		// Sends POST Request to /pills endpoint
+		const res = await request.post('/pills').send(Constants.testPillSleep);
+		expect(res.status).toBe(200);
+		expect(res.body.status).toBe(200);
+		expect(res.body.msg).toBe('Pill Created Successfully');
+		done();
+	})
+	// Delete the pill so next time tests are run, pill already exists error will not occur
+	it('Tests DELETE endpoint with valid parameters', async done => {
+		// Sends GET Request to /pills endpoint
+		const res = await request.delete('/pills').send(Constants.testPillSleep);
+		expect(res.status).toBe(200);
+		expect(res.body.msg).toBe('Pill Removed Successfully');
+		done();
+	})
+	it('Tests POST endpoint with weekly pill without food', async done => {
+		// Sends POST Request to /pills endpoint
+		const res = await request.post('/pills').send(Constants.testPillWeekly);
+		expect(res.status).toBe(200);
+		expect(res.body.status).toBe(200);
+		expect(res.body.msg).toBe('Pill Created Successfully');
+		done();
+	})
+	// Delete the pill so next time tests are run, pill already exists error will not occur
+	it('Tests DELETE endpoint with valid parameters', async done => {
+		// Sends GET Request to /pills endpoint
+		const res = await request.delete('/pills').send(Constants.testPillWeekly);
+		expect(res.status).toBe(200);
+		expect(res.body.msg).toBe('Pill Removed Successfully');
+		done();
+	})
+	it('Tests POST endpoint with pill requiring Food And Sleep', async done => {
+		// Sends POST Request to /pills endpoint
+		const res = await request.post('/pills').send(Constants.testPillFoodSleep2);
+		expect(res.status).toBe(200);
+		expect(res.body.status).toBe(200);
+		expect(res.body.msg).toBe('Pill Created Successfully');
+		done();
+	})
+	// Delete the pill so next time tests are run, pill already exists error will not occur
+	it('Tests DELETE endpoint with valid parameters', async done => {
+		// Sends GET Request to /pills endpoint
+		const res = await request.delete('/pills').send(Constants.testPillFoodSleep2);
+		expect(res.status).toBe(200);
+		expect(res.body.msg).toBe('Pill Removed Successfully');
+		done();
+	})
+	it('Tests POST endpoint with pill requiring Only Sleep', async done => {
+		// Sends POST Request to /pills endpoint
+		const res = await request.post('/pills').send(Constants.testPillSleep2);
+		expect(res.status).toBe(200);
+		expect(res.body.status).toBe(200);
+		expect(res.body.msg).toBe('Pill Created Successfully');
+		done();
+	})
+	// Delete the pill so next time tests are run, pill already exists error will not occur
+	it('Tests DELETE endpoint with valid parameters', async done => {
+		// Sends GET Request to /pills endpoint
+		const res = await request.delete('/pills').send(Constants.testPillSleep2);
+		expect(res.status).toBe(200);
+		expect(res.body.msg).toBe('Pill Removed Successfully');
+		done();
+	})
+	it('Tests POST endpoint with hours > 4 apart', async done => {
+		// Sends POST Request to /pills endpoint
+		const res = await request.post('/pills').send(Constants.testPillWeekly2);
+		expect(res.status).toBe(200);
+		expect(res.body.status).toBe(200);
+		expect(res.body.msg).toBe('Pill Created Successfully');
+		done();
+	})
+	// Delete the pill so next time tests are run, pill already exists error will not occur
+	it('Tests DELETE endpoint with valid parameters', async done => {
+		// Sends GET Request to /pills endpoint
+		const res = await request.delete('/pills').send(Constants.testPillWeekly2);
+		expect(res.status).toBe(200);
+		expect(res.body.msg).toBe('Pill Removed Successfully');
+		done();
+	})
+	it('Tests POST endpoint with hours > 4 apart with food', async done => {
+		// Sends POST Request to /pills endpoint
+		const res = await request.post('/pills').send(Constants.testPillFood3Gt);
+		expect(res.status).toBe(200);
+		expect(res.body.status).toBe(200);
+		expect(res.body.msg).toBe('Pill Created Successfully');
+		done();
+	})
+	// Delete the pill so next time tests are run, pill already exists error will not occur
+	it('Tests DELETE endpoint with valid parameters', async done => {
+		// Sends GET Request to /pills endpoint
+		const res = await request.delete('/pills').send(Constants.testPillFood3Gt);
+		expect(res.status).toBe(200);
+		expect(res.body.msg).toBe('Pill Removed Successfully');
+		done();
+	})
+	it('Tests POST endpoint with hours < 4 apart with food', async done => {
+		// Sends POST Request to /pills endpoint
+		const res = await request.post('/pills').send(Constants.testPillFood3Lt);
+		expect(res.status).toBe(200);
+		expect(res.body.status).toBe(200);
+		expect(res.body.msg).toBe('Pill Created Successfully');
+		done();
+	})
+	// Delete the pill so next time tests are run, pill already exists error will not occur
+	it('Tests DELETE endpoint with valid parameters', async done => {
+		// Sends GET Request to /pills endpoint
+		const res = await request.delete('/pills').send(Constants.testPillFood3Lt);
+		expect(res.status).toBe(200);
+		expect(res.body.msg).toBe('Pill Removed Successfully');
+		done();
+	})
+
+/*
+	it('Tests POST endpoint with valid userId', async done => {
+		// Sends POST Request to /pills endpoint
+		const res = await request.post('/pills').send(Constants.testPillValid);
+		expect(res.status).toBe(200);
+		expect(res.body.status).toBe(200);
+		expect(res.body.msg).toBe('Pill Created Successfully');
+		console.log("DONE");
+		done();
+	})
+*/
+
+});

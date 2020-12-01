@@ -22,6 +22,29 @@ let constants = {
 
 	takenPillValid : {"userId":"validUserId2", "name":"testPill", "timeTaken" : {"day":0, "hour":1, "min":10}, "reminderId":"214e5249-a89e-473a-a554-609942a01b5f"},
 
+	testPillFoodSleep: {"userId":"validUserId2", "name":"foodSleepPill", "totalQuantity":10, "frequency":2, "frequencyUnit":"daily", "dosage":1,
+	   			  "withFood":true, "withSleep":true, "remaining":5},
+
+	testPillSleep: {"userId":"validUserId2", "name":"sleepPill", "totalQuantity":10, "frequency":2, "frequencyUnit":"daily", "dosage":1,
+	   			  "withFood":false, "withSleep":true, "remaining":5},
+
+	testPillWeekly: {"userId":"validUserId2", "name":"weeklyPill", "totalQuantity":10, "frequency":2, "frequencyUnit":"weekly", "dosage":1,
+	   			  "withFood":false, "withSleep":false, "remaining":5},
+
+	testPillFoodSleep2: {"userId":"greaterThanUser", "name":"foodSleepPill2", "totalQuantity":10, "frequency":2, "frequencyUnit":"daily", "dosage":1,
+	   			  "withFood":true, "withSleep":true, "remaining":5},
+
+	testPillSleep2: {"userId":"greaterThanUser", "name":"sleepPill2", "totalQuantity":10, "frequency":2, "frequencyUnit":"daily", "dosage":1,
+	   			  "withFood":false, "withSleep":true, "remaining":5},
+
+	testPillWeekly2: {"userId":"greaterThanUser", "name":"weeklyPill2", "totalQuantity":10, "frequency":2, "frequencyUnit":"weekly", "dosage":1,
+	   			  "withFood":false, "withSleep":false, "remaining":5},
+
+	testPillFood3Gt: {"userId":"greaterThanUser", "name":"food3gt", "totalQuantity":10, "frequency":3, "frequencyUnit":"daily", "dosage":1,
+	   			  "withFood":true, "withSleep":false, "remaining":5},
+
+	testPillFood3Lt: {"userId":"validUserId2", "name":"food3lt", "totalQuantity":10, "frequency":3, "frequencyUnit":"daily", "dosage":1,
+	   			  "withFood":true, "withSleep":false, "remaining":5},
 
 	// Test Labels for integration testing
 	testLabel : {"body":"1 Local Pharmacy 0004921—39S RX 500 MG TABLET\n TAKE ONE TABLET TWICE DAILY\n QTY: 20 NO REFILLS REMAIN 123 RX AVENUE NEW YORK DISCARD BY: 02/05/2020 (555) 555 -555 five"},
@@ -217,17 +240,21 @@ let constants = {
 	pillNotFound : {status: 404, msg: "Pill Not Found"},
 
 	// Test Users for User Integration Tests:
-	initialUser : {"token":"testToken", "userId":"validUserId2", "wakeupHr":10, "wakeupMin":10, "wakeupAM":true, "wakeupPM":false, "sleepHr":10, "sleepMin":10, "sleepAM":false, "sleepPM":true,
-					 "breakfastHr":10, "breakfastMin":30, "breakfastAM":true, "breakfastPM":false, "lunchHr":12, "lunchMin":0, "lunchAM":false, "lunchPM":true, "dinnerHr":7, "dinnerMin":15,
-					 "dinnerAM":false, "dinnerPM":true, "schedule":[null, null, null, null, null, null, null]}, 
+	initialUser : {"token":"testToken", "userId":"validUserId2", "wakeupHr":1, "wakeupMin":10, "wakeupAM":true, "wakeupPM":false, "sleepHr":11, "sleepMin":10, "sleepAM":true, "sleepPM":false,
+					 "breakfastHr":3, "breakfastMin":30, "breakfastAM":true, "breakfastPM":false, "lunchHr":5, "lunchMin":0, "lunchAM":true, "lunchPM":false, "dinnerHr":7, "dinnerMin":15,
+					 "dinnerAM":true, "dinnerPM":false, "schedule":[[], [], [], [], [], [], []]}, 
+
+	greaterThanUser : {"token":"testToken", "userId":"greaterThanUser", "wakeupHr":1, "wakeupMin":10, "wakeupAM":true, "wakeupPM":false, "sleepHr":11, "sleepMin":10, "sleepAM":false, "sleepPM":true,
+					 "breakfastHr":6, "breakfastMin":30, "breakfastAM":true, "breakfastPM":false, "lunchHr":11, "lunchMin":0, "lunchAM":true, "lunchPM":false, "dinnerHr":4, "dinnerMin":20,
+					 "dinnerAM":false, "dinnerPM":true, "schedule":[[], [], [], [], [], [], []]}, 
 
 	newUser : {"token":"testToken", "userId":"validUserId", "wakeupHr":10, "wakeupMin":10, "wakeupAM":true, "wakeupPM":false, "sleepHr":10, "sleepMin":10, "sleepAM":false, "sleepPM":true,
 					 "breakfastHr":10, "breakfastMin":30, "breakfastAM":true, "breakfastPM":false, "lunchHr":12, "lunchMin":0, "lunchAM":false, "lunchPM":true, "dinnerHr":7, "dinnerMin":15,
-					 "dinnerAM":false, "dinnerPM":true, "schedule":[null, null, null, null, null, null, null]}, 
+					 "dinnerAM":false, "dinnerPM":true, "schedule":[[], [], [], [], [], [], []]}, 
 	
 	updateUserValid : {"token":"testToken", "userId":"validUserId", "wakeupHr":8, "wakeupMin":50, "wakeupAM":true, "wakeupPM":false, "sleepHr":10, "sleepMin":10, "sleepAM":false, "sleepPM":true,
 					 "breakfastHr":10, "breakfastMin":30, "breakfastAM":true, "breakfastPM":false, "lunchHr":12, "lunchMin":0, "lunchAM":false, "lunchPM":true, "dinnerHr":7, "dinnerMin":15,
-					 "dinnerAM":false, "dinnerPM":true, "schedule":[null, null, null, null, null, null, null] 
+					 "dinnerAM":false, "dinnerPM":true, "schedule":[[], [], [], [], [], [], []] 
 					 },
 	
 	updateUserInvalid : {"token":"testToken", "userId":"invalidUserId", "wakeupHr":8, "wakeupMin":50, "wakeupAM":true, "wakeupPM":false, "sleepHr":10, "sleepMin":10, "sleepAM":false }
