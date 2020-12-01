@@ -600,6 +600,27 @@ const mockCreateReminder = jest
          withSleep: true
    }
 }) //End of Test With Food and Sleep Pill
+.mockImplementationOnce(() => {
+   return  {
+         time: {
+            reminderTime: {
+               hour: 20,
+               minute: 0
+            },
+            leftBound: 4,
+            rightBound: 4
+         },
+         pillName: "Tylenol",
+         reminderId: 1234,
+         dosage: 1,
+         timesLate: 0,
+         adjustedTimes: [],
+         takenEarly: false,
+         withFood: true,
+         withSleep: true
+   }
+}) //End of Test 2 Times A Week Pill
+
 
 
 const mockReminder = jest.fn().mockImplementation(() => {

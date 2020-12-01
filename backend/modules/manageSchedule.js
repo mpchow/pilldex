@@ -83,8 +83,10 @@ const createSchedule = (pillParams, user) => {
       }
       else {
          let reminderBody = reminder.createReminder(context)
-         for (let day in freqMap[pillParams.frequency - 1]) {
-            schedule[day].push(reminderBody);
+         let spacing = freqMap[pillParams.frequency - 1];
+         for (let i = 0; i < spacing.length; i++) {
+            schedule[0].push(reminderBody);
+            schedule[4].push(reminderBody);
          }
       }
    }
