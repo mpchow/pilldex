@@ -17,9 +17,11 @@ describe('Create Account Test', () => {
 
     const email = element(by.id('Email-Input'));
     const pw = element(by.id('Password-Input'));
+    const confirm = element(by.id('Password-Confirm'));
 
     await email.replaceText('bobjohnson');
     await pw.replaceText('123456');
+    await confirm.replaceText('123456');
 
     await element(by.text("CREATE ACCOUNT")).tap();
 
@@ -32,9 +34,11 @@ describe('Create Account Test', () => {
 
     const email = element(by.id('Email-Input'));
     const pw = element(by.id('Password-Input'));
+    const confirm = element(by.id('Password-Confirm'));
 
     await email.replaceText('bobjohnson@gmail.com');
     await pw.replaceText('1234');
+    await confirm.replaceText('1234');
 
     await element(by.text("CREATE ACCOUNT")).tap();
 
@@ -42,18 +46,20 @@ describe('Create Account Test', () => {
     await element(by.text("OK")).tap();
   });
 
-  it ('Create User Bad Password', async () => { // put a timeout thing here
+  it ('Create User Mismatch Password', async () => { // put a timeout thing here
     await element(by.text("NEW USER")).tap();
 
     const email = element(by.id('Email-Input'));
     const pw = element(by.id('Password-Input'));
+    const confirm = element(by.id('Password-Confirm'));
 
-    await email.replaceText('bobjohnson@gmail.com');
-    await pw.replaceText('1234');
+    await email.replaceText('bobbyjohnson@gmail.com');
+    await pw.replaceText('123456');
+    await confirm.replaceText('1234567');
 
     await element(by.text("CREATE ACCOUNT")).tap();
 
-    await expect(element(by.text("This password is too weak, please enter a new one"))).toBeVisible();
+    await expect(element(by.text("Passwords do not match!"))).toBeVisible();
     await element(by.text("OK")).tap();
   });
 
@@ -62,9 +68,11 @@ describe('Create Account Test', () => {
 
     const email = element(by.id('Email-Input'));
     const pw = element(by.id('Password-Input'));
+    const confirm = element(by.id('Password-Confirm'));
 
     await email.replaceText('meepmoop@gmail.com');
     await pw.replaceText('meepmoop');
+    await confirm.replaceText('meepmoop');
 
     await element(by.text("CREATE ACCOUNT")).tap();
 
@@ -100,9 +108,11 @@ describe('Create Account Test', () => {
 
     const email = element(by.id('Email-Input'));
     const pw = element(by.id('Password-Input'));
+    const confirm = element(by.id('Password-Confirm'));
 
     await email.replaceText('meepitymoop@gmail.com');
     await pw.replaceText('meepitymoop');
+    await confirm.replaceText('meepitymoop');
 
     await element(by.text("CREATE ACCOUNT")).tap();
 
@@ -137,9 +147,11 @@ describe('Create Account Test', () => {
 
     const email = element(by.id('Email-Input'));
     const pw = element(by.id('Password-Input'));
+    const confirm = element(by.id('Password-Confirm'));
 
     await email.replaceText('meepitymoop@gmail.com');
     await pw.replaceText('meepitymoop');
+    await confirm.replaceText('meepitymoop');
 
     await element(by.text("CREATE ACCOUNT")).tap();
 
@@ -174,9 +186,11 @@ describe('Create Account Test', () => {
 
     const email = element(by.id('Email-Input'));
     const pw = element(by.id('Password-Input'));
+    const confirm = element(by.id('Password-Confirm'));
 
     await email.replaceText('meepitymoop@gmail.com');
     await pw.replaceText('meepitymoop');
+    await confirm.replaceText('meepitymoop');
 
     await element(by.text("CREATE ACCOUNT")).tap();
 
@@ -212,9 +226,11 @@ describe('Create Account Test', () => {
 
     const email = element(by.id('Email-Input'));
     const pw = element(by.id('Password-Input'));
+    const confirm = element(by.id('Password-Confirm'));
 
     await email.replaceText('meepitymoop@gmail.com');
     await pw.replaceText('meepitymoop');
+    await confirm.replaceText('meepitymoop');
 
     await element(by.text("CREATE ACCOUNT")).tap();
 
@@ -250,9 +266,11 @@ describe('Create Account Test', () => {
 
     const email = element(by.id('Email-Input'));
     const pw = element(by.id('Password-Input'));
+    const confirm = element(by.id('Password-Confirm'));
 
     await email.replaceText('meepitymoop@gmail.com');
     await pw.replaceText('meepitymoop');
+    await confirm.replaceText('meepitymoop');
 
     await element(by.text("CREATE ACCOUNT")).tap();
 
@@ -288,9 +306,11 @@ describe('Create Account Test', () => {
 
     const email = element(by.id('Email-Input'));
     const pw = element(by.id('Password-Input'));
+    const confirm = element(by.id('Password-Confirm'));
 
     await email.replaceText('meepitymoop@gmail.com');
     await pw.replaceText('meepitymoop');
+    await confirm.replaceText('meepitymoop');
 
     await element(by.text("CREATE ACCOUNT")).tap();
 
@@ -319,6 +339,45 @@ describe('Create Account Test', () => {
     await element(by.text("SUBMIT")).tap();
     await expect(element(by.text("Please enter a valid time for Lunch"))).toBeVisible();
     await element(by.text("OK")).tap();
+  });
+
+  it ('Successfully create account', async () => {
+    await element(by.text("NEW USER")).tap();
+
+    const email = element(by.id('Email-Input'));
+    const pw = element(by.id('Password-Input'));
+    const confirm = element(by.id('Password-Confirm'));
+
+    await email.replaceText('meepitymoop@gmail.com');
+    await pw.replaceText('meepitymoop');
+    await confirm.replaceText('meepitymoop');
+
+    await element(by.text("CREATE ACCOUNT")).tap();
+
+    await expect(element(by.text("Smart Scheduler"))).toBeVisible();
+    const wake = element(by.id('Wakeup'));
+    const bed = element(by.id('Bedtime'));
+    const brfst = element(by.id('Breakfast'));
+    const lnch = element(by.id('Lunch'));
+    const din = element(by.id('Dinner'));
+
+    await wake.replaceText('7:00');
+    await element(by.id('WakeupAM')).tap();
+
+    await bed.replaceText('11:00');
+    await element(by.id('BedtimePM')).tap();
+
+    await brfst.replaceText('8:00');
+    await element(by.id('BreakfastAM')).tap();
+
+    await lnch.replaceText('12:00');
+    await element(by.id('LunchPM')).tap();
+
+    await din.replaceText('6:00');
+    await element(by.id('DinnerPM')).tap();
+
+    await element(by.text("SUBMIT")).tap();
+    await waitFor(element(by.text("My Pilldex"))).toBeVisible().withTimeout(30000);
   });
 
 

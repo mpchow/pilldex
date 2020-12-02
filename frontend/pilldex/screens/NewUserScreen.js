@@ -65,6 +65,7 @@ function NewUserScreen({ navigation }) {
           onChangeText = {(text) => setPassword(text)}
       />
       <TextInput
+          testID="Password-Confirm"
           placeholder = "Confirm Password"
           secureTextEntry={true}
           style= {styles.input}
