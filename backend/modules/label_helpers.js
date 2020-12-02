@@ -1,12 +1,16 @@
 // List of common prescription drugs to look for in the label
-var pillNames = new Set(["acetaminophen", "adderall", "amitriptyline", "amlodipine", "amoxicillin", "ativan", "atorvastatin", "azithromycin", 
-					 "benzonatate", "cephalexin", "ciprofloxacin", "citalopram", "hydrochlorothiazide", "ibuprofen", "hydrocodone", "lexapro", 
-					 "levothyroxine", "lisinopril", "lipitor", "melatonin", "metaformin", "methadone", "metaprolol", "naproxen", 
-					 "prinivil", "simvastitin", "synthroid","vicodin", "zestril", "zithromax", "zocore"]);
+var pillNames = new Set(["acetaminophen", "adderall", "amitriptyline", 
+						 "amlodipine", "amoxicillin", "ativan", "atorvastatin", "azithromycin",
+						 "benzonatate", "cephalexin", "ciprofloxacin", "citalopram", 
+						 "hydrochlorothiazide", "ibuprofen", "hydrocodone", "lexapro",
+						 "levothyroxine", "lisinopril", "lipitor", "melatonin", "metaformin", 
+						 "methadone", "metaprolol", "naproxen", "prinivil", "simvastitin", 
+						 "synthroid","vicodin", "zestril", "zithromax", "zocore"]);
 
 // Dictionary mapping digits to their string values
-var numDict = {"one" : 1, "two" : 2, "three" : 3, "four" : 4, "five" : 5, "six" : 6, "seven" : 7, "eight" : 8, "nine" : 9, "ten" : 10,
-				"once" : 1, "twice" : 2};
+var numDict = {"one" : 1, "two" : 2, "three" : 3, "four" : 4, "five" : 5, "six" : 6, 
+			   "seven" : 7, "eight" : 8, "nine" : 9, "ten" : 10,
+			   "once" : 1, "twice" : 2};
 
 // Sets containing signal words that indicate potential value(s) for each of the pill fields
 var weekly = new Set(["weekly", "week", "week"]);

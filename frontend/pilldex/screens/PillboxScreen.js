@@ -101,9 +101,6 @@ function PillboxScreen( {navigation } ) {
     <View style={styles.container}>
       <View style={{flexDirection: 'row'}}>
         <Text style={styles.title}>Patient's Pillbox</Text>
-        <TouchableOpacity testID="Refresh" style={{paddingTop: 38, paddingLeft: 15}} onPress={()=>{getPills()}}>
-          <AntDesign name="sync" size={26} color="#46B1C9"/>
-        </TouchableOpacity>
       </View>
       <SafeAreaView style={{flex: 1}} >
         <FlatList
