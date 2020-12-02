@@ -1,15 +1,47 @@
 describe('Pillbox Tests', () => {
 
-    it ('Login with user', async () => {
+    it ('Make new user', async () => {
 
-      const email = element(by.id('Email-Input-Login'));
-      const pw = element(by.id('Password-Input-Login'));
+        await element(by.text("NEW USER")).tap();
 
-      await email.replaceText('mootemop@gmail.com');
-      await pw.replaceText('mootemop');
+        await waitFor(element(by.text("Create Account"))).toBeVisible().withTimeout(30000);
+        const email = element(by.id('Email-Input'));
+        const pw = element(by.id('Password-Input'));
+        const confirm = element(by.id('Password-Confirm'));
 
-      await element(by.text("SIGN IN")).tap();
-      await waitFor(element(by.text("My Pilldex"))).toBeVisible().withTimeout(30000);
+        var mail = Math.random().toString();
+        var inputEmail = mail + '@gmail.com';
+        await email.replaceText(inputEmail);
+        await pw.replaceText(mail);
+        await confirm.replaceText(mail);
+
+        await element(by.text("CREATE ACCOUNT")).tap();
+
+        await expect(element(by.text("Smart Scheduler"))).toBeVisible();
+        const wake = element(by.id('Wakeup'));
+        const bed = element(by.id('Bedtime'));
+        const brfst = element(by.id('Breakfast'));
+        const lnch = element(by.id('Lunch'));
+        const din = element(by.id('Dinner'));
+
+        await wake.replaceText('7:00');
+        await element(by.id('WakeupAM')).tap();
+
+        await bed.replaceText('11:00');
+        await element(by.id('BedtimePM')).tap();
+
+        await brfst.replaceText('8:00');
+        await element(by.id('BreakfastAM')).tap();
+
+        await lnch.replaceText('12:00');
+        await element(by.id('LunchPM')).tap();
+
+        await din.replaceText('6:00');
+        await element(by.id('DinnerPM')).tap();
+
+        await element(by.text("SUBMIT")).tap();
+
+        await waitFor(element(by.text("My Pilldex"))).toBeVisible().withTimeout(30000);
     });
 
     it ('Creates a pill', async () => {
