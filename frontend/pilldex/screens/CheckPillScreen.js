@@ -23,7 +23,7 @@ function CheckPillScreen({ navigation, route }) {
   const [foodButton, setFoodButton] = useState(null);
   const [drowsyButton, setDrowsyButton] = useState(null);
 
-  function sendNewUserInfo(){
+  function sendNewUserInfo() {
     console.log(name, firebase.auth().currentUser.uid, refillUnits, dosage, freq, freqUnits, foodButton, drowsyButton);
 
     /* Make sure inputs are valid */
@@ -61,6 +61,9 @@ function CheckPillScreen({ navigation, route }) {
       return;
     } else if (drowsyButton && (frq != 1)) {
       Alert.alert("Pills causing drowsiness can only be scheduled once a day!");
+      return;
+    } else if (refill < dose * frq) {
+      Alert.alert("Invalid refill amount for specified dosage and consumption frequency");
       return;
     }
 

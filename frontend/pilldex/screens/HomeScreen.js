@@ -76,9 +76,8 @@ function HomeScreen({ navigation }) {
       return;
 
     data[d].forEach((e) => {
-      //const t = Date.parse(e["time"]["reminderTime"]);
-      //const time = new Date(t);
       var dateString = "";
+      var AM = false;
 
       var mins = e["time"]["reminderTime"]["minute"];
       var minutes = mins;
@@ -86,24 +85,24 @@ function HomeScreen({ navigation }) {
       if (mins < 10)
         mins = "0" + mins;
 
-      if (hours > 12)
+      if (hours > 12) {
         dateString = (hours - 12) + ":" + mins + " PM";
-      else
+      } else {
         dateString = hours + ":" + mins + " AM";
+        AM = true;
+      }
+
+      var d = new Date(date.year, date.month, date.date, hours, mins);
 
       console.log("Pill taken early is " + e['takenEarly']);
 
       ret.push({id: e['reminderId'], name: e['pillName'], food: true,
                drowsy: true, done: e['takenEarly'], dateString: dateString,
-               hour: hours, mins: minutes});
+               hour: hours, mins: minutes, date: d});
     });
 
     // sort by time HERE
     ret.sort((a, b) => {
-      if (a.done || b.done) {
-        return -1;
-      }
-
       if ( a.hour < b.hour ) {
         return -1;
       } else if ( a.hour > b.hour ) {
@@ -115,13 +114,6 @@ function HomeScreen({ navigation }) {
           return a.mins > b.mins ? 1 : -1;
         }
       }
-    });
-
-    var retCopy = [...ret];
-    // move closed reminders to the back of the list
-    retCopy.forEach(elem => {
-      if (elem.done)
-        ret.push(ret.splice(ret.indexOf(elem), 1)[0]);
     });
 
     setNotifs(ret);
@@ -154,24 +146,18 @@ function HomeScreen({ navigation }) {
       var copy = [...notifs];
       var i = copy.indexOf(item);
       copy[i].done = true;
-      copy.push(copy.splice(i, 1)[0]);
       setNotifs(copy);
 
-      var taken = new Date();
-      var early = false;
-      var h = taken.getHours();
-      console.log(h);
-      if (taken.getHours() < item.hour) {
-        early = true;
-      } else if (taken.getHours() > item.hour) {
-        early = false;
-      } else {
-        if (taken.getMinutes() < item.hour)
-          early = true;
-        else
-          early = false;
-      }
+      setTimeout((copy) => {
+        setNotifs(copy => {
+          return copy.filter((elem) => elem.id != id);
+      })}, 1000);
 
+      var taken = new Date();
+      console.log(taken);
+      console.log(item.date);
+      var early = ((taken - item.date) < 0) ? true : false;
+      console.log(early);
 
       fetch(`http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/pills/taken`, {
         method: 'POST',
@@ -247,12 +233,7 @@ function HomeScreen({ navigation }) {
                         onPress={() => navigation.navigate('NewPill')}>
         <Text style={styles.btnText}>NEW PILL</Text>
       </TouchableOpacity>
-      <View style={{height:10}} />
-              <TouchableOpacity style={styles.button}
-                                onPress={() => displayNotification("Test Notification")}>
-                <Text style={styles.btnText}>TEST</Text>
-              </TouchableOpacity>
-      <View style={{height:10}} />
+      <View style={{height: 30}} />
     </View>
   );
 }

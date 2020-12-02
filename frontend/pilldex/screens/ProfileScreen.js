@@ -38,15 +38,6 @@ function ProfileScreen({ navigation }) {
       <Text style={styles.title}>My Profile</Text>
       <View style={{height: 35}} />
       <View style={styles.profileOption}>
-        <TouchableOpacity style={{flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'center'}}>
-          <Text style={styles.optionText}>Edit Account Details</Text>
-          <SimpleLineIcons style={{marginLeft: 80, marginBottom: 3}}
-                           name="arrow-right" color='#538083' size={23}
-          />
-        </TouchableOpacity>
-        <View style={styles.line} />
-      </View>
-      <View style={styles.profileOption}>
         <TouchableOpacity style={{flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'center'}}
                           onPress={() => navigation.navigate('Scheduler', {email: "", password: ""})}>
           <Text style={styles.optionText}>Smart Schedule</Text>
@@ -100,7 +91,7 @@ const styles = StyleSheet.create({
     borderWidth: 2.5,
     borderColor: '#9FB7B9',
     borderRadius: 35,
-    marginTop: 250,
+    marginTop: 300,
     marginLeft: 5
   },
   btnText: {
