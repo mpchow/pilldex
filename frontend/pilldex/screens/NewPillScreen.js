@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { RNCamera } from 'react-native-camera';
-//import RNMlKit from 'react-native-firebase-mlkit';
 import vision from '@react-native-firebase/ml-vision';
 import {
   StyleSheet,
