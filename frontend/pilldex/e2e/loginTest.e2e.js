@@ -217,7 +217,7 @@ describe('Create Account Test', () => {
     await element(by.id('DinnerPM')).tap();
 
     await element(by.text("SUBMIT")).tap();
-    await expect(element(by.text("Please enter a valid time for Breakfast"))).toBeVisible();
+    await expect(element(by.text("Please enter a time in HH:MM format for Breakfast"))).toBeVisible();
     await element(by.text("OK")).tap();
   });
 
@@ -337,7 +337,7 @@ describe('Create Account Test', () => {
     await element(by.id('DinnerPM')).tap();
 
     await element(by.text("SUBMIT")).tap();
-    await expect(element(by.text("Please enter a valid time for Lunch"))).toBeVisible();
+    await expect(element(by.text("Please enter a time in HH:MM format for Lunch"))).toBeVisible();
     await element(by.text("OK")).tap();
   });
 
@@ -348,9 +348,11 @@ describe('Create Account Test', () => {
     const pw = element(by.id('Password-Input'));
     const confirm = element(by.id('Password-Confirm'));
 
-    await email.replaceText('meepitymoop@gmail.com');
-    await pw.replaceText('meepitymoop');
-    await confirm.replaceText('meepitymoop');
+    var mail = Math.random().toString();
+    var inputEmail = mail + '@gmail.com';
+    await email.replaceText(inputEmail);
+    await pw.replaceText(mail);
+    await confirm.replaceText(mail);
 
     await element(by.text("CREATE ACCOUNT")).tap();
 

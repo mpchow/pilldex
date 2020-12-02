@@ -10,16 +10,11 @@ import {
 import { useIsFocused } from '@react-navigation/native';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import messaging from '@react-native-firebase/messaging';
 import firebase from '@react-native-firebase/app';
-import auth from '@react-native-firebase/auth';
-import PNController, { displayNotification } from '../components/PNController.js';
+
 
 const width = Dimensions.get('window').width;
-/* Notification: userID, time closed, notification ID
- * 'http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/pills/taken
- * takenEarly: true
-*/
+
 function HomeScreen({ navigation }) {
 
   const dayArray = ["Sunday", "Monday", "Tuesday",
@@ -63,7 +58,7 @@ function HomeScreen({ navigation }) {
       formatNotifs(responseJson["user"]["schedule"]);
     })
     .catch((error) => {
-      console.warn(error);
+      console.log(error);
       setSchedule([]);
     });
   }
