@@ -15,7 +15,7 @@ import { NotifProvider } from '../components/NotifContext.js';
 const width = Dimensions.get('window').width;
 
 function NotificationsScreen({ navigation }) {
-  //var notifications = ["hello", "medicine"];
+  // imported context variables and local notifications state to maintain list
   const { allNotifs } = useContext(NotifProvider);
   const isFocused = useIsFocused();
   const [notifs, setNotifs] = useState([]);
@@ -25,22 +25,6 @@ function NotificationsScreen({ navigation }) {
     console.log(allNotifs);
     setNotifs(allNotifs);
   }, [isFocused]);
-  /*useEffect(() => {
-    fetch(`http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/users?userId=${firebase.auth().currentUser.uid}`, {
-      method: 'GET',
-    })
-    .then((response) => response.json())
-    .then((responseJson) => {
-      console.log("Response from server is", responseJson);
-      console.log(responseJson["user"]["schedule"]);
-      console.log(responseJson["user"]["schedule"][0]);
-    })
-    .catch((error) => {
-         console.error(error);
-    });
-  }, []);*/
-
-
 
   return (
     <View style={styles.container}>

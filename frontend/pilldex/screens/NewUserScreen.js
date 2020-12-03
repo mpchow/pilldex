@@ -13,6 +13,7 @@ import auth, { firebase } from '@react-native-firebase/auth';
 
 function NewUserScreen({ navigation }) {
 
+  // local user information states - to be sent to AuthProvider
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,6 +21,7 @@ function NewUserScreen({ navigation }) {
 
   const { register } = useContext(AuthContext);
 
+  // verify that the user has inputted valid information
   function checkFields() {
     if (password.length < 6) {
       Alert.alert("This password is too weak, please enter a new one");

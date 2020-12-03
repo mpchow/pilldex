@@ -14,7 +14,7 @@ import LoginStack from '../navigation/LoginStack.js';
 const width = Dimensions.get('window').width;
 
 function SignInScreen({ navigation }) {
-  
+  // authentication states to be sent to AuthProvider
   const { register, login } = useContext(AuthContext);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");

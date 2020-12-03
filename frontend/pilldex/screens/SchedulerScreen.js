@@ -16,11 +16,11 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 function SchedulerScreen({ navigation, route }) {
-
+  // screen and context variables
   const { user, register } = useContext(AuthContext);
   const { email, password } = route.params;
 
-  // will go to default values or the user's prev settings
+  // routine states - default values or the user's prev settings
   const [changeRoutine, setChangeRoutine] = useState(false);
   const [userData, setUserData] = useState({});
   const [wakeup, setWakeup] = useState("");
@@ -41,14 +41,13 @@ function SchedulerScreen({ navigation, route }) {
       getUserRoutine();
   }, [changeRoutine]);
 
+  // fetches user's routine from database and sends to helper functions to be formatted
   function getUserRoutine() {
     fetch(`http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/users?userId=${firebase.auth().currentUser.uid}`, {
       method: 'GET'
     })
     .then((response) => response.json())
     .then((res) => {
-      console.log("in fetch scheduler");
-      console.log(res["user"]);
       setWakeup(res["user"]['wakeupHr'] + ":" + res["user"]['wakeupMin']);
       setBedtime(res["user"]['sleepHr'] + ":" + res["user"]['sleepMin']);
       setBfast(res["user"]['breakfastHr'] + ":" + res["user"]['breakfastMin']);
@@ -64,6 +63,7 @@ function SchedulerScreen({ navigation, route }) {
     });
   }
 
+  // formats given routine to local state structure
   function formatRoutine(data) {
     setRoutine([
       {title: "Wake-up", "time": formatTime(data['wakeupHr'], data['wakeupMin']),
@@ -79,12 +79,14 @@ function SchedulerScreen({ navigation, route }) {
     ]);
   }
 
+  // formats time for display
   function formatTime(hours, mins) {
     if (mins < 10)
       mins = "0" + mins;
     return hours + ":" + mins;
   }
 
+  // updates the displayed routine live while the user is editing
   function updateRoutine(index, field, newValue) {
     var routineCopy = [...routine];
     var isPM = routineCopy[index]["PM"];
@@ -123,6 +125,7 @@ function SchedulerScreen({ navigation, route }) {
     setRoutine(routineCopy);
   }
 
+  // verify that user inputs are valid, else display alert message
   async function checkInputs() {
     /* Update the state times first for error checking */
     var copy = [...routine];

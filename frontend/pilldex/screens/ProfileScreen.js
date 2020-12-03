@@ -16,6 +16,7 @@ function ProfileScreen({ navigation }) {
 
   const { logout } = useContext(AuthContext);
 
+  // alert box to double check that user wishes to sign out
   function signOut() {
     Alert.alert('Sign Out',
       'Sign out of pilldex?',

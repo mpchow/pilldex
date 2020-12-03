@@ -12,11 +12,10 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import firebase from '@react-native-firebase/app';
 
-
 const width = Dimensions.get('window').width;
 
 function HomeScreen({ navigation }) {
-
+  // date related states
   const dayArray = ["Sunday", "Monday", "Tuesday",
                     "Wednesday", "Thursday", "Friday", "Saturday"];
   const monthArray = ["January", "February", "March", "April", "May",
@@ -33,6 +32,7 @@ function HomeScreen({ navigation }) {
     });
   });
 
+  // schedule states
   const [schedule,setSchedule] = useState([]);
   const [notifs, setNotifs] = useState([]);
   const [refresh, setRefresh] = useState(false);
@@ -42,6 +42,7 @@ function HomeScreen({ navigation }) {
     fetchSchedule();
   }, [refresh, isFocused]);
 
+  // fetch schedule from database and send to processing functions
   function fetchSchedule() {
     fetch(`http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/users?userId=${firebase.auth().currentUser.uid}`, {
       method: 'GET',
@@ -61,6 +62,7 @@ function HomeScreen({ navigation }) {
     });
   }
 
+  // format user schedule for display
   function formatNotifs(data) {
     var d = date.dateObj.getDay();
     var ret = [];
@@ -68,6 +70,7 @@ function HomeScreen({ navigation }) {
     if (data[d] == undefined)
       return;
 
+    // package each reminder found
     data[d].forEach((e) => {
       var dateString = "";
       var AM = false;
@@ -87,11 +90,12 @@ function HomeScreen({ navigation }) {
 
       var d = new Date(date.year, date.dateObj.getMonth(), date.date, hours, mins);
 
-      console.log("Pill taken early is " + e['takenEarly']);
+      if (!e['takenEarly']) {
+        ret.push({id: e['reminderId'], name: e['pillName'], food: true,
+                 drowsy: true, done: e['takenEarly'], dateString: dateString,
+                 hour: hours, mins: minutes, date: d});
+      }
 
-      ret.push({id: e['reminderId'], name: e['pillName'], food: true,
-               drowsy: true, done: e['takenEarly'], dateString: dateString,
-               hour: hours, mins: minutes, date: d});
     });
 
     // sort by time HERE
@@ -112,6 +116,7 @@ function HomeScreen({ navigation }) {
     setNotifs(ret);
   }
 
+  // function to handle date toggling
   function toggleDate(dir) {
     var newDate = date.dateObj;
     newDate.setDate(date.dateObj.getDate() + dir);
@@ -125,7 +130,7 @@ function HomeScreen({ navigation }) {
     formatNotifs(schedule);
   }
 
-// set
+  // dismiss a reminder
   function closeNotification(id) {
     var item = notifs.filter(obj => {
       return obj.id === id;
@@ -225,13 +230,6 @@ function HomeScreen({ navigation }) {
     </View>
   );
 }
-
-/*      <View style={{height:10}} />
-        <TouchableOpacity style={styles.button}
-                          onPress={() => displayNotification("Test Notification")}>
-          <Text style={styles.btnText}>TEST</Text>
-        </TouchableOpacity>
-*/
 
 const styles = StyleSheet.create({
   container: {
