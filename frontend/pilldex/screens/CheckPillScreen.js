@@ -15,6 +15,7 @@ function CheckPillScreen({ navigation, route }) {
 
   const { info } = route.params;
 
+  // States for all the form fields
   const [name, setName] = useState("");
   const [refillUnits, setRefillUnits] = useState("");
   const [freq, setFreq] = useState("");
@@ -23,6 +24,7 @@ function CheckPillScreen({ navigation, route }) {
   const [foodButton, setFoodButton] = useState(null);
   const [drowsyButton, setDrowsyButton] = useState(null);
 
+  // Function to error check input add a pill (by making post request to server)
   function sendNewUserInfo() {
     console.log(name, firebase.auth().currentUser.uid, refillUnits, dosage, freq, freqUnits, foodButton, drowsyButton);
 
@@ -67,6 +69,7 @@ function CheckPillScreen({ navigation, route }) {
       return;
     }
 
+    // Fetch request to server
     fetch('http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/pills', {
       method: 'POST',
       headers: {
@@ -92,6 +95,7 @@ function CheckPillScreen({ navigation, route }) {
     navigation.navigate("Home");
   }
 
+  // Gets the parsed label from the server
   useEffect(() => {
     setName(name => info.name);
     setRefillUnits(refillUnits => info.totalQuantity);

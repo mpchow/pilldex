@@ -12,10 +12,12 @@ import {
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
+
 function NewPillScreen({ navigation }) {
   const [text, setText] = useState("");
   var camera;
-
+  
+  // Function that takes a picture and parses info
   async function takePicture() {
     if (camera) {
       const options = { quality: 0.5, base64: true };
@@ -25,7 +27,7 @@ function NewPillScreen({ navigation }) {
       const processed = await vision().cloudDocumentTextRecognizerProcessImage(data.uri);
       console.log('Found text in document: ', processed.text);
 
-      // Make post request
+      // Make post request and sends parsed info
       fetch('http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/pills/label', {
         method: 'POST',
         headers: {

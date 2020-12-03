@@ -26,6 +26,7 @@ function PillboxScreen( {navigation } ) {
   const [pills, setPills] = useState([]);
   console.log("Pill is", pills);
 
+  // Deletes a pill from the users pillbox
   function deletePills(pillName) {
     var arr = [{
         text: 'Cancel',
@@ -34,6 +35,7 @@ function PillboxScreen( {navigation } ) {
       },
       {
         text: 'OK', onPress: () => {
+          // Fetch request to delete pill from server
           fetch('http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/pills', {
             method: 'DELETE',
             headers: {
@@ -59,7 +61,8 @@ function PillboxScreen( {navigation } ) {
     );
   }
 
-  function getPills() { // RESPONSE FROM SERVER UNDEFINED
+  // Get pills from server
+  function getPills() { 
 
     fetch(`http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/pills?userId=${firebase.auth().currentUser.uid}`, {
       method: 'GET',
@@ -81,9 +84,9 @@ function PillboxScreen( {navigation } ) {
     console.log("Inside useEffect function");
     getPills();
 
-
   }, [isFocused]);
 
+  // Function that gets pill info and navigates to pillinfo screen
   function showInfo(pillName) {
     fetch(`http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/pills/single?userId=${firebase.auth().currentUser.uid}&name=${pillName}`, {
       method: 'GET',

@@ -15,6 +15,7 @@ function PillInfoScreen({ navigation, route }) {
 
   const [pillsLeft, setPillsLeft] = useState(pillInfo.remaining);
 
+  // Determines the instructions that the user will see
   function instructions(){
     return pillInfo.withFood && pillInfo.withSleep ? <View>
                                     <Text style={styles.text}>This medication will make you drowsy.</Text>
@@ -25,11 +26,12 @@ function PillInfoScreen({ navigation, route }) {
           : null;
   }
   
-  //TODO: FIX THIS FUNCTION
+  // Refill a pill
   function refillPill() {
     var new_pillsleft = pillsLeft + pillInfo.totalQuantity;
     setPillsLeft(new_pillsleft);
-    console.log(`pills left are ${pillsLeft}`);
+
+    // Make post request to server
     fetch('http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/pills', {
       method: 'PUT',
       headers: {
