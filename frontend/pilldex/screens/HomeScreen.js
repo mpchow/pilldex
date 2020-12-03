@@ -16,10 +16,7 @@ import auth from '@react-native-firebase/auth';
 import PNController, { displayNotification } from '../components/PNController.js';
 
 const width = Dimensions.get('window').width;
-/* Notification: userID, time closed, notification ID
- * 'http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/pills/taken
- * takenEarly: true
-*/
+
 function HomeScreen({ navigation }) {
 
   const dayArray = ["Sunday", "Monday", "Tuesday",
@@ -47,8 +44,6 @@ function HomeScreen({ navigation }) {
     fetchSchedule();
   }, [refresh, isFocused]);
 
-  console.log(date);
-
   function fetchSchedule() {
     fetch(`http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/users?userId=${firebase.auth().currentUser.uid}`, {
       method: 'GET',
@@ -63,7 +58,7 @@ function HomeScreen({ navigation }) {
       formatNotifs(responseJson["user"]["schedule"]);
     })
     .catch((error) => {
-      console.warn(error);
+      console.log(error);
       setSchedule([]);
     });
   }
@@ -92,7 +87,7 @@ function HomeScreen({ navigation }) {
         AM = true;
       }
 
-      var d = new Date(date.year, date.month, date.date, hours, mins);
+      var d = new Date(date.year, date.dateObj.getMonth(), date.date, hours, mins);
 
       console.log("Pill taken early is " + e['takenEarly']);
 
@@ -132,15 +127,13 @@ function HomeScreen({ navigation }) {
     formatNotifs(schedule);
   }
 
-  // set item.done to true and move notif to end of array
-  // ids of existing notifs also need to change?? idksksjsjj
+// set
   function closeNotification(id) {
     var item = notifs.filter(obj => {
       return obj.id === id;
     });
 
     item = item[0];
-    console.log(item);
 
     if (!item.done) {
       var copy = [...notifs];
@@ -154,10 +147,7 @@ function HomeScreen({ navigation }) {
       })}, 1000);
 
       var taken = new Date();
-      console.log(taken);
-      console.log(item.date);
       var early = ((taken - item.date) < 0) ? true : false;
-      console.log(early);
 
       fetch(`http://ec2-3-96-185-233.ca-central-1.compute.amazonaws.com:3000/pills/taken`, {
         method: 'POST',
