@@ -1,4 +1,4 @@
-describe('Screen Navigation Tests', () => {
+describe('Camera Tests', () => {
 
   it ('Make new user', async () => {
     const email = element(by.id('Email-Input-Login'));
